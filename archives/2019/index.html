@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="/css/mdui.css">
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="mdui-appbar-with-toolbar mdui-drawer-body-left mdui-theme-primary-indigo mdui-theme-accent-pink">
+<body class="mdui-appbar-with-toolbar mdui-drawer-body-left mdui-theme-primary-brown mdui-theme-accent-blue">
   <script>var a=localStorage.getItem("mdui-theme-layout-dark");if(a){document.getElementsByTagName("body")[0].className+=" mdui-theme-layout-dark"};</script>
   <header id="header" class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide mdui-appbar-inset">
   <div class="mdui-toolbar mdui-color-theme">
@@ -63,8 +63,10 @@
 </header>
 <div class="mdui-dialog" id="search">
   
-    <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="请输入关键字"><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-    <div class="search-result"></div>
+    <div class="search-form">
+      <input type="search" class="search-form-input" placeholder="请输入关键字">
+    </div>
+    <div class="search-result" data-resource="/search.xml"></div>
   
 </div>
   <aside id="sidebar" class="mdui-drawer mdui-drawer-full-height">
@@ -76,6 +78,10 @@
         <div class="mdui-grid-tile-title">John Doe</div>
         <div class="mdui-grid-tile-subtitle"><i class="mdui-icon material-icons">art_track</i></div>
       </div>
+      
+        <div class="mdui-grid-tile-buttons">
+          <a href="mailto:610596547@qq.com" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '610596547@qq.com'}"><i class="mdui-icon material-icons">email</i></a>
+        </div>
       
     </div>
   </div>
@@ -135,9 +141,7 @@
 
   <div class="mdui-list" mdui-collapse="{accordion: true}">
     
-      <a href="/tagcloud" class="mdui-list-item mdui-ripple">标签云</a>
-    
-      <a href="/gallery" class="mdui-list-item mdui-ripple">画廊</a>
+      <a href="http://139.159.245.212:1998/" class="mdui-list-item mdui-ripple">个人主页</a>
     
     <div class="mdui-collapse-item">
       <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
@@ -159,7 +163,7 @@
     <a href="/2019/08/15/我的第一篇博客/">
       <header class="mdui-card-media mdui-ripple">
         
-        <img src="/images/random/material-16.png" style="max-height: 240px;">
+        <img src="/images/random/material-9.png" style="max-height: 240px;">
         <div class="mdui-card-media-covered">
           <div class="mdui-card-primary">
             <div class="mdui-card-primary-title">我的第一篇博客</div>
@@ -184,7 +188,7 @@
     <a href="/2019/08/15/hello-world/">
       <header class="mdui-card-media mdui-ripple">
         
-        <img src="/images/random/material-13.png" style="max-height: 240px;">
+        <img src="/images/random/material-9.png" style="max-height: 240px;">
         <div class="mdui-card-media-covered">
           <div class="mdui-card-primary">
             <div class="mdui-card-primary-title">Hello World</div>
@@ -215,9 +219,13 @@
     
     
     
+      <a href="https://github.com/XiaoZhong233" target="_blank"><i class="mdui-p-a-1 mdui-icon iconfont mdui-text-color-theme-a100">&#xe7ab;</i></a>
     
     
     
+    
+    
+      <a href="610596547" target="_blank"><i class="mdui-p-a-1 mdui-icon iconfont mdui-text-color-theme-a100">&#xe651;</i></a>
     
     
   </div>
