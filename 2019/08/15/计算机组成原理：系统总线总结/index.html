@@ -65,10 +65,12 @@
 <meta property="og:site_name" content="钟浩伟的个人博客">
 <meta property="og:description" content="总线的基本概念历史：早期计算机采用分散连接的方式，这种连接方式以运算器为中心，I/O与存储器交换信息时，都要通过运算器，致使运算器停止运算。为了提高CPU工作效率，改进为存储器为中心的分散连接。随着IO设备的增多，这种连接方式逐渐淘汰，所以出现了总线连接的方式。计算机使用总线结构便于增减外设，同时减少了信息传输线。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-15T15:32:32.378Z">
+<meta property="og:image" content="localhost:/2019/08/15/计算机组成原理：系统总线总结/jiegou.jpg">
+<meta property="og:updated_time" content="2019-08-16T03:43:52.042Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机组成原理：系统总线总结">
 <meta name="twitter:description" content="总线的基本概念历史：早期计算机采用分散连接的方式，这种连接方式以运算器为中心，I/O与存储器交换信息时，都要通过运算器，致使运算器停止运算。为了提高CPU工作效率，改进为存储器为中心的分散连接。随着IO设备的增多，这种连接方式逐渐淘汰，所以出现了总线连接的方式。计算机使用总线结构便于增减外设，同时减少了信息传输线。">
+<meta name="twitter:image" content="localhost:/2019/08/15/计算机组成原理：系统总线总结/jiegou.jpg">
   <link rel="canonical" href="localhost:4000/2019/08/15/计算机组成原理：系统总线总结/">
 
 
@@ -336,7 +338,8 @@
       
         <h1 id="总线的基本概念"><a href="#总线的基本概念" class="headerlink" title="总线的基本概念"></a>总线的基本概念</h1><h3 id="历史："><a href="#历史：" class="headerlink" title="历史："></a>历史：</h3><p>早期计算机采用分散连接的方式，这种连接方式以运算器为中心，I/O与存储器交换信息时，都要通过运算器，致使运算器停止运算。为了提高CPU工作效率，改进为存储器为中心的分散连接。随着IO设备的增多，这种连接方式逐渐淘汰，所以出现了总线连接的方式。</p><p>计算机使用总线结构便于增减外设，同时减少了信息传输线。</p><a id="more"></a>
 
-<h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><p><strong>总线</strong>：<br>总线是连接多个部件的信息传输线，是各部件共享的传输介质。<br><strong>以CPU为中心的双总线结构</strong>：<br>包括存储总线（M总线）和I/O总线，前者连接CPU和主存，后者连接CPU和I/O。<br>缺点：这种结构在I/O与主存进行交换信息依然要占用CPU<br><strong>单总线结构</strong>:<br>单独拉出一条系统总线，CPU，主存，和各IO设备连接到该系统总线。当I/O与主存进行交换信息时，CPU可以继续处理不访问主存或I/O设备的操作。<br>缺点：因为只有一组总线。容器发生冲突，就必须设置判优逻辑，这会影响整机的工作速度<br><strong>以存储器为中心的双总线结构</strong>：<br>在单总线的基础上又开辟了一条CPU与主存之间的总线（存储总线）。存储总线只提供主存与CPU直接的信息传输。有点像上面两种结构的折中。</p>
+<h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><p><img src="/2019/08/15/计算机组成原理：系统总线总结/jiegou.jpg" alt="总线结构"></p>
+<p><strong>总线</strong>：<br>总线是连接多个部件的信息传输线，是各部件共享的传输介质。<br><strong>以CPU为中心的双总线结构</strong>：<br>包括存储总线（M总线）和I/O总线，前者连接CPU和主存，后者连接CPU和I/O。<br>缺点：这种结构在I/O与主存进行交换信息依然要占用CPU<br><strong>单总线结构</strong>:<br>单独拉出一条系统总线，CPU，主存，和各IO设备连接到该系统总线。当I/O与主存进行交换信息时，CPU可以继续处理不访问主存或I/O设备的操作。<br>缺点：因为只有一组总线。容器发生冲突，就必须设置判优逻辑，这会影响整机的工作速度<br><strong>以存储器为中心的双总线结构</strong>：<br>在单总线的基础上又开辟了一条CPU与主存之间的总线（存储总线）。存储总线只提供主存与CPU直接的信息传输。有点像上面两种结构的折中。</p>
 <h1 id="总线的分类"><a href="#总线的分类" class="headerlink" title="总线的分类"></a>总线的分类</h1><h2 id="分类标准："><a href="#分类标准：" class="headerlink" title="分类标准："></a>分类标准：</h2><ol>
 <li>按数据传送方式可分为：<br>并行传输总线和串行传输总线</li>
 <li>按总线的使用范围可分为<br> 计算机总线，测控总线，网络通信总线</li>
