@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="man命令man可以查看命令的帮组和配置文件的帮助man查看命令信息例如想要查看ls的帮助信息1man ls查看ls命令的帮助信息按空格翻页 按q离开NAME代表描述，说明这个命令的作用SYNOPSIS表示用法，说明这个命令的使用方法DESCRIPTION是各种选项参数的解释，如果你要快速的定位到某个选项参数信息，输入/xxx即可">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常见命令-帮助命令">
+<meta property="og:url" content="localhost:4000/2019/08/16/Linux常见命令-帮助命令/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="man命令man可以查看命令的帮组和配置文件的帮助man查看命令信息例如想要查看ls的帮助信息1man ls查看ls命令的帮助信息按空格翻页 按q离开NAME代表描述，说明这个命令的作用SYNOPSIS表示用法，说明这个命令的使用方法DESCRIPTION是各种选项参数的解释，如果你要快速的定位到某个选项参数信息，输入/xxx即可">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816220906.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816222824.png!blog">
+<meta property="og:updated_time" content="2019-08-16T15:01:36.493Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux常见命令-帮助命令">
+<meta name="twitter:description" content="man命令man可以查看命令的帮组和配置文件的帮助man查看命令信息例如想要查看ls的帮助信息1man ls查看ls命令的帮助信息按空格翻页 按q离开NAME代表描述，说明这个命令的作用SYNOPSIS表示用法，说明这个命令的使用方法DESCRIPTION是各种选项参数的解释，如果你要快速的定位到某个选项参数信息，输入/xxx即可">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816220906.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/08/16/Linux常见命令-帮助命令/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Linux常见命令-帮助命令 | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/Linux常见命令-帮助命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">Linux常见命令-帮助命令
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-16 23:00:21" itemprop="dateCreated datePublished" datetime="2019-08-16T23:00:21+08:00">2019-08-16</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="/2019/08/16/Linux常见命令-帮助命令/" class="post-meta-item leancloud_visitors" data-flag-title="Linux常见命令-帮助命令" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+            
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/08/16/Linux常见命令-帮助命令/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/16/Linux常见命令-帮助命令/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="man命令"><a href="#man命令" class="headerlink" title="man命令"></a>man命令</h1><p>man可以查看命令的帮组和配置文件的帮助</p><h2 id="man查看命令信息"><a href="#man查看命令信息" class="headerlink" title="man查看命令信息"></a>man查看命令信息</h2><p>例如想要查看ls的帮助信息</p><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">man</span> <span class="keyword">ls</span></span><br></pre></td></tr></table></figure><p>查看ls命令的帮助信息</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816220906.png!blog" alt="20190816220906"></p><p>按<code>空格</code>翻页 按<code>q</code>离开</p><p><code>NAME</code>代表描述，说明这个命令的作用</p><p><code>SYNOPSIS</code>表示用法，说明这个命令的使用方法</p><p><code>DESCRIPTION</code>是各种选项参数的解释，如果你要快速的定位到某个选项参数信息，输入<code>/xxx</code>即可</p><a id="more"></a>
+
+
+
+
+
+
+
+
+
+<h2 id="man查看配置文件信息"><a href="#man查看配置文件信息" class="headerlink" title="man查看配置文件信息"></a>man查看配置文件信息</h2><p>例如查看 locale.conf配置，注意不需要加绝对路径，直接名字即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man locale.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816222824.png!blog" alt="20190816222824"></p>
+<p><code>NAME</code>代表描述，说明这个命令的作用</p>
+<p><code>SYNOPSIS</code>表示用法，说明这个命令的使用方法</p>
+<p><code>DESCRIPTION</code>是各种选项参数的解释，如果你要快速的定位到某个选项参数信息</p>
+<p>往后翻，可以查看到使用的方法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">OPTIONS</span><br><span class="line">       The following locale settings may be set using /etc/locale.conf: LANG=, LANGUAGE=, LC_CTYPE=, LC_NUMERIC=, LC_TIME=, LC_COLLATE=,</span><br><span class="line">       LC_MONETARY=, LC_MESSAGES=, LC_PAPER=, LC_NAME=, LC_ADDRESS=, LC_TELEPHONE=, LC_MEASUREMENT=, LC_IDENTIFICATION=. Note that LC_ALL may not</span><br><span class="line">       be configured in this file. For details about the meaning and semantics of these settings, refer to locale(7).</span><br><span class="line"></span><br><span class="line">EXAMPLE</span><br><span class="line">       Example 1. German locale with English messages</span><br></pre></td></tr></table></figure>
+
+<h1 id="特殊情况"><a href="#特殊情况" class="headerlink" title="特殊情况"></a>特殊情况</h1><p>如果碰到一个即是命令又是配置文件的该怎么办？</p>
+<p>例如<code>passwd</code>命令</p>
+<p>用<code>whereis</code>查看<code>passwd</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 /]# whereis passwd</span><br><span class="line">passwd: /usr/bin/passwd /etc/passwd /usr/share/man/man1/passwd.1.gz /usr/share/man/man1/passwd.5.gz</span><br></pre></td></tr></table></figure>
+
+<p>可以看到查出来既有命令又有配置文件，第一个是命令的位置，第二个是配置文件的位置，第三个是命令帮助文件的位置，第四个是配置文件帮助命令的位置</p>
+<p><code>1</code>是命令的帮助 <code>5</code>是配置文件的帮助。优先显示命令的帮组</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">man</span> 5 passwd</span><br></pre></td></tr></table></figure>
+
+<p>即可查看该配置文件的信息</p>
+<h1 id="whatis命令"><a href="#whatis命令" class="headerlink" title="whatis命令"></a>whatis命令</h1><p>如果只是想简单的看下该命令是做什么的可以用此命令</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">what <span class="keyword">is</span></span><br></pre></td></tr></table></figure>
+
+<p>该命令会直接显示<code>NAME</code>的信息，这样就不用看一大片的英文了。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium<span class="number">-2</span>-linux<span class="number">-20190722215607</span> /]# whatis ls</span><br><span class="line">ls (<span class="number">1</span>)               - <span class="type">list</span> directory contents</span><br></pre></td></tr></table></figure>
+
+<h1 id="apropos-命令"><a href="#apropos-命令" class="headerlink" title="apropos 命令"></a>apropos 命令</h1><p>如果想简单的查看配置文件的信息，用该命令即可</p>
+<p>例如</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 /]# apropos locale.<span class="keyword">conf</span></span><br><span class="line">locale.<span class="keyword">conf</span> (5)      - Configuration <span class="keyword">file</span> <span class="keyword">for</span> locale settings</span><br></pre></td></tr></table></figure>
+
+<h1 id="–help-选项"><a href="#–help-选项" class="headerlink" title="–help 选项"></a>–help 选项</h1><p>利用<code>--help</code>会把常见的选项信息列出</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium<span class="number">-2</span>-linux<span class="number">-20190722215607</span> /]<span class="meta"># ls --help</span></span><br><span class="line">Usage: ls [<span class="keyword">OPTION</span>]... [FILE]...</span><br><span class="line">List information about the FILEs (the current directory <span class="keyword">by</span> <span class="keyword">default</span>).</span><br><span class="line">Sort entries alphabetically <span class="keyword">if</span> none <span class="keyword">of</span> -cftuvSUX nor --sort <span class="keyword">is</span> specified.</span><br><span class="line"></span><br><span class="line">Mandatory arguments <span class="keyword">to</span> <span class="built_in">long</span> options are mandatory <span class="keyword">for</span> <span class="built_in">short</span> options too.</span><br><span class="line">  -a, --all                  <span class="keyword">do</span> <span class="keyword">not</span> ignore entries starting <span class="keyword">with</span> .</span><br><span class="line">  -A, --almost-all           <span class="keyword">do</span> <span class="keyword">not</span> list implied . <span class="keyword">and</span> ..</span><br><span class="line">      --author               <span class="keyword">with</span> -l, print the author <span class="keyword">of</span> <span class="keyword">each</span> file</span><br><span class="line">  -b, --escape               print C-style escapes <span class="keyword">for</span> nongraphic characters</span><br><span class="line">      --block-size=SIZE      scale sizes <span class="keyword">by</span> SIZE before printing them; e.g.,</span><br><span class="line">                               <span class="comment">'--block-size=M' prints sizes in units of</span></span><br><span class="line">                               <span class="number">1</span>,<span class="number">048</span>,<span class="number">576</span> bytes; see SIZE format below</span><br><span class="line">  -B, --ignore-backups       <span class="keyword">do</span> <span class="keyword">not</span> list implied entries ending <span class="keyword">with</span> ~</span><br><span class="line">  -c                         <span class="keyword">with</span> -lt: sort <span class="keyword">by</span>, <span class="keyword">and</span> show, ctime (time <span class="keyword">of</span> last</span><br><span class="line">                               modification <span class="keyword">of</span> file status information);</span><br><span class="line">                               <span class="keyword">with</span> -l: show ctime <span class="keyword">and</span> sort <span class="keyword">by</span> name;</span><br><span class="line">                               otherwise: sort <span class="keyword">by</span> ctime, newest first</span><br><span class="line">  -C                         list entries <span class="keyword">by</span> columns</span><br><span class="line">      --color[=<span class="keyword">WHEN</span>]         colorize the output; <span class="keyword">WHEN</span> can be <span class="comment">'never', 'auto',</span></span><br><span class="line">                               <span class="keyword">or</span> <span class="comment">'always' (the default); more info below</span></span><br><span class="line">  -d, --directory            list directories themselves, <span class="keyword">not</span> their contents</span><br><span class="line">  -D, --dired                generate output designed <span class="keyword">for</span> Emacs<span class="comment">' dired mode</span></span><br><span class="line">  -f                         <span class="keyword">do</span> <span class="keyword">not</span> sort, enable -aU, disable -ls --color</span><br></pre></td></tr></table></figure>
+
+<h1 id="help-命令"><a href="#help-命令" class="headerlink" title="help 命令"></a>help 命令</h1><p>该命令可以查看Shell内置命令的帮助信息</p>
+<p>什么是内置命令？在shell中默认设置的命令就是内置命令。shell的作用就是向内核解释代码。</p>
+<p>例如<code>cd</code>命令</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 /]#<span class="built_in"> type </span>cd</span><br><span class="line">cd is a shell builtin</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>help</code>命令查看<code>cd</code>命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 /]# help cd</span><br><span class="line">cd: cd [-L|[-P [-e]]] [dir]</span><br><span class="line">    Change the shell working directory.</span><br><span class="line">    </span><br><span class="line">    Change the current directory to DIR.  The default DIR is the value of the</span><br><span class="line">    HOME shell variable.</span><br><span class="line">    </span><br><span class="line">    The variable CDPATH defines the search path for the directory containing</span><br><span class="line">    DIR.  Alternative directory names in CDPATH are separated by a colon (:).</span><br><span class="line">    A null directory name is the same as the current directory.  If DIR begins</span><br><span class="line">    with a slash (/), then CDPATH is not used.</span><br><span class="line">    </span><br><span class="line">    If the directory is not found, and the shell option `cdable_vars' is set,</span><br><span class="line">    the word is assumed to be  a variable name.  If that variable has a value,</span><br><span class="line">    its value is used for DIR.</span><br><span class="line">    </span><br><span class="line">    Options:</span><br><span class="line">        -L	force symbolic links to be followed</span><br><span class="line">        -P	use the physical directory structure without following symbolic</span><br><span class="line">    	links</span><br><span class="line">        -e	if the -P option is supplied, and the current working directory</span><br><span class="line">    	cannot be determined successfully, exit with a non-zero status</span><br><span class="line">    </span><br><span class="line">    The default is to follow symbolic links, as if `-L' were specified.</span><br><span class="line">    </span><br><span class="line">    Exit Status:</span><br><span class="line">    Returns 0 if the directory is changed, and if $PWD is set successfully when</span><br><span class="line">    -P is used; non-zero otherwise.</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>man 查看命令或配置文件帮助 </li>
+<li>whatis 获得命令简短的信息</li>
+<li>apropos 获得配置文件的简短信息</li>
+<li>help 查看shell查看shell内置命令信息</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/linux/" rel="tag"># linux</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/08/16/hexo部署云服务器的全过程/" rel="next" title="hexo部署云服务器的全过程">
+                  <i class="fa fa-chevron-left"></i> hexo部署云服务器的全过程
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://139.159.245.212:1998" title="Profile &rarr; http://139.159.245.212:1998" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#man命令"><span class="nav-number">1.</span> <span class="nav-text">man命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#man查看命令信息"><span class="nav-number">1.1.</span> <span class="nav-text">man查看命令信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#man查看配置文件信息"><span class="nav-number">1.2.</span> <span class="nav-text">man查看配置文件信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特殊情况"><span class="nav-number">2.</span> <span class="nav-text">特殊情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#whatis命令"><span class="nav-number">3.</span> <span class="nav-text">whatis命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#apropos-命令"><span class="nav-number">4.</span> <span class="nav-text">apropos 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#–help-选项"><span class="nav-number">5.</span> <span class="nav-text">–help 选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#help-命令"><span class="nav-number">6.</span> <span class="nav-text">help 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+  <div id="days"></div>
+    <script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+    
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: true,
+    notify: true,
+    appId: 'CEkthisCtMnKtxbK5s8CfmvV-MdYXbMMI',
+    appKey: 'gXG75AUPMuVW4RapiCsPpQmL',
+    placeholder: '留下邮箱，有回复时你将收到提醒，邮箱不会被公开。',
+    avatar: 'hide',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>
