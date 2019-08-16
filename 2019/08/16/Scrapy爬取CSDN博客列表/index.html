@@ -57,22 +57,24 @@
   };
 </script>
 
-  <meta name="description" content="新建Scrapy爬虫项目如果你还没有安装Scrapy，可以通过下面这个命令安装1​pip install scrapy​12345```## 新建一个项目安装好之后就可以创建项目了scrapy startproject 你的项目名12345678910111213![20190816135546](https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/bl">
+  <meta name="description" content="前言Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 其可以应用在数据挖掘，信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取 (更确切来说, 网络抓取 )所设计的， 也可以应用在获取API所返回的数据(例如 Amazon Associates Web Services ) 或者通用的网络爬虫。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。">
 <meta name="keywords" content="爬虫">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scrapy爬取CSDN博客列表">
 <meta property="og:url" content="localhost:4000/2019/08/16/Scrapy爬取CSDN博客列表/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="新建Scrapy爬虫项目如果你还没有安装Scrapy，可以通过下面这个命令安装1​pip install scrapy​12345```## 新建一个项目安装好之后就可以创建项目了scrapy startproject 你的项目名12345678910111213![20190816135546](https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/bl">
+<meta property="og:description" content="前言Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 其可以应用在数据挖掘，信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取 (更确切来说, 网络抓取 )所设计的， 也可以应用在获取API所返回的数据(例如 Amazon Associates Web Services ) 或者通用的网络爬虫。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816150949.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816135546.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816140048.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816145051.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816145728.png!blog">
-<meta property="og:updated_time" content="2019-08-16T07:01:06.427Z">
+<meta property="og:updated_time" content="2019-08-16T07:10:24.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scrapy爬取CSDN博客列表">
-<meta name="twitter:description" content="新建Scrapy爬虫项目如果你还没有安装Scrapy，可以通过下面这个命令安装1​pip install scrapy​12345```## 新建一个项目安装好之后就可以创建项目了scrapy startproject 你的项目名12345678910111213![20190816135546](https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/bl">
-<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816140048.png!blog">
+<meta name="twitter:description" content="前言Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 其可以应用在数据挖掘，信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取 (更确切来说, 网络抓取 )所设计的， 也可以应用在获取API所返回的数据(例如 Amazon Associates Web Services ) 或者通用的网络爬虫。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816150949.png!blog">
   <link rel="canonical" href="localhost:4000/2019/08/16/Scrapy爬取CSDN博客列表/">
 
 
@@ -338,12 +340,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="新建Scrapy爬虫项目"><a href="#新建Scrapy爬虫项目" class="headerlink" title="新建Scrapy爬虫项目"></a>新建Scrapy爬虫项目</h1><p>如果你还没有安装Scrapy，可以通过下面这个命令安装</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">​</span><br></pre></td></tr></table></figure><p>pip install scrapy<br>​<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">## 新建一个项目</span><br><span class="line"></span><br><span class="line">安装好之后就可以创建项目了</span><br></pre></td></tr></table></figure></p><p>scrapy startproject 你的项目名</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![20190816135546](https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816135546.png!blog)</span><br><span class="line"></span><br><span class="line">创建好之后的目录如上图所示</span><br><span class="line"></span><br><span class="line">每个文件的具体作用可以参照Scrapy的官方文档，这里就不再赘述。</span><br><span class="line"></span><br><span class="line">## 新建一个爬虫</span><br><span class="line"></span><br><span class="line">通过命令</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">scrapy genspider 你的爬虫名</span><br></pre></td></tr></table></figure><a id="more"></a>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 其可以应用在数据挖掘，信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取 (更确切来说, 网络抓取 )所设计的， 也可以应用在获取API所返回的数据(例如 Amazon Associates Web Services ) 或者通用的网络爬虫。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。<img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816150949.png!blog" alt="20190816150949"></p>
+<a id="more"></a>
 
 
 
+<h1 id="新建Scrapy爬虫项目"><a href="#新建Scrapy爬虫项目" class="headerlink" title="新建Scrapy爬虫项目"></a>新建Scrapy爬虫项目</h1><p>如果你还没有安装Scrapy，可以通过下面这个命令安装</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy</span><br></pre></td></tr></table></figure>
 
+<h2 id="新建一个项目"><a href="#新建一个项目" class="headerlink" title="新建一个项目"></a>新建一个项目</h2><p>安装好之后就可以创建项目了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject 你的项目名</span><br></pre></td></tr></table></figure>
 
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816135546.png!blog" alt="20190816135546"></p>
+<p>创建好之后的目录如上图所示</p>
+<p>每个文件的具体作用可以参照Scrapy的官方文档，这里就不再赘述。</p>
+<h2 id="新建一个爬虫"><a href="#新建一个爬虫" class="headerlink" title="新建一个爬虫"></a>新建一个爬虫</h2><p>通过命令</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy genspider 你的爬虫名</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816140048.png!blog" alt="20190816140048"></p>
 <h1 id="设置配置文件"><a href="#设置配置文件" class="headerlink" title="设置配置文件"></a>设置配置文件</h1><p>如果你不需要存入数据库或者做进一步的反爬处理，则可以跳过这一步，打开setting.py进行以下修改</p>
@@ -556,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建Scrapy爬虫项目"><span class="nav-number">1.</span> <span class="nav-text">新建Scrapy爬虫项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置配置文件"><span class="nav-number">2.</span> <span class="nav-text">设置配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置浏览器名"><span class="nav-number">2.1.</span> <span class="nav-text">设置浏览器名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置日志级别"><span class="nav-number">2.2.</span> <span class="nav-text">设置日志级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置模式"><span class="nav-number">2.3.</span> <span class="nav-text">设置模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你要抓取的博客页数"><span class="nav-number">2.4.</span> <span class="nav-text">设置你要抓取的博客页数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你的数据库"><span class="nav-number">2.5.</span> <span class="nav-text">设置你的数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建数据项"><span class="nav-number">3.</span> <span class="nav-text">新建数据项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写爬虫文件"><span class="nav-number">4.</span> <span class="nav-text">编写爬虫文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#保存数据至数据库"><span class="nav-number">5.</span> <span class="nav-text">保存数据至数据库</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建Scrapy爬虫项目"><span class="nav-number">2.</span> <span class="nav-text">新建Scrapy爬虫项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个项目"><span class="nav-number">2.1.</span> <span class="nav-text">新建一个项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个爬虫"><span class="nav-number">2.2.</span> <span class="nav-text">新建一个爬虫</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置配置文件"><span class="nav-number">3.</span> <span class="nav-text">设置配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置浏览器名"><span class="nav-number">3.1.</span> <span class="nav-text">设置浏览器名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置日志级别"><span class="nav-number">3.2.</span> <span class="nav-text">设置日志级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置模式"><span class="nav-number">3.3.</span> <span class="nav-text">设置模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你要抓取的博客页数"><span class="nav-number">3.4.</span> <span class="nav-text">设置你要抓取的博客页数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置你的数据库"><span class="nav-number">3.5.</span> <span class="nav-text">设置你的数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建数据项"><span class="nav-number">4.</span> <span class="nav-text">新建数据项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写爬虫文件"><span class="nav-number">5.</span> <span class="nav-text">编写爬虫文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#保存数据至数据库"><span class="nav-number">6.</span> <span class="nav-text">保存数据至数据库</span></a></li></ol></div>
             
 
           </div>
