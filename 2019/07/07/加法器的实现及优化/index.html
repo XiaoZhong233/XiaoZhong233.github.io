@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="1、半加器半加器有一个异或门和与门组成，异或门赋值记录数值，与门记录是否产生了进位。但是半加器是无法完成加法运算的。 需要完成加法运算，需要用到全加器">
+<meta name="keywords" content="计组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加法器的实现及优化">
+<meta property="og:url" content="localhost:4000/2019/07/07/加法器的实现及优化/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="1、半加器半加器有一个异或门和与门组成，异或门赋值记录数值，与门记录是否产生了进位。但是半加器是无法完成加法运算的。 需要完成加法运算，需要用到全加器">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161154.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161241.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161253.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161304.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161321.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161402.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161413.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161435.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161449.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161459.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161510.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161522.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161541.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161551.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161608.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:updated_time" content="2019-08-16T08:16:12.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="加法器的实现及优化">
+<meta name="twitter:description" content="1、半加器半加器有一个异或门和与门组成，异或门赋值记录数值，与门记录是否产生了进位。但是半加器是无法完成加法运算的。 需要完成加法运算，需要用到全加器">
+<meta name="twitter:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+  <link rel="canonical" href="localhost:4000/2019/07/07/加法器的实现及优化/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>加法器的实现及优化 | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/07/07/加法器的实现及优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">加法器的实现及优化
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-07 00:34:40" itemprop="dateCreated datePublished" datetime="2019-07-07T00:34:40+08:00">2019-07-07</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机原理/" itemprop="url" rel="index"><span itemprop="name">计算机原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="/2019/07/07/加法器的实现及优化/" class="post-meta-item leancloud_visitors" data-flag-title="加法器的实现及优化" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+            
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/07/加法器的实现及优化/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/07/加法器的实现及优化/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1、半加器"><a href="#1、半加器" class="headerlink" title="1、半加器"></a>1、半加器<img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></h1><p>半加器有一个异或门和与门组成，异或门赋值记录数值，与门记录是否产生了进位。但是半加器是无法完成加法运算的。</p>
+<p>需要完成加法运算，需要用到全加器</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161154.png!blog" alt="20190816161154"></p>
+<a id="more"></a>
+
+<h1 id="2、全加器"><a href="#2、全加器" class="headerlink" title="2、全加器"></a>2、全加器</h1><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161241.png!blog" alt="20190816161241"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>全加器由两个半加器组成，绿色的为一个半加器，橙色的为另一个半加器。三个输入，两个输出。</p>
+<p>两个输出表示了他能表示的范围为0,1,2,3  对应的二进制则为表上的Cout 与 S</p>
+<p>例如进行1+1的运算时</p>
+<p>先来看看S的输出：</p>
+<p><strong>A端输入1，B端输入1，C端输入0（最低位加法运算默认为0），1（A）异或1（B） 结果为0（记为D）0（D）+0（Cin）结果是0，所以绿色的异或门输出（S）为0，说明该位的运算结果为0。</strong></p>
+<p>再来看看Cout（进位）的输出：</p>
+<p><strong>1（A）与1（B） 结果为1，说明产生了进位，橙色的与门输出1。由S的输出过程可得绿色的与门的输入为0,0，绿色的与门输出为0，这个时候需要一个或门即可判断两次加法（A+B和B+Cin）是否产生了进位，只要其中一个产生的进位，Cout置1。</strong></p>
+<p>运算结果：</p>
+<p>将Cout与S连起来，就是10，也就是2。</p>
+<h2 id="减法的实现："><a href="#减法的实现：" class="headerlink" title="减法的实现："></a>减法的实现：</h2><p>减法实际上就是加法  A-B 可以表示为 <strong>A+ （-B）</strong>  这个-B可以用补码来表示。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161253.png!blog" alt="20190816161253"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>如上图所示，sub-mode负责加减法的选择，同时他连接到最低位的Cin端。</p>
+<p>如果为加法，则sub-mode为0，那么直接进行加法运算</p>
+<p>如果为减法，则sub-mode为1，最低位数字Cin（C0端）被置为1，同时控制电路对B的每一位是输入数字作取反处理，这样就完成的（-B）补码的“按位取反，末位加一”的操作。然后按加法运算即可</p>
+<h1 id="3、行波进位加法器"><a href="#3、行波进位加法器" class="headerlink" title="3、行波进位加法器"></a>3、行波进位加法器</h1><p>行波进位加法器就是由n个全加器构成的，可以运算n位的加法。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161304.png!blog" alt="20190816161304"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>例如计算：1101+0110。将每个低位的Cout（进位输出）作为对应高位的Cin（进位输入）。</p>
+<p>这里Cout最高位为1，而假设我们当前的寄存器的位数为4位，则产生了溢出。</p>
+<h2 id="溢出和进位的区别："><a href="#溢出和进位的区别：" class="headerlink" title="溢出和进位的区别："></a>溢出和进位的区别：</h2><p>溢出：表示数据超过了正常的表示范围，如果采用浮点表示还分成上溢出和下溢出。</p>
+<p>进位：N进制进位这个就是逢N进一</p>
+<p>需要注意，溢出和进位并没有直接关系。<strong>溢出的发生只在有符号位时发生</strong>，也就是说你的机器数是带符号的就有可能产生溢出。</p>
+<h2 id="判断溢出的方法："><a href="#判断溢出的方法：" class="headerlink" title="判断溢出的方法："></a>判断溢出的方法：</h2><p>1、最高位数值和符号位都发生了进位或者<strong>都不产生</strong>进位，则没有溢出。最高位数值和符号位有一个产生进位，另一个没有进位，则为溢出。计算机实现用异或电路</p>
+<p>例如 1,111+0,100 -&gt;10011(舍去最高位) ，最终结果为 0,011  未发生进位</p>
+<p>2、如果采用两位符号位表示，原理和方法1一样，采用了两位符号位来记录原来的1位符号位和最高数值位的进位情况，这样就不需要用异或电路。符号位为00或11则未溢出，如果为01为正溢出（此时真正的符号位正），10为负溢出（此时真正的符号为负）</p>
+<h2 id="行波进位加法器的运算过程："><a href="#行波进位加法器的运算过程：" class="headerlink" title="行波进位加法器的运算过程："></a>行波进位加法器的运算过程：</h2><p>在进行加法运算时，首先准备好的是（从右往左为1,2,3,4号）1号全加器的3个input。而2、3、4号全加器的Cin全部来自前一个全加器的Cout，只有等到1号全加器运算完毕，2、3、4号全加器才能依次进行进位运算，最终得到结果。 这样进位输出，像波浪一样，依次从低位到高位传递， 最终产生结果的加法器，也因此得名为<strong>行波进位加法器</strong>（Ripple-Carry Adder，RCA）。</p>
+<p>RCA的优点是电路<strong>布局简单，设计方便</strong>， 我们只要设计好了全加器，连接起来就构成了多位的加法器。 但是缺点也很明显，也就是<strong>高位的运算必须等待低位的运算完成</strong>， 这样造成了整个加法器的延迟时间很长。那么，RCA的效率到底如何呢？让我们来算一算：</p>
+<p>将4bit的RCA内部结构全部打开，就得到了如图2所示的4-bit RCA的门电路图。要对一个电路的性能进行分析，我们就要找出其中的最长路径。 也就是找出所有的从输入到输出的电路连接中，经过的门数最多的那一条，也称为关键路径（如下图所示）。</p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161321.png!blog" alt="20190816161321"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="判断延迟的两个指标："><a href="#判断延迟的两个指标：" class="headerlink" title="判断延迟的两个指标："></a>判断延迟的两个指标：</h2><h3 id="（1）门延迟"><a href="#（1）门延迟" class="headerlink" title="（1）门延迟"></a>（1）门延迟</h3><p>经过每个门所花费的实际，称为<strong>门延迟</strong></p>
+<h3 id="（2）线延迟"><a href="#（2）线延迟" class="headerlink" title="（2）线延迟"></a>（2）线延迟</h3><p>输入信号进入到这块电路之后，在连接线上传递需要花时间。 称为<strong>线延迟</strong></p>
+<h2 id="行波进位加法器的延迟分析："><a href="#行波进位加法器的延迟分析：" class="headerlink" title="行波进位加法器的延迟分析："></a><strong>行波进位加法器的延迟分析：</strong></h2><p><strong>以只考虑门延迟为例</strong></p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161402.png!blog" alt="20190816161402"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161413.png!blog" alt="20190816161413"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动">从第一个全加器的A-S这条通路来看，产生第一个S输出，需要通过两个门的延迟。 所以它显然不是最长的路径，当然，从A出发或着从B出发都是一样的， 所以对于第一个全加器，它的最长路径，是红色线标记的那条，后面的全加器关键路径同理可得。</p>
+<p>那么，假设经过一个门电路的延迟时间为T，那么经过4个全加器所需要的总延迟时间就是：2T x 4 + T(第一个全加器产生3个T) = 9T。所以推出，经过n个全加器所产生的总延迟时间为2T x n + T = (2n+1)T。</p>
+<p>对于一个32bit的RCA，有总延迟时间：(2n+1)T =(2×32+1)×T =65T，这是什么概念呢？举个例子，iPhone 5s的A7 SoC处理器采用28nm制造工艺，主频1.3GHz（0.66ns  CPU时钟周期中每两个上沿所隔的时间）。按照这个工艺水平，门延迟T设为0.02ns，那么32-bit RCA的延迟时间为1.3ns ，时钟频率为769MHz，远超A7处理器的主频延迟时间，更别说这个32bit的RCA只是一个加法运算器，更更别说，我们在计算过程中只考虑了门延迟，还有线延迟等各种延迟没有加入计算……</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161435.png!blog" alt="20190816161435"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="4、超前进位加法器"><a href="#4、超前进位加法器" class="headerlink" title="4、超前进位加法器"></a>4、超前进位加法器</h1><p>从上面可以看到，影响行波进位加法器（RCA）运算效率的主要因素是<strong>高位的运算必须等待低位的“进位输出信号”</strong>，那我们的优化思路就是‘能否提前计算出“进位输出信号’ ？”</p>
+<p>答案是有的，如图所示。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161449.png!blog" alt="20190816161449"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>全加器有三个输入，当其中的两个为1时，必定产生进位。这样就有了如下的公式：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161459.png!blog" alt="20190816161459"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>Ai Bi Ci 分别是全加器的三个输入，Ci+1为进位输出 Ci为进位输入。</p>
+<p>如果是最低位，则Ci=C0，C0根据加法或是减法置为0或者1。</p>
+<p>简化公式得：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161510.png!blog" alt="20190816161510"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>如果表示4个全加器的进位输入输出：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161522.png!blog" alt="20190816161522"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>可以得到由每个低位全加器的进位输出得到每个高位全加器的进位输入。</p>
+<p>最终我们需要得到的是C4，经过换算，C4=G3+P3·G2+P3·P2·G1+P3·P2·P1·G0+P3·P2·P1·P0·C0，而这些参数，全部已知！并不需要前一个全加器运算输出，由此我们得到了提前计算进位输出的方法， 用这样的方法实现了加法器就被称为<strong>超前进位加法器</strong>（Carry-Lookahead Adder，CLA）。</p>
+<p>这样就实现了提前获得进位输入的能力，这样就大大提高了加法运算的效率。但有得必有失，这样的代价是电路比较复杂。</p>
+<h2 id="超前进位加法器的实现"><a href="#超前进位加法器的实现" class="headerlink" title="超前进位加法器的实现"></a>超前进位加法器的实现</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161541.png!blog" alt="20190816161541"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>C4的结果由或门实现，把每个多项式进行求和，乘用与门实现。</p>
+<h2 id="延迟分析"><a href="#延迟分析" class="headerlink" title="延迟分析"></a>延迟分析</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161551.png!blog" alt="20190816161551"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>使用CLA来进行加法运算的效率如何呢？还是按照Apple A7处理器的工艺水平，单个CLA的延迟为0.08ns，4级CLA的延迟为0.26ns，时钟频率3.84GHz，都远远小于主频的延迟，完全符合标准。然而，由图可见，计算4bit的二进制数，就要平行排列4个全加器，那么要是计算8bit，16bit，32bit……的呢？可能就需要更复杂的布线方式，这就是CLA的缺点。</p>
+<p>比较一下RCA和CLA的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>行波进位加法器（RCA）</th>
+<th>超前进位加法器（LCA）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>结构特点</td>
+<td>低位全加器的Cout连接到高一位全加器Cin</td>
+<td>每个全加器的进位输入并不来自于前一级的全加器，而是来自超前进位的逻辑电路</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>电路布局简单，设计方便</td>
+<td>计算Ci+1的延迟时间固定为三级门延迟，与加法器的位数无关</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>高位的运算必须等待低位的运算完成，延迟时间长</td>
+<td>如果进一步拓宽加法器的位数，则电路变得非常复杂</td>
+</tr>
+</tbody></table>
+<p>32位的加法器如果采用行波进位的方式，我们已经分析过需要65级的门延迟， 那如果采用超前进位的方式，理想情况下也只需要四级的门延迟，但可惜的是， 这也只是一个理想。因为要实现32位的完全的超前进位，电路就会变得非常的复杂。 因此通常的实现方法， 是采用多个小规模的超前进位加法器拼接而成一个较大的加法器，例如，用4个8-bit的超前进位加法器连接成32-bit加法器。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816161608.png!blog" alt="20190816161608"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\08\14\计算机组成原理：系统总线总结\" rel="bookmark">计算机组成原理：系统总线总结</a></div>
+      
+    </li>
+  
+  </ul>
+
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/计组/" rel="tag"># 计组</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/07/19/Dubbo-Admin的配置以及遇到的坑/" rel="prev" title="Dubbo-Admin的配置以及遇到的坑">
+                  Dubbo-Admin的配置以及遇到的坑 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、半加器"><span class="nav-number">1.</span> <span class="nav-text">1、半加器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、全加器"><span class="nav-number">2.</span> <span class="nav-text">2、全加器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#减法的实现："><span class="nav-number">2.1.</span> <span class="nav-text">减法的实现：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、行波进位加法器"><span class="nav-number">3.</span> <span class="nav-text">3、行波进位加法器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#溢出和进位的区别："><span class="nav-number">3.1.</span> <span class="nav-text">溢出和进位的区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断溢出的方法："><span class="nav-number">3.2.</span> <span class="nav-text">判断溢出的方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行波进位加法器的运算过程："><span class="nav-number">3.3.</span> <span class="nav-text">行波进位加法器的运算过程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断延迟的两个指标："><span class="nav-number">3.4.</span> <span class="nav-text">判断延迟的两个指标：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#（1）门延迟"><span class="nav-number">3.4.1.</span> <span class="nav-text">（1）门延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（2）线延迟"><span class="nav-number">3.4.2.</span> <span class="nav-text">（2）线延迟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行波进位加法器的延迟分析："><span class="nav-number">3.5.</span> <span class="nav-text">行波进位加法器的延迟分析：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、超前进位加法器"><span class="nav-number">4.</span> <span class="nav-text">4、超前进位加法器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#超前进位加法器的实现"><span class="nav-number">4.1.</span> <span class="nav-text">超前进位加法器的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延迟分析"><span class="nav-number">4.2.</span> <span class="nav-text">延迟分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+  <div id="days"></div>
+    <script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+    
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: true,
+    notify: true,
+    appId: 'CEkthisCtMnKtxbK5s8CfmvV-MdYXbMMI',
+    appKey: 'gXG75AUPMuVW4RapiCsPpQmL',
+    placeholder: '留下邮箱，有回复时你将收到提醒，邮箱不会被公开。',
+    avatar: 'hide',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>

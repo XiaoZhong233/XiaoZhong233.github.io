@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Dubbo 是什么Apache Dubbo™ (incubating)是一款高性能Java RPC框架官网：http://dubbo.apache.org/zh-cn/index.html使用感受：Dubbo将传统的服务调用关系分为了消费者和提供者。符合现在前后端分离的这种模式。">
+<meta name="keywords" content="Dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot下采用Dubbo进行服务治理">
+<meta property="og:url" content="localhost:4000/2019/07/19/SpringBoot下采用Dubbo进行服务治理/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="Dubbo 是什么Apache Dubbo™ (incubating)是一款高性能Java RPC框架官网：http://dubbo.apache.org/zh-cn/index.html使用感受：Dubbo将传统的服务调用关系分为了消费者和提供者。符合现在前后端分离的这种模式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160235.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190719205657858.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160409.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160431.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160451.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160505.png!blog">
+<meta property="og:updated_time" content="2019-08-16T08:06:44.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot下采用Dubbo进行服务治理">
+<meta name="twitter:description" content="Dubbo 是什么Apache Dubbo™ (incubating)是一款高性能Java RPC框架官网：http://dubbo.apache.org/zh-cn/index.html使用感受：Dubbo将传统的服务调用关系分为了消费者和提供者。符合现在前后端分离的这种模式。">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160235.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/07/19/SpringBoot下采用Dubbo进行服务治理/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SpringBoot下采用Dubbo进行服务治理 | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/07/19/SpringBoot下采用Dubbo进行服务治理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot下采用Dubbo进行服务治理
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-19 21:26:29" itemprop="dateCreated datePublished" datetime="2019-07-19T21:26:29+08:00">2019-07-19</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span id="/2019/07/19/SpringBoot下采用Dubbo进行服务治理/" class="post-meta-item leancloud_visitors" data-flag-title="SpringBoot下采用Dubbo进行服务治理" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+          
+            
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/19/SpringBoot下采用Dubbo进行服务治理/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/19/SpringBoot下采用Dubbo进行服务治理/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Dubbo-是什么"><a href="#Dubbo-是什么" class="headerlink" title="Dubbo 是什么"></a>Dubbo 是什么</h1><p>Apache Dubbo™ (incubating)是一款高性能Java RPC框架<br>官网：<br><a href="http://dubbo.apache.org/zh-cn/index.html" target="_blank" rel="noopener">http://dubbo.apache.org/zh-cn/index.html</a><br>使用感受：<br>Dubbo将传统的服务调用关系分为了消费者和提供者。符合现在前后端分离的这种模式。</p>
+<a id="more"></a>
+
+<p>Dubbo架构如图<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160235.png!blog" alt="20190816160235"><br>节点角色说明：</p>
+<table>
+<thead>
+<tr>
+<th align="center">节点</th>
+<th align="center">角色说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Provider</td>
+<td align="center">暴露服务的服务提供方</td>
+</tr>
+<tr>
+<td align="center">Consumer</td>
+<td align="center">调用远程服务的服务消费方</td>
+</tr>
+<tr>
+<td align="center">Registry</td>
+<td align="center">服务注册与发现的注册中心</td>
+</tr>
+<tr>
+<td align="center">Monitor</td>
+<td align="center">统计服务的调用次数和调用时间的监控中心</td>
+</tr>
+<tr>
+<td align="center">Container</td>
+<td align="center">服务运行容器</td>
+</tr>
+</tbody></table>
+<h1 id="使用记录"><a href="#使用记录" class="headerlink" title="使用记录"></a>使用记录</h1><p>主要记录dubbo的工作流程，加深理解，如果需要详细的配置及代码请移步度娘</p>
+<h2 id="1、服务注册中心"><a href="#1、服务注册中心" class="headerlink" title="1、服务注册中心"></a>1、服务注册中心</h2><p>使用zookeeper作为服务注册中心，将其部署在docker上。<br>Zookeeper 是 Apacahe Hadoop 的子项目，是一个树型的目录服务，支持变更推送，适合作为 Dubbo 服务的注册中心，工业强度较高，可用于生产环境，并推荐使用。</p>
+<h3 id="部署-启动"><a href="#部署-启动" class="headerlink" title="部署+启动"></a>部署+启动</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#启动docker</span></span><br><span class="line">service docker start</span><br><span class="line"><span class="comment">#拉取镜像</span></span><br><span class="line">docker pull zookeeper:3.5</span><br><span class="line"><span class="comment">#创建容器</span></span><br><span class="line">docker create --name zk -p 2181:2181 zookeeper:3.5</span><br><span class="line"><span class="comment">#启动容器</span></span><br><span class="line">docker start zk</span><br></pre></td></tr></table></figure>
+
+<p>启动成功后，可查看容器运行情况</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker ps</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190719205657858.png!blog" alt="20190719205657858"><br>默认端口是2181。</p>
+<h2 id="2、SpringBoot下引入Dubbo进行服务治理"><a href="#2、SpringBoot下引入Dubbo进行服务治理" class="headerlink" title="2、SpringBoot下引入Dubbo进行服务治理"></a>2、SpringBoot下引入Dubbo进行服务治理</h2><p>最明显的感受就是dubbo是非侵入性的，原先的service可以不发生改变，由dubbo调用该service并暴露一个dubbo服务接口给controller，简单的代码就可以实现服务治理。</p>
+<h3 id="2-1dubbo配置"><a href="#2-1dubbo配置" class="headerlink" title="2.1dubbo配置"></a>2.1dubbo配置</h3><p>在springboot的配置文件application.properties中</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Dubbo配置</span></span><br><span class="line"><span class="comment"># Service version</span></span><br><span class="line"><span class="attr">dubbo.service.version</span> = <span class="number">1.0</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务的扫描包</span></span><br><span class="line"><span class="attr">dubbo.scan.basePackages</span>  = zhong.dubbo.server.api</span><br><span class="line"></span><br><span class="line"><span class="comment"># 应用名称</span></span><br><span class="line"><span class="attr">dubbo.application.name</span> = dubbo-provider-house-resources</span><br><span class="line"></span><br><span class="line"><span class="comment"># 协议以及端口</span></span><br><span class="line"><span class="attr">dubbo.protocol.name</span> = dubbo</span><br><span class="line"><span class="attr">dubbo.protocol.port</span> = <span class="number">20881</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># zk注册中心</span></span><br><span class="line"><span class="attr">dubbo.registry.address</span> = zookeeper://<span class="number">192.168</span>.<span class="number">146.128</span>:<span class="number">2181</span></span><br><span class="line"><span class="attr">dubbo.registry.client</span> = zkclient</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2dubbo使用"><a href="#2-2dubbo使用" class="headerlink" title="2.2dubbo使用"></a>2.2dubbo使用</h3><h4 id="2-2-1定义dubbo服务接口"><a href="#2-2-1定义dubbo服务接口" class="headerlink" title="2.2.1定义dubbo服务接口"></a>2.2.1定义dubbo服务接口</h4><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160409.png!blog" alt="20190816160409"><br>dubbo的服务要实现此接口，同时，该接口也是暴露给外层应用调用的，需要注意的是，要把接口和实现分开。</p>
+<h4 id="2-2-2实现dubbo服务接口"><a href="#2-2-2实现dubbo服务接口" class="headerlink" title="2.2.2实现dubbo服务接口"></a>2.2.2实现dubbo服务接口</h4><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160431.png!blog" alt="20190816160431"><br>新增一个api包，在这里使用dubbo并暴露出dubbo服务的接口给表现层（我随便说的，感觉像类似）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这个是dubbo服务，不要和spring的服务搞混了</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span>(version = <span class="string">"1.0.0"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HouseResourcesService</span> <span class="keyword">implements</span> <span class="title">ApiHouseResourcesService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注入的是spring的服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> zhong.dubbo.server.service.HouseResourcesService houseResourcesService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">saveHouseResources</span><span class="params">(HouseResources houseResources)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.houseResourcesService.saveHouseResources(houseResources);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3查看dubbo服务"><a href="#2-3查看dubbo服务" class="headerlink" title="2.3查看dubbo服务"></a>2.3查看dubbo服务</h3><p>利用dubbo-admin即可查看注册的服务<br>如果没配置过dubbo-admin，可以看这篇<br><a href="https://blog.csdn.net/weixin_41154636/article/details/96478016" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41154636/article/details/96478016</a><br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160451.png!blog" alt="20190816160451"></p>
+<h3 id="2-3调用dubbo"><a href="#2-3调用dubbo" class="headerlink" title="2.3调用dubbo"></a>2.3调用dubbo</h3><p>在Controller中，因为在上一步中已经完成dubbo服务接口的定义及实现，并且把dubbo 服务的接口注入到spring容器中了。所以只需要在controller中调用duddo服务即可。<br>使用起来非常简单呢。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(<span class="meta-string">"house/resources"</span>)</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HouseResourcesController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> HouseResourcesService houseResourcesService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> houseResources 接收json数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;<span class="built_in">Void</span>&gt; save(<span class="meta">@RequestBody</span> HouseResources houseResources)&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            boolean success = <span class="keyword">this</span>.houseResourcesService.save(houseResources);</span><br><span class="line">            <span class="keyword">if</span>(success)&#123;</span><br><span class="line">                <span class="keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).build();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="keyword">get</span>()&#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok(<span class="string">"ok"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以从dubbo-admin中看到消费者列表<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160505.png!blog" alt="20190816160505"><br>这个时候这里的消费者就是指某个controller，这里只是完成了服务的订阅，当某个请求过来的时候，才是真正的服务调用，dubbo会根据负载均衡的不同策略对已注册的服务选择调用。</p>
+<h1 id="Dubbo的工作流程总结"><a href="#Dubbo的工作流程总结" class="headerlink" title="Dubbo的工作流程总结"></a>Dubbo的工作流程总结</h1><ol>
+<li>服务容器负责启动，加载，运行服务提供者。</li>
+<li>服务提供者在启动时，向注册中心注册自己提供的服务。</li>
+<li>服务消费者在启动时，向注册中心订阅自己所需的服务。</li>
+<li>注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
+<li>服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另<br>一台调用。</li>
+<li>服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\07\19\Dubbo-Admin的配置以及遇到的坑\" rel="bookmark">Dubbo-Admin的配置以及遇到的坑</a></div>
+      
+    </li>
+  
+  </ul>
+
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/Dubbo/" rel="tag"># Dubbo</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/07/19/Dubbo-Admin的配置以及遇到的坑/" rel="next" title="Dubbo-Admin的配置以及遇到的坑">
+                  <i class="fa fa-chevron-left"></i> Dubbo-Admin的配置以及遇到的坑
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/07/30/React学习总结/" rel="prev" title="React学习总结">
+                  React学习总结 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="comments"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dubbo-是什么"><span class="nav-number">1.</span> <span class="nav-text">Dubbo 是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用记录"><span class="nav-number">2.</span> <span class="nav-text">使用记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、服务注册中心"><span class="nav-number">2.1.</span> <span class="nav-text">1、服务注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#部署-启动"><span class="nav-number">2.1.1.</span> <span class="nav-text">部署+启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、SpringBoot下引入Dubbo进行服务治理"><span class="nav-number">2.2.</span> <span class="nav-text">2、SpringBoot下引入Dubbo进行服务治理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1dubbo配置"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1dubbo配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2dubbo使用"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2dubbo使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1定义dubbo服务接口"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">2.2.1定义dubbo服务接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2实现dubbo服务接口"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">2.2.2实现dubbo服务接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3查看dubbo服务"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3查看dubbo服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3调用dubbo"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.3调用dubbo</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dubbo的工作流程总结"><span class="nav-number">3.</span> <span class="nav-text">Dubbo的工作流程总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+  <div id="days"></div>
+    <script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+  <script src="/js/motion.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+    
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: true,
+    notify: true,
+    appId: 'CEkthisCtMnKtxbK5s8CfmvV-MdYXbMMI',
+    appKey: 'gXG75AUPMuVW4RapiCsPpQmL',
+    placeholder: '留下邮箱，有回复时你将收到提醒，邮箱不会被公开。',
+    avatar: 'hide',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: location.pathname
+  });
+}, window.Valine);
+</script>
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>
