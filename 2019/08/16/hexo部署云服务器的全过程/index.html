@@ -68,10 +68,10 @@
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816202358.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816204019.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816204246.png!blog">
-<meta property="og:image" content="c:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1566001964718.png">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190817085235.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816213146.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816214345.png!blog">
-<meta property="og:updated_time" content="2019-08-17T00:34:15.501Z">
+<meta property="og:updated_time" content="2019-08-17T00:52:47.846Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo部署云服务器的全过程">
 <meta name="twitter:description" content="前言由于不想部署在github上，因为Github的访问速度在国内比较慢，所以有了此文。 部署之前先了解一下hexo利于git更新的流程，部署在Github上和部署在云服务器上没有特别大的本质区别。 整个流程就是本地将 *.md 渲染成静态文件，然后Git推送到服务器的repository,服务器再通过 git-hooks 同步网站根目录。再利于nginx托管这些静态资源，就可以实现快速的访问。">
@@ -388,7 +388,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -v git@SERVER_IP</span><br></pre></td></tr></table></figure>
 
 <p>测试成功</p>
-<p><img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1566001964718.png" alt="1566001964718"></p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190817085235.png!blog" alt="20190817085235"></p>
 <p>如果你的测试不成功，请查看具体的输出信息，通常是公钥没配置好，可以把原来生成的公钥删了，重新配置一遍。</p>
 <h2 id="创建网站的根目录"><a href="#创建网站的根目录" class="headerlink" title="创建网站的根目录"></a>创建网站的根目录</h2><p>创建网站的根目录的目的是为了让nginx托管这些静态文件。</p>
 <p>创建一个目录用于作为网站的根目录。切换成root用户</p>
