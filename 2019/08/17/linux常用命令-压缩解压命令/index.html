@@ -57,18 +57,18 @@
   };
 </script>
 
-  <meta name="description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名选项:  -c打包 -f指定文件名 -v输出详细信息 -x解包 例如：123[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar">
+  <meta name="description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。 使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux常用命令-压缩解压命令">
 <meta property="og:url" content="localhost:4000/2019/08/17/linux常用命令-压缩解压命令/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名选项:  -c打包 -f指定文件名 -v输出详细信息 -x解包 例如：123[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar">
+<meta property="og:description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。 使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-17T16:27:31.801Z">
+<meta property="og:updated_time" content="2019-08-17T16:38:12.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux常用命令-压缩解压命令">
-<meta name="twitter:description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名选项:  -c打包 -f指定文件名 -v输出详细信息 -x解包 例如：123[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar">
+<meta name="twitter:description" content="打包命令在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到tar命令进行打包成文件。 使用方法：tar -cf[v] 打包后的文件名 需要打包的目录名">
   <link rel="canonical" href="localhost:4000/2019/08/17/linux常用命令-压缩解压命令/">
 
 
@@ -334,17 +334,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="打包命令"><a href="#打包命令" class="headerlink" title="打包命令"></a>打包命令</h1><p>在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到<code>tar</code>命令进行打包成文件。</p><p>使用方法：<code>tar -cf[v] 打包后的文件名 需要打包的目录名</code></p><p>选项: </p><ul>
+        <h1 id="打包命令"><a href="#打包命令" class="headerlink" title="打包命令"></a>打包命令</h1><p>在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到<code>tar</code>命令进行打包成文件。</p>
+<p>使用方法：<code>tar -cf[v] 打包后的文件名 需要打包的目录名</code></p>
+<a id="more"></a>
+
+<p>选项: </p>
+<ul>
 <li><code>-c</code>打包</li>
 <li><code>-f</code>指定文件名</li>
 <li><code>-v</code>输出详细信息</li>
 <li><code>-x</code>解包</li>
-</ul><p>例如：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar testDir</span><br><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# ls</span><br><span class="line">testDir  testDir.tar</span><br></pre></td></tr></table></figure><a id="more"></a>
-
-
-
-
-
+</ul>
+<p>例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar testDir</span><br><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# ls</span><br><span class="line">testDir  testDir.tar</span><br></pre></td></tr></table></figure>
 
 <h1 id="几种压缩格式及命令"><a href="#几种压缩格式及命令" class="headerlink" title="几种压缩格式及命令"></a>几种压缩格式及命令</h1><h2 id="gz格式"><a href="#gz格式" class="headerlink" title=".gz格式"></a>.gz格式</h2><p>这种格式在Linux中用的最多，也最常见</p>
 <h3 id="压缩文件命令"><a href="#压缩文件命令" class="headerlink" title="压缩文件命令"></a>压缩文件命令</h3><p><code>.gz</code>文件可以用<code>gzip</code> 命令进行压缩</p>

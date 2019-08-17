@@ -329,12 +329,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="打包命令"><a href="#打包命令" class="headerlink" title="打包命令"></a>打包命令</h1><p>在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到<code>tar</code>命令进行打包成文件。</p><p>使用方法：<code>tar -cf[v] 打包后的文件名 需要打包的目录名</code></p><p>选项: </p><ul>
-<li><code>-c</code>打包</li>
-<li><code>-f</code>指定文件名</li>
-<li><code>-v</code>输出详细信息</li>
-<li><code>-x</code>解包</li>
-</ul><p>例如：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# tar -cf testDir.tar testDir</span><br><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 home]# ls</span><br><span class="line">testDir  testDir.tar</span><br></pre></td></tr></table></figure>
+          <h1 id="打包命令"><a href="#打包命令" class="headerlink" title="打包命令"></a>打包命令</h1><p>在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到<code>tar</code>命令进行打包成文件。</p>
+<p>使用方法：<code>tar -cf[v] 打包后的文件名 需要打包的目录名</code></p>
           <!--noindex-->
           
             <div class="post-button text-center">
