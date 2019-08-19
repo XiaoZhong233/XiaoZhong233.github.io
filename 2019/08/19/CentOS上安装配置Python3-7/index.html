@@ -57,25 +57,23 @@
   };
 </script>
 
-  <meta name="description" content="Dubbo-Admin下载配置环境： linux centos7在github上clone到本地即可 1git clone https://github.com/apache/dubbo-admin.git">
-<meta name="keywords" content="Dubbo">
+  <meta name="description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
+<meta name="keywords" content="部署">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dubbo-Admin的配置以及遇到的坑">
-<meta property="og:url" content="localhost:4000/2019/07/19/Dubbo-Admin的配置以及遇到的坑/index.html">
+<meta property="og:title" content="CentOS上安装配置Python3.7及虚拟环境virtualenv">
+<meta property="og:url" content="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="Dubbo-Admin下载配置环境： linux centos7在github上clone到本地即可 1git clone https://github.com/apache/dubbo-admin.git">
+<meta property="og:description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160759.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160814.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160828.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160841.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160855.png!blog">
-<meta property="og:updated_time" content="2019-08-16T08:09:45.854Z">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131549.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131711.png!blog">
+<meta property="og:updated_time" content="2019-08-19T05:24:25.903Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dubbo-Admin的配置以及遇到的坑">
-<meta name="twitter:description" content="Dubbo-Admin下载配置环境： linux centos7在github上clone到本地即可 1git clone https://github.com/apache/dubbo-admin.git">
-<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160759.png!blog">
-  <link rel="canonical" href="localhost:4000/2019/07/19/Dubbo-Admin的配置以及遇到的坑/">
+<meta name="twitter:title" content="CentOS上安装配置Python3.7及虚拟环境virtualenv">
+<meta name="twitter:description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/">
 
 
 <script id="page-configurations">
@@ -89,7 +87,7 @@
   };
 </script>
 
-  <title>Dubbo-Admin的配置以及遇到的坑 | 钟浩伟的个人博客</title>
+  <title>CentOS上安装配置Python3.7及虚拟环境virtualenv | 钟浩伟的个人博客</title>
   
 
 
@@ -255,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/07/19/Dubbo-Admin的配置以及遇到的坑/">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="钟浩伟">
@@ -269,7 +267,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">Dubbo-Admin的配置以及遇到的坑
+          <h1 class="post-title" itemprop="name headline">CentOS上安装配置Python3.7及虚拟环境virtualenv
 
             
           </h1>
@@ -286,7 +284,7 @@
                 
               
 
-              <time title="创建时间：2019-07-19 12:30:49" itemprop="dateCreated datePublished" datetime="2019-07-19T12:30:49+08:00">2019-07-19</time>
+              <time title="创建时间：2019-08-19 12:30:24" itemprop="dateCreated datePublished" datetime="2019-08-19T12:30:24+08:00">2019-08-19</time>
             </span>
           
             <span class="post-meta-item">
@@ -295,7 +293,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
 
                 
                 
@@ -304,7 +302,7 @@
           
 
           
-            <span id="/2019/07/19/Dubbo-Admin的配置以及遇到的坑/" class="post-meta-item leancloud_visitors" data-flag-title="Dubbo-Admin的配置以及遇到的坑" title="阅读次数">
+            <span id="/2019/08/19/CentOS上安装配置Python3-7/" class="post-meta-item leancloud_visitors" data-flag-title="CentOS上安装配置Python3.7及虚拟环境virtualenv" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -323,8 +321,8 @@
       
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/07/19/Dubbo-Admin的配置以及遇到的坑/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/19/Dubbo-Admin的配置以及遇到的坑/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/08/19/CentOS上安装配置Python3-7/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/19/CentOS上安装配置Python3-7/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -340,43 +338,51 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Dubbo-Admin下载"><a href="#Dubbo-Admin下载" class="headerlink" title="Dubbo-Admin下载"></a>Dubbo-Admin下载</h1><h2 id="配置环境：-linux-centos7"><a href="#配置环境：-linux-centos7" class="headerlink" title="配置环境： linux centos7"></a>配置环境： linux centos7</h2><p>在github上clone到本地即可</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">clone</span> <span class="title">https</span>://github.com/apache/dubbo-admin.git</span><br></pre></td></tr></table></figure>
+        <h1 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install </span>zlib-devel <span class="keyword">bzip2-devel </span>openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br></pre></td></tr></table></figure><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> libffi-devel -y</span><br></pre></td></tr></table></figure><h1 id="下载python3-7的包"><a href="#下载python3-7的包" class="headerlink" title="下载python3.7的包"></a>下载python3.7的包</h1><a id="more"></a>
 
-<a id="more"></a>
 
-<h1 id="前端配置"><a href="#前端配置" class="headerlink" title="前端配置"></a>前端配置</h1><p>dubbo采用前后端分离部署，所以他的部署相对有点麻烦，如果按照官方的文档，像个铁憨憨一样c+v，则会出现npm install fail 等错误。<br>因为前端工程是用vue开发的，所以得先配个node.js即可，node.js中自带了npm。<br>首先进入前端工程目录下</p>
-<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd dubbo-<span class="literal">admin</span>/dubbo-<span class="literal">admin</span>-ui</span><br></pre></td></tr></table></figure>
 
-<h2 id="修改前端工程端口及配置信息"><a href="#修改前端工程端口及配置信息" class="headerlink" title="修改前端工程端口及配置信息"></a>修改前端工程端口及配置信息</h2><p>如果需要修改前端工程端口或其他配置信息，进入到</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">vim</span> config/<span class="built_in">index</span>.js</span><br></pre></td></tr></table></figure>
+<h2 id="方法一：直接在官方网站下载"><a href="#方法一：直接在官方网站下载" class="headerlink" title="方法一：直接在官方网站下载"></a>方法一：直接在官方网站下载</h2><p>打开python的官方网站：<a href="https://www.python.org/" target="_blank" rel="noopener">https://www.python.org/</a>  –&gt;Downloads–&gt;Source code–&gt;Latest Python 3 Release - Python 3.7.0–&gt;拉到最下面，选择Gzipped source tarball，下载到本地，然后上传到服务器即可</p>
+<h2 id="方法二：通过wget"><a href="#方法二：通过wget" class="headerlink" title="方法二：通过wget"></a>方法二：通过wget</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="regexp">//</span>www.python.org<span class="regexp">/ftp/</span>python<span class="regexp">/3.7.0/</span>Python-<span class="number">3.7</span>.<span class="number">0</span>.tgz</span><br></pre></td></tr></table></figure>
 
-<p>配置文件下修改即可<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160759.png!blog" alt="20190816160759"><br>需要注意的是，如果修改了后端的端口，记得修改ProxyTable的配置<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160814.png!blog" alt="20190816160814"></p>
-<h2 id="构建dubbo-admin前端工程"><a href="#构建dubbo-admin前端工程" class="headerlink" title="构建dubbo-admin前端工程"></a>构建dubbo-admin前端工程</h2><p>运行</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span></span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python<span class="number">-3.7</span><span class="number">.0</span>.tgz <span class="meta">#解压解包</span></span><br><span class="line">cd Python<span class="number">-3.7</span><span class="number">.0</span></span><br><span class="line">./configure <span class="meta">#运行配置</span></span><br><span class="line"><span class="built_in">make</span>&amp;&amp;<span class="built_in">make</span> install <span class="meta">#编译并安装</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="启动dubbo-admin前端工程"><a href="#启动dubbo-admin前端工程" class="headerlink" title="启动dubbo-admin前端工程"></a>启动dubbo-admin前端工程</h2><p>在<strong>当前目录</strong>下，运行</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">run</span><span class="bash"> dev</span></span><br></pre></td></tr></table></figure>
+<p>安装的目录通常在：/usr/bin/下</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>这里为了使默认python变成python3，需要加一条软链接,并把之前的python命令改成python.bak，而且pip也是要进行链接的：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv <span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>usr<span class="regexp">/bin/</span>python.bak</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>python3 <span class="regexp">/usr/</span>bin/python</span><br><span class="line">mv <span class="regexp">/usr/</span>bin<span class="regexp">/pip /</span>usr<span class="regexp">/bin/</span>pip.bak</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>pip3 <span class="regexp">/usr/</span>bin/pip</span><br></pre></td></tr></table></figure>
 
-<p>运行前端项目，然后就应该可以访问页面了。<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160828.png!blog" alt="20190816160828"></p>
-<h1 id="配置后端项目"><a href="#配置后端项目" class="headerlink" title="配置后端项目"></a>配置后端项目</h1><p>进入后端工程，后端是用springboot和Maven构建的。<br>所以如果你没配置maven的话，可以在先配个maven<br>在linux中配置maven非常简单，具体操作咨询度娘。</p>
-<h2 id="修改后端配置"><a href="#修改后端配置" class="headerlink" title="修改后端配置"></a>修改后端配置</h2><h4 id="修改注册中心端口"><a href="#修改注册中心端口" class="headerlink" title="修改注册中心端口"></a>修改注册中心端口</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim dubbo-admin-server<span class="regexp">/src/m</span>ain<span class="regexp">/resources/</span>application.properties</span><br></pre></td></tr></table></figure>
+<p>接下来需要配置yum的引用，因为yum引用的是之前系统默认的python2.7，现在变成了3.7，需要把他改回来。需要改动两个地方</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="regexp">/usr/</span>libexec<span class="regexp">/urlgrabber-ext-down</span></span><br></pre></td></tr></table></figure>
 
-<p>在这里主要配置注册中心的端口<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160841.png!blog" alt="20190816160841"><br>因为我的zookeeper（服务注册中心）是部署在本机的，所以用本机地址即可。</p>
-<h4 id="修改dubbo-admin后台服务端口"><a href="#修改dubbo-admin后台服务端口" class="headerlink" title="修改dubbo-admin后台服务端口"></a>修改dubbo-admin后台服务端口</h4><p>默认端口为8080，如果需要更改，加入配置</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server.port</span>=&lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog" alt="20190819131304"></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="regexp">/usr/</span>bin<span class="regexp">/yum</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><p>进入到<strong>dubbo-admin-server</strong>目录下，进行构建，如果直接在项目根目录构建会出错。</p>
-<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd dubbo-admin-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131549.png!blog" alt="20190819131549"></p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>输入</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">python -V</span></span><br></pre></td></tr></table></figure>
 
-<p>运行</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean <span class="class"><span class="keyword">package</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">pip -V</span></span><br></pre></td></tr></table></figure>
 
-<p>将项目打包，正常情况下的能构建成功的，如果是npm fail失败的原因，请仔细检查前端工程的配置或是否将前端工程build和install</p>
-<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>运行</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn --projects dubbo-admin-server spring-boot:<span class="keyword">run</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<p>如果出现3.7版本，就说明成功了。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131711.png!blog" alt="20190819131711"></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>新建一个py文件</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">vim</span> helloWorld.<span class="keyword">py</span></span><br></pre></td></tr></table></figure>
 
-<p>然后你再次访问前端页面，就可以监视到通过dubbo注册在zookeeper的服务了。<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190816160855.png!blog" alt="20190816160855"></p>
+<p>修改内容如下：</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /usr/bin/python </span></span><br><span class="line">print(<span class="string">"hello,world"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>第一句一定要加的，除非你配个虚拟环境<code>virtualenv</code></p>
+<p>增加执行权限：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">chmod</span> +<span class="selector-tag">x</span> <span class="selector-tag">helloWorld</span><span class="selector-class">.py</span></span><br></pre></td></tr></table></figure>
+
+<p>运行：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">./helloWorld.py</span></span><br></pre></td></tr></table></figure>
+
+<p>如果控制台输出为：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">hello,</span>world</span><br></pre></td></tr></table></figure>
+
+<p>即测试成功了。</p>
 
     </div>
 
@@ -389,7 +395,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\07\19\SpringBoot下采用Dubbo进行服务治理\" rel="bookmark">SpringBoot下采用Dubbo进行服务治理</a></div>
+      <div class="popular-posts-title"><a href="\2019\08\16\hexo部署云服务器的全过程\" rel="bookmark">hexo部署云服务器的全过程</a></div>
       
     </li>
   
@@ -404,7 +410,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/Dubbo/" rel="tag"># Dubbo</a>
+              <a href="/tags/部署/" rel="tag"># 部署</a>
             
           </div>
         
@@ -414,8 +420,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/07/07/加法器的实现及优化/" rel="next" title="加法器的实现及优化">
-                  <i class="fa fa-chevron-left"></i> 加法器的实现及优化
+                <a href="/2019/08/18/Linux常用命令-网络命令/" rel="next" title="Linux常用命令-网络命令">
+                  <i class="fa fa-chevron-left"></i> Linux常用命令-网络命令
                 </a>
               
             </div>
@@ -423,10 +429,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/07/19/SpringBoot下采用Dubbo进行服务治理/" rel="prev" title="SpringBoot下采用Dubbo进行服务治理">
-                  SpringBoot下采用Dubbo进行服务治理 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -607,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dubbo-Admin下载"><span class="nav-number">1.</span> <span class="nav-text">Dubbo-Admin下载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置环境：-linux-centos7"><span class="nav-number">1.1.</span> <span class="nav-text">配置环境： linux centos7</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前端配置"><span class="nav-number">2.</span> <span class="nav-text">前端配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改前端工程端口及配置信息"><span class="nav-number">2.1.</span> <span class="nav-text">修改前端工程端口及配置信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建dubbo-admin前端工程"><span class="nav-number">2.2.</span> <span class="nav-text">构建dubbo-admin前端工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动dubbo-admin前端工程"><span class="nav-number">2.3.</span> <span class="nav-text">启动dubbo-admin前端工程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置后端项目"><span class="nav-number">3.</span> <span class="nav-text">配置后端项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改后端配置"><span class="nav-number">3.1.</span> <span class="nav-text">修改后端配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改注册中心端口"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">修改注册中心端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改dubbo-admin后台服务端口"><span class="nav-number">3.1.0.2.</span> <span class="nav-text">修改dubbo-admin后台服务端口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建"><span class="nav-number">3.2.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动"><span class="nav-number">3.3.</span> <span class="nav-text">启动</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装依赖包"><span class="nav-number">1.</span> <span class="nav-text">安装依赖包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载python3-7的包"><span class="nav-number">2.</span> <span class="nav-text">下载python3.7的包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：直接在官方网站下载"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：直接在官方网站下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：通过wget"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：通过wget</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a></li></ol></div>
             
 
           </div>
