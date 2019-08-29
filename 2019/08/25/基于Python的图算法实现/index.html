@@ -67,7 +67,7 @@
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190829183358.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
-<meta property="og:updated_time" content="2019-08-29T12:14:28.247Z">
+<meta property="og:updated_time" content="2019-08-29T12:23:04.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Python的图算法实现">
 <meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表建议直接看[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))首先定义了一个异常类：12class GraphError(Exception):    pass">
@@ -357,6 +357,11 @@ isnull-->end1
 visit-->isnull
 isnull--不为空-->deque</pre>
 
+<div id="flowchart-0" class="flow-chart"></div>
+
+
+
+
 
 
 <h4 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 广度优先遍历</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs</span><span class="params">(self, start)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(start):</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + start + <span class="string">"这样的顶点"</span>)</span><br><span class="line">    queue = [start]  <span class="comment"># 队列实现BFS</span></span><br><span class="line">    seen = set(start)  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">    parent = &#123;start: <span class="literal">None</span>&#125;  <span class="comment"># Node代表根节点，数组形式保存树</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> queue.__len__() &gt; <span class="number">0</span>:  <span class="comment"># 队非空时</span></span><br><span class="line">        vertex = queue.pop(<span class="number">0</span>)  <span class="comment"># 队首顶点出队</span></span><br><span class="line">        nodes = self._graph[vertex]  <span class="comment"># 获得其邻接顶点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">            <span class="keyword">if</span> node <span class="keyword">not</span> <span class="keyword">in</span> seen:</span><br><span class="line">                queue.append(node)  <span class="comment"># 其邻接顶点如果没有被访问，则入队，并且保留父顶点</span></span><br><span class="line">                seen.add(node)</span><br><span class="line">                parent[node] = vertex</span><br><span class="line">        result.append(vertex)</span><br><span class="line">    <span class="keyword">return</span> result, parent</span><br></pre></td></tr></table></figure>
@@ -405,7 +410,21 @@ isnull--不为空-->deque</pre>
 <h2 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h2><p>最小生成树针对的是连通网而言的。假定一个网络G，他的边带有权值，自然可以通过BFS,DFS获得他的生成树，权值最小的那棵树，就称最小生成树</p>
 <p>最小生成树有许多实际的应用，例如通信网，输电网及各种网的规划。</p>
 <h3 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h3><h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-2"><a href="#算法实现-2" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h4><h3 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h3><h4 id="算法原理-1"><a href="#算法原理-1" class="headerlink" title="算法原理"></a>算法原理</h4><p>在一个连通图中不断选取权值最小的边，然后连起来，就是这样。</p>
-<h4 id="算法实现-3"><a href="#算法实现-3" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-3"><a href="#测试-3" class="headerlink" title="测试"></a>测试</h4><h2 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h2><h3 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h3><h4 id="算法原理-2"><a href="#算法原理-2" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-4"><a href="#算法实现-4" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-4"><a href="#测试-4" class="headerlink" title="测试"></a>测试</h4><h3 id="弗洛依德算法"><a href="#弗洛依德算法" class="headerlink" title="弗洛依德算法"></a>弗洛依德算法</h3><h4 id="算法原理-3"><a href="#算法原理-3" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-5"><a href="#算法实现-5" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-5"><a href="#测试-5" class="headerlink" title="测试"></a>测试</h4><h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><h3 id="算法原理-4"><a href="#算法原理-4" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-6"><a href="#算法实现-6" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-6"><a href="#测试-6" class="headerlink" title="测试"></a>测试</h3><h2 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h2><h3 id="算法原理-5"><a href="#算法原理-5" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-7"><a href="#算法实现-7" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-7"><a href="#测试-7" class="headerlink" title="测试"></a>测试</h3>
+<h4 id="算法实现-3"><a href="#算法实现-3" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-3"><a href="#测试-3" class="headerlink" title="测试"></a>测试</h4><h2 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h2><h3 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h3><h4 id="算法原理-2"><a href="#算法原理-2" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-4"><a href="#算法实现-4" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-4"><a href="#测试-4" class="headerlink" title="测试"></a>测试</h4><h3 id="弗洛依德算法"><a href="#弗洛依德算法" class="headerlink" title="弗洛依德算法"></a>弗洛依德算法</h3><h4 id="算法原理-3"><a href="#算法原理-3" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-5"><a href="#算法实现-5" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-5"><a href="#测试-5" class="headerlink" title="测试"></a>测试</h4><h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><h3 id="算法原理-4"><a href="#算法原理-4" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-6"><a href="#算法实现-6" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-6"><a href="#测试-6" class="headerlink" title="测试"></a>测试</h3><h2 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h2><h3 id="算法原理-5"><a href="#算法原理-5" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-7"><a href="#算法实现-7" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-7"><a href="#测试-7" class="headerlink" title="测试"></a>测试</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: Start|past:>http://www.google.com[blank]
+e=>end: End:>http://www.google.com
+op1=>operation: My Operation|past
+op2=>operation: Stuff|current
+sub1=>subroutine: My Subroutine|invalid
+cond=>condition: Yes
+or No?|approved:>http://www.google.com
+c2=>condition: Good idea|rejected
+io=>inputoutput: catch something...|request
+
+st->op1(right)->cond
+cond(yes, right)->c2
+cond(no)->sub1(left)->op1
+c2(yes)->io->e
+c2(no)->op2->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
     </div>
 
     
