@@ -55,22 +55,22 @@
   };
 </script>
 
-  <meta name="description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
+  <meta name="description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; `图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta name="keywords" content="python,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Python的图算法实现">
 <meta property="og:url" content="localhost:4000/2019/08/25/基于Python的图算法实现/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
+<meta property="og:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; `图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190829183358.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
-<meta property="og:updated_time" content="2019-08-29T11:25:20.522Z">
+<meta property="og:updated_time" content="2019-08-29T11:27:46.384Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Python的图算法实现">
-<meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
+<meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; `图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
   <link rel="canonical" href="localhost:4000/2019/08/25/基于Python的图算法实现/">
 
@@ -311,12 +311,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。</p><p><code></code> <code>mermaid
-graph TD;
-    A--&gt;B;
-    A--&gt;C;
-    B--&gt;D;
-    C--&gt;D;</code> <code></code></p><h1 id="图的存储结构实现"><a href="#图的存储结构实现" class="headerlink" title="图的存储结构实现"></a>图的存储结构实现</h1><p>图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表</p><a id="more"></a>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。</p><pre class="mermaid">graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+`</pre><h1 id="图的存储结构实现"><a href="#图的存储结构实现" class="headerlink" title="图的存储结构实现"></a>图的存储结构实现</h1><p>图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表</p><a id="more"></a>
+
 
 
 <p>建议直接看</p>
@@ -366,7 +367,16 @@ graph TD;
 <li>当前访问顶点的邻接顶点入栈</li>
 <li>当栈不为空的时候，循环1,2步</li>
 </ol>
-<h4 id="算法流程-1"><a href="#算法流程-1" class="headerlink" title="算法流程"></a>算法流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: 起始顶点入栈</span><br><span class="line">dequeue=&gt;operation: 出栈</span><br><span class="line">cond=&gt;condition: 未被访问?</span><br><span class="line">visit=&gt;inputoutput: 访问该顶点并输出</span><br><span class="line">e=&gt;end</span><br><span class="line">st-&gt;dequeue-&gt;cond</span><br><span class="line">cond(no)-&gt;dequeue</span><br><span class="line">cond(yes)-&gt;visit-&gt;e</span><br></pre></td></tr></table></figure>
+<h4 id="算法流程-1"><a href="#算法流程-1" class="headerlink" title="算法流程"></a>算法流程</h4><pre class="mermaid">st=>start: 起始顶点入栈
+dequeue=>operation: 出栈
+cond=>condition: 未被访问?
+visit=>inputoutput: 访问该顶点并输出
+e=>end
+st->dequeue->cond
+cond(no)->dequeue
+cond(yes)->visit->e</pre>
+
+
 
 <h4 id="算法实现-1"><a href="#算法实现-1" class="headerlink" title="算法实现"></a>算法实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 深度优先遍历</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(self, start)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(start):</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + start + <span class="string">"这样的顶点"</span>)</span><br><span class="line">    stack = [start]  <span class="comment"># 栈实现DFS</span></span><br><span class="line">    seen = set(start)  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">    parent = &#123;start: <span class="literal">None</span>&#125;  <span class="comment"># Node代表根节点，数组形式保存树</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> stack.__len__() &gt; <span class="number">0</span>:  <span class="comment"># 栈非空时</span></span><br><span class="line">        vertex = stack.pop()  <span class="comment"># 顶点出栈</span></span><br><span class="line">        nodes = self._graph[vertex]  <span class="comment"># 获取出栈顶点的邻接顶点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">            <span class="keyword">if</span> node <span class="keyword">not</span> <span class="keyword">in</span> seen:</span><br><span class="line">                stack.append(node)</span><br><span class="line">                seen.add(node)</span><br><span class="line">                parent[node] = vertex</span><br><span class="line">        result.append(vertex)</span><br><span class="line">    <span class="keyword">return</span> result, parent</span><br></pre></td></tr></table></figure>
 
