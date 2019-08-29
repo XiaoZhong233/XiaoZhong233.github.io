@@ -55,22 +55,22 @@
   };
 </script>
 
-  <meta name="description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表建议直接看[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))首先定义了一个异常类：12class GraphError(Exception):    pass">
+  <meta name="description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta name="keywords" content="python,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Python的图算法实现">
 <meta property="og:url" content="localhost:4000/2019/08/25/基于Python的图算法实现/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表建议直接看[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))首先定义了一个异常类：12class GraphError(Exception):    pass">
+<meta property="og:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190829183358.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
-<meta property="og:updated_time" content="2019-08-29T10:58:56.423Z">
+<meta property="og:updated_time" content="2019-08-29T11:25:20.522Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Python的图算法实现">
-<meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表建议直接看[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))首先定义了一个异常类：12class GraphError(Exception):    pass">
+<meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。 mermaid graph TD;     A--&amp;gt;B;     A--&amp;gt;C;     B--&amp;gt;D;     C--&amp;gt;D; 图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表">
 <meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
   <link rel="canonical" href="localhost:4000/2019/08/25/基于Python的图算法实现/">
 
@@ -311,12 +311,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。</p><h1 id="图的存储结构实现"><a href="#图的存储结构实现" class="headerlink" title="图的存储结构实现"></a>图的存储结构实现</h1><p>图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表</p><p>建议直接看</p><p>[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))</p><p>首先定义了一个异常类：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。</p><p><code></code> <code>mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;</code> <code></code></p><h1 id="图的存储结构实现"><a href="#图的存储结构实现" class="headerlink" title="图的存储结构实现"></a>图的存储结构实现</h1><p>图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表</p><a id="more"></a>
 
 
-
-
-
+<p>建议直接看</p>
+<p>[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))</p>
+<p>首先定义了一个异常类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="邻接矩阵实现（不重要也不好用）"><a href="#邻接矩阵实现（不重要也不好用）" class="headerlink" title="邻接矩阵实现（不重要也不好用）"></a>邻接矩阵实现（不重要也不好用）</h2><p>基于邻接矩阵定义了一个实现图的类，其中矩阵元素可以是1或者其他权值，表示有边，或者用一个特殊值表示“无关联”。构造参数的<code>unconn</code>就是表示无关联的值，默认为0。</p>
 <p>图的构造函数的主要参数是<code>mat</code>,表示初始的邻接矩阵。要求是一个二维数组，且为方阵。代码如下</p>
