@@ -69,7 +69,16 @@
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190830224239.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831002634.png!blog">
-<meta property="og:updated_time" content="2019-08-30T16:32:49.330Z">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831190937.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831205632.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831210501.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212236.png!blog">
+<meta property="og:image" content="c:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1567257835949.png">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog">
+<meta property="og:updated_time" content="2019-08-31T13:25:29.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Python的图算法实现">
 <meta name="twitter:description" content="前言本来是想用C语言好好写的，可是指针和结构体太烦人了，弄得我头凉。因此决定用python实现一下图的一些算法。图的存储结构实现图的实现有邻接矩阵，邻接表，十字链表等。我后面的算法主要用邻接表建议直接看[邻接表实现2，基于字典实现](# 邻接表实现2 (基于字典实现，好用))首先定义了一个异常类：12class GraphError(Exception):    pass">
@@ -1096,7 +1105,272 @@ V3--5---V2</pre>
 
 
 
-<h2 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h2><h3 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h3><h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-4"><a href="#算法实现-4" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-4"><a href="#测试-4" class="headerlink" title="测试"></a>测试</h4><h3 id="弗洛依德算法"><a href="#弗洛依德算法" class="headerlink" title="弗洛依德算法"></a>弗洛依德算法</h3><h4 id="算法原理-1"><a href="#算法原理-1" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-5"><a href="#算法实现-5" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-5"><a href="#测试-5" class="headerlink" title="测试"></a>测试</h4><h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><h3 id="算法原理-2"><a href="#算法原理-2" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-6"><a href="#算法实现-6" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-6"><a href="#测试-6" class="headerlink" title="测试"></a>测试</h3><h2 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h2><h3 id="算法原理-3"><a href="#算法原理-3" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-7"><a href="#算法实现-7" class="headerlink" title="算法实现"></a>算法实现</h3><h3 id="测试-7"><a href="#测试-7" class="headerlink" title="测试"></a>测试</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 初始化队列，初始顶点入队
+<h2 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h2><h3 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h3><h4 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h4><p>在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog" alt="20190825160305"></p>
+<p>选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831190937.png!blog" alt="20190831190937"></p>
+<p>然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。</p>
+<p>假如可以把这些顶点进行排序，然后不断更新队中节点到A的距离值，那么应该可以一步步的获得当前节点到A节点的最短距离了。</p>
+<p>该算法有两个难点：</p>
+<ol>
+<li>如何排序</li>
+</ol>
+<p>我使用的是python的优先队列，该队列是基于堆这一种数据结构实现的，你也可以自行选择排序算法进行排序</p>
+<ol start="2">
+<li>如何更新距离</li>
+</ol>
+<p>在BFS中每个节点到A的距离是固定的，是不会发生更新操作的，这是由于BFS算法实现过程中有个访问标志会标志某个节点是否已被访问，该标志保证了每个节点只访问一次。但是在迪杰斯特拉算法中，这样是不行的，因为想要在每个节点出队后，都要将该结点的邻接节点到目标点（这个例子中是A点）的距离进行比较更新，选择权值和小的。</p>
+<p>看下面这个网</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog" alt="20190831193520"></p>
+<p>当遍历到B的时候A到B有两条路，一条是A-B，另一条是A-C-B，前者的距离为5，比较长，后者的距离为3（1+2）。在迪杰斯特拉中就会选择路径A-C-B这条路径。</p>
+<p>在实际的算法实现中，距离的比较是通过一个<code>distance</code>的列表实现的，该列表距离了每个顶点到目标点的最短距离。然后在下一次遍历中不断得更新这个距离就可以了。</p>
+<h5 id="构造过程举例-1"><a href="#构造过程举例-1" class="headerlink" title="构造过程举例"></a>构造过程举例</h5><p>假设还是上面这个图。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog" alt="20190831193520"></p>
+<p>要求图中顶点到A的最短距离</p>
+<h6 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h6><p>初始化距离列表,inf 表示无穷，A的目标点，所以距离为0</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,inf]
+    C[C,inf]
+    D[D,inf]
+    E[E,inf]
+    F[F,inf]</pre>
+
+<p>初始化优先级队列，目标节点A入队</p>
+<pre class="mermaid">graph TB
+    A((A,0))</pre>
+
+
+
+<p>当队列不为空时，循环。</p>
+<h6 id="第一次构造-2"><a href="#第一次构造-2" class="headerlink" title="第一次构造"></a>第一次构造</h6><ol>
+<li>A出队,并标记为已访问，遍历A的邻接节点B、C，同时将A到B的距离5(0+5)和A到C的距离1(0+1)，与<code>distance</code>列表中的距离进行比较，由于<code>distance</code>中的距离都是无穷，所以<code>distance</code>中C的距离更新为1，B的距离更新为<code>5</code></li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,5]
+    C[C,1]
+    D[D,inf]
+    E[E,inf]
+    F[F,inf]</pre>
+
+<ol start="2">
+<li>B,C节点由于距离被更新了。需要参与下一次比较，所以B、C入队</li>
+</ol>
+<pre class="mermaid">graph LR
+    B((B,5))
+    C((C,1))
+C-->B</pre>
+
+
+
+<p>第二次构造</p>
+<ol>
+<li>C出队，并标记为已访问，遍历C的邻接节点A,B,D,E，将C-A的距离1，C-B的距离3(1+2)和C-D的距离5(1+4)和C-E的距离9（1+8），与<code>distance</code>列表中的B,C,E的距离进行比较，更新为其中的较小值</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,5]
+    E[E,9]
+    F[F,inf]</pre>
+
+<ol start="2">
+<li>由于B,D,E的距离被更新了。需要参与下一次的比较，所以B,C,E需要入队，带着他们的更新后的权值</li>
+</ol>
+<pre class="mermaid">graph LR
+    B((B,5))
+    B1((B,3))
+    D((D,5))
+    E((E,9))
+
+B1-->B
+B-->D
+D-->E</pre>
+
+
+
+<h6 id="第三次构造-3"><a href="#第三次构造-3" class="headerlink" title="第三次构造"></a>第三次构造</h6><ol>
+<li>B出队，并标记为已访问，遍历B的子节点D,C,A，将B-D（3+1=4）,B-C（3+2=5）,B-A（3+5）的距离分别与<code>distance</code>中的D,C,A距离进行比较，取小的值，发现只有D的距离被更新为了4</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,9]
+    F[F,inf]</pre>
+
+<ol start="3">
+<li>由于D被更新了，需要参与下一次的比较，所以D入队，带着D更新后的权值</li>
+</ol>
+<pre class="mermaid">graph LR
+    D1((D,4))
+    B((B,5))
+    D((D,5))
+    E((E,9))
+
+D1-->B
+B-->D
+D-->E</pre>
+
+
+
+<h6 id="第四次构造-2"><a href="#第四次构造-2" class="headerlink" title="第四次构造"></a>第四次构造</h6><ol>
+<li>D出队，并标记为已访问，遍历D的子节点B,C,E,F。将D-B（4+1=5）,D-C（4+4=8）,D-E(4+3=7),D-F(4+6=10)的距离分别与<code>distance</code>中的B,C,E,F距离进行比较，取小的值</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+<ol start="3">
+<li>由于只有E,F的距离被更新为7,和10，所以E，F需要带着他们更新后的权值入队，参与下一次的比较。</li>
+</ol>
+<pre class="mermaid">graph LR
+
+    B((B,5))
+    D((D,5))
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+
+B-->D
+D-->E1
+E1-->E
+E-->F</pre>
+
+
+
+
+
+<h6 id="第五次构造-2"><a href="#第五次构造-2" class="headerlink" title="第五次构造"></a>第五次构造</h6><ol>
+<li>队首B出队，由于B被标记已访问，所以直接扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    D((D,5))
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+D-->E1
+E1-->E
+E-->F</pre>
+
+<ol start="2">
+<li>队首D出队，由于D已经被标记已访问，扔掉。进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+
+E1-->E
+E-->F</pre>
+
+<ol start="3">
+<li><p>队首E出队，标记为已访问。遍历其邻接节点C,D，将E-C（7+4=11），E-D（7+3=10）与<code>distance</code>中的C,D值进行比较，取小的值，发现C,D都不需要更新。</p>
+</li>
+<li><p>由于没有节点被更新，所以没有节点入队。此时的<code>distance</code>如下图</p>
+</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+
+
+<h6 id="第六次构造-2"><a href="#第六次构造-2" class="headerlink" title="第六次构造"></a>第六次构造</h6><ol>
+<li>队首E出队，由于E被标记为已访问，扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    E((E,9))
+    F((F,10))
+
+E-->F</pre>
+
+<ol start="2">
+<li>队首E出队，由于E被标记为已访问，扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    F((F,10))</pre>
+
+<ol start="3">
+<li>队首F出队,发现他没有子节点，所以<code>distance</code>不会被更新，队列将不会加入新的结点。此时的<code>distance</code>如下图</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+<h6 id="第七次构造"><a href="#第七次构造" class="headerlink" title="第七次构造"></a>第七次构造</h6><p>由于此时队列为空，所以循环结束，迪杰斯特拉算法求解完毕！此时的<code>distance</code>就是每个节点到目标点A的最短距离了。</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+<p>迪杰斯特拉算法就是基于这种”宽度优先遍历”的思想，按路径的长度选择下一个最短节点然后逐步扩张（这一点也很像用MST性质实现的prim算法）。这个算法在探索中也会更新已经节点的最短路径，每一步都可以找到一个确定的最短路径，这就是典型的动态规划思想（在计算中保留一些信息，用来支持下一步的决策信息）</p>
+<h4 id="算法实现-4"><a href="#算法实现-4" class="headerlink" title="算法实现"></a>算法实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 迪杰斯特拉法算最短路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dijkstra</span><span class="params">(self, start)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(start):</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + start + <span class="string">"这样的顶点"</span>)</span><br><span class="line">    graph = self._graph</span><br><span class="line">    pqueue = []  <span class="comment"># 优先级队列</span></span><br><span class="line">    heapq.heappush(pqueue, (<span class="number">0</span>, start))  <span class="comment"># 根顶点进队，最高优先级</span></span><br><span class="line">    seen = set()  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">    parent = &#123;start: <span class="literal">None</span>&#125;  <span class="comment"># 生成树</span></span><br><span class="line">    distance = self.__init_distance(start)  <span class="comment"># 初始化距离</span></span><br><span class="line">    <span class="keyword">while</span> pqueue.__len__() &gt; <span class="number">0</span>:</span><br><span class="line">        pair = heapq.heappop(pqueue)  <span class="comment"># pop弹出的是元组，第一个参数是距离（优先级），第二个是顶点</span></span><br><span class="line">        dist = pair[<span class="number">0</span>]</span><br><span class="line">        vertex = pair[<span class="number">1</span>]</span><br><span class="line">        seen.add(vertex)  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">        nodes = graph[vertex].keys()  <span class="comment"># 获取其顶点的邻接顶点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">            <span class="keyword">if</span> node <span class="keyword">not</span> <span class="keyword">in</span> seen:</span><br><span class="line">                <span class="keyword">if</span> dist + graph[vertex][node] &lt; distance[node]:  <span class="comment"># 如果当前顶点到开始顶点的距离小于距离列表中的值，更新距离</span></span><br><span class="line">                    heapq.heappush(pqueue, (dist + graph[vertex][node], node))</span><br><span class="line">                    parent[node] = vertex</span><br><span class="line">                    distance[node] = dist + graph[vertex][node]</span><br><span class="line">        <span class="comment"># 输出遍历结果</span></span><br><span class="line">        <span class="comment"># print(vertex)</span></span><br><span class="line">    <span class="keyword">return</span> distance, parent</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="测试-4"><a href="#测试-4" class="headerlink" title="测试"></a>测试</h4><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831205632.png!blog" alt="20190831205632"></p>
+<p>可以发现，如刚才推导的结果一模一样。</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+<h3 id="弗洛依德算法-待填坑"><a href="#弗洛依德算法-待填坑" class="headerlink" title="弗洛依德算法(待填坑)"></a>弗洛依德算法(待填坑)</h3><h4 id="算法原理-1"><a href="#算法原理-1" class="headerlink" title="算法原理"></a>算法原理</h4><h4 id="算法实现-5"><a href="#算法实现-5" class="headerlink" title="算法实现"></a>算法实现</h4><h4 id="测试-5"><a href="#测试-5" class="headerlink" title="测试"></a>测试</h4><h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><h3 id="算法原理-2"><a href="#算法原理-2" class="headerlink" title="算法原理"></a>算法原理</h3><p>拓扑排序是有向图（网）中的内容，只在有向网（图）的范畴中讨论。</p>
+<p>先看一个实际生活中可能遇到的问题：选课问题，例如上大一的时候你肯定要先学C语言，然后才能学数据结构。这个时候C语言和数据结构就构成了一个排列问题，<strong>谁在前谁在后</strong>。用图中的顶点表示一个活动，边表示活动之间的顺序关系。这样的图就称为AOV网（顶点活动网）</p>
+<p>下图就是一个典型的AOV网实例。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831210501.png!blog" alt="20190831210501"></p>
+<p>任何无回路的AOV网N都可以求解出拓扑序列，方法很简单：</p>
+<ul>
+<li>从N中选出一个入度为0的顶点作为序列的下一个顶点</li>
+<li>从N网中删除所选顶点的出边</li>
+<li>重复执行上面两步，直到已经选出了图N的所有顶点</li>
+</ul>
+<p>拓扑排序算法有两个难点：</p>
+<ol>
+<li>如何寻找入度为0的顶点</li>
+<li>真的需要拷贝整张图，然后进行删除</li>
+</ol>
+<p>一个显然的办法是不断遍历图，寻找入度为0的顶点。但时间代价会很高。顶点间的制约关系决定了顶点的入度。入度是一个整数，用一个整数表就能记录所以顶点的入度了。因此，我的方法是用一张入度表记录了每个顶点的入度，初始时，表中的各顶点的入度对应为图中顶点的入度，在随后的计算中，一旦选中一个顶点，就将该顶点的出边入度减一。</p>
+<p>在实际的算法实现中还用了一个0度栈来记录已经入度为0但还未处理的顶点。</p>
+<p>算法比较简单。</p>
+<p>可以慢慢调试</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212236.png!blog" alt="20190831212236"></p>
+<h3 id="算法实现-6"><a href="#算法实现-6" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">topological_sort</span><span class="params">(self)</span>:</span></span><br><span class="line">    indegree = &#123;&#125;  <span class="comment"># 入度表</span></span><br><span class="line">    zerov = []  <span class="comment"># 利用0度栈记录已知的入度为0的但还未处理的顶点</span></span><br><span class="line">    m = <span class="number">0</span>  <span class="comment"># 输出顶点计数</span></span><br><span class="line">    topo = []  <span class="comment"># 拓扑排序结果</span></span><br><span class="line">    <span class="comment"># 生成入度表和0度栈</span></span><br><span class="line">    <span class="keyword">for</span> vetx <span class="keyword">in</span> self._graph:</span><br><span class="line">        indegree[vetx] = self.get_inEdge(vetx).__len__()</span><br><span class="line">        <span class="keyword">if</span> indegree[vetx] == <span class="number">0</span>:</span><br><span class="line">            zerov.append(vetx)</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> zerov.__len__() != <span class="number">0</span>:</span><br><span class="line">        Vi = zerov.pop()</span><br><span class="line">        topo.append(Vi)</span><br><span class="line">        m += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> Vj <span class="keyword">in</span> self.get_outEdge(Vi).keys():  <span class="comment"># 对顶点Vi的每个邻接点入度减1，如果Vj的入度变为0，则将Vj入栈，表示Vj就是下一个需要处理的顶点</span></span><br><span class="line">            indegree[Vj] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> indegree[Vj] == <span class="number">0</span>:</span><br><span class="line">                zerov.append(Vj)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> m &lt; self.get_vertexNum():  <span class="comment"># 该有向图有回路</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> topo</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试-6"><a href="#测试-6" class="headerlink" title="测试"></a>测试</h3><p><img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1567257835949.png" alt="1567257835949"></p>
+<h2 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h2><h3 id="算法原理-3"><a href="#算法原理-3" class="headerlink" title="算法原理"></a>算法原理</h3><h3 id="算法实现-7"><a href="#算法实现-7" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关键路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">criticalPath</span><span class="params">(self, delay=<span class="number">0</span>)</span>:</span></span><br><span class="line">    topo = self.topological_sort()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> topo:</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"存在有向环！"</span>)</span><br><span class="line">    ve = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最早开始时间</span></span><br><span class="line">    vl = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最迟开始时间</span></span><br><span class="line">    cp = []  <span class="comment"># 关键路径</span></span><br><span class="line">    result = &#123;&#125;  <span class="comment"># 返回结果</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最早发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():  <span class="comment"># 获取拓扑节点的邻接点，计算ve</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 邻接节点的下标</span></span><br><span class="line">            <span class="keyword">if</span> ve[j] &lt; ve[i] + w:  <span class="comment"># 更新邻接点的最早发生时间，选大的时间</span></span><br><span class="line">                ve[j] = ve[i] + w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最晚发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):  <span class="comment"># 给每个事件的最迟发生时间置初值，初值为最早发生时间中的最大值</span></span><br><span class="line">        vl[i] = ve[topo.__len__() - <span class="number">1</span>] + delay</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(topo.__len__())):</span><br><span class="line">        k = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_inEdge(k).keys():  <span class="comment"># 获取拓扑节点的逆邻接点，计算vl</span></span><br><span class="line">            w = self._graph[node][k]  <span class="comment"># 逆邻接点和当前节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 逆邻接点的下标</span></span><br><span class="line">            <span class="keyword">if</span> vl[j] &gt; vl[i] - w:  <span class="comment"># 更新逆邻接点的最晚发生时间，选小的时间</span></span><br><span class="line">                vl[j] = vl[i] - w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------判断每一活动是否为关键路径--------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]</span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():</span><br><span class="line">            j = topo.index(node)  <span class="comment"># 获得邻接顶点的下标</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            e = ve[i]  <span class="comment"># 计算活动&lt;start,node&gt;的最早开始时间</span></span><br><span class="line">            l = vl[j] - w - delay  <span class="comment"># 计算活动&lt;start,node&gt;的最晚开始时间</span></span><br><span class="line">            <span class="keyword">if</span> e == l:</span><br><span class="line">                cp.append((start, node))  <span class="comment"># 如果相等就说明为关键路径</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        result[topo[i]] = (ve[i], vl[i])</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> result, cp</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试-7"><a href="#测试-7" class="headerlink" title="测试"></a>测试</h3><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog" alt="20190831212504"></p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 初始化队列，初始顶点入队
 e=>end: 结束BFS
 deque=>operation: 出队
 isVisit=>condition: 是否访问过该顶点?
@@ -1348,7 +1622,7 @@ isqueNull(no)->deque</textarea><textarea id="flowchart-1-options" style="display
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的存储结构实现"><span class="nav-number">2.</span> <span class="nav-text">图的存储结构实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接矩阵实现（不重要也不好用）"><span class="nav-number">2.1.</span> <span class="nav-text">邻接矩阵实现（不重要也不好用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表实现1（基于邻接矩阵，不好用）"><span class="nav-number">2.2.</span> <span class="nav-text">邻接表实现1（基于邻接矩阵，不好用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表实现2-基于字典实现，好用"><span class="nav-number">2.3.</span> <span class="nav-text">邻接表实现2 (基于字典实现，好用)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的一些算法实现"><span class="nav-number">3.</span> <span class="nav-text">图的一些算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的遍历"><span class="nav-number">3.1.</span> <span class="nav-text">图的遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BFS（广度优先搜索）"><span class="nav-number">3.1.1.</span> <span class="nav-text">BFS（广度优先搜索）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及步骤"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">算法原理及步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法流程"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">3.1.1.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS（深度优先搜索）"><span class="nav-number">3.1.2.</span> <span class="nav-text">DFS（深度优先搜索）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及步骤-1"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">算法原理及步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法流程-1"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-1"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-1"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#存储结构"><span class="nav-number">3.1.2.4.1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试结果"><span class="nav-number">3.1.2.4.2.</span> <span class="nav-text">测试结果</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小生成树"><span class="nav-number">3.2.</span> <span class="nav-text">最小生成树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prim算法"><span class="nav-number">3.2.1.</span> <span class="nav-text">Prim算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及算法流程"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">算法原理及算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#原理："><span class="nav-number">3.2.1.1.1.</span> <span class="nav-text">原理：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构造过程举例"><span class="nav-number">3.2.1.1.2.</span> <span class="nav-text">构造过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次构造"><span class="nav-number">3.2.1.1.2.1.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二次构造"><span class="nav-number">3.2.1.1.2.2.</span> <span class="nav-text">第二次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造"><span class="nav-number">3.2.1.1.2.3.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四次构造"><span class="nav-number">3.2.1.1.2.4.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五次构造"><span class="nav-number">3.2.1.1.2.5.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第六次构造"><span class="nav-number">3.2.1.1.2.6.</span> <span class="nav-text">第六次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#最终结果"><span class="nav-number">3.2.1.1.2.7.</span> <span class="nav-text">最终结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-2"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-2"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#克鲁斯卡尔算法"><span class="nav-number">3.2.2.</span> <span class="nav-text">克鲁斯卡尔算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及流程"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">算法原理及流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#原理"><span class="nav-number">3.2.2.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构成过程举例"><span class="nav-number">3.2.2.1.2.</span> <span class="nav-text">构成过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.2.2.1.2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次构造-1"><span class="nav-number">3.2.2.1.2.2.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二次构造-1"><span class="nav-number">3.2.2.1.2.3.</span> <span class="nav-text">第二次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造-1"><span class="nav-number">3.2.2.1.2.4.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造-2"><span class="nav-number">3.2.2.1.2.5.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四次构造-1"><span class="nav-number">3.2.2.1.2.6.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五次构造-1"><span class="nav-number">3.2.2.1.2.7.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第六次构造-1"><span class="nav-number">3.2.2.1.2.8.</span> <span class="nav-text">第六次构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-3"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-3"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最短路径"><span class="nav-number">3.3.</span> <span class="nav-text">最短路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dijkstra算法"><span class="nav-number">3.3.1.</span> <span class="nav-text">dijkstra算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-4"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-4"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弗洛依德算法"><span class="nav-number">3.3.2.</span> <span class="nav-text">弗洛依德算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理-1"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-5"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-5"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓扑排序"><span class="nav-number">3.4.</span> <span class="nav-text">拓扑排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理-2"><span class="nav-number">3.4.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-6"><span class="nav-number">3.4.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-6"><span class="nav-number">3.4.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键路径"><span class="nav-number">3.5.</span> <span class="nav-text">关键路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理-3"><span class="nav-number">3.5.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-7"><span class="nav-number">3.5.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-7"><span class="nav-number">3.5.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的存储结构实现"><span class="nav-number">2.</span> <span class="nav-text">图的存储结构实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接矩阵实现（不重要也不好用）"><span class="nav-number">2.1.</span> <span class="nav-text">邻接矩阵实现（不重要也不好用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表实现1（基于邻接矩阵，不好用）"><span class="nav-number">2.2.</span> <span class="nav-text">邻接表实现1（基于邻接矩阵，不好用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表实现2-基于字典实现，好用"><span class="nav-number">2.3.</span> <span class="nav-text">邻接表实现2 (基于字典实现，好用)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图的一些算法实现"><span class="nav-number">3.</span> <span class="nav-text">图的一些算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#图的遍历"><span class="nav-number">3.1.</span> <span class="nav-text">图的遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BFS（广度优先搜索）"><span class="nav-number">3.1.1.</span> <span class="nav-text">BFS（广度优先搜索）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及步骤"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">算法原理及步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法流程"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">3.1.1.4.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS（深度优先搜索）"><span class="nav-number">3.1.2.</span> <span class="nav-text">DFS（深度优先搜索）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及步骤-1"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">算法原理及步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法流程-1"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-1"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-1"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#存储结构"><span class="nav-number">3.1.2.4.1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试结果"><span class="nav-number">3.1.2.4.2.</span> <span class="nav-text">测试结果</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小生成树"><span class="nav-number">3.2.</span> <span class="nav-text">最小生成树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prim算法"><span class="nav-number">3.2.1.</span> <span class="nav-text">Prim算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及算法流程"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">算法原理及算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#原理："><span class="nav-number">3.2.1.1.1.</span> <span class="nav-text">原理：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构造过程举例"><span class="nav-number">3.2.1.1.2.</span> <span class="nav-text">构造过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次构造"><span class="nav-number">3.2.1.1.2.1.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二次构造"><span class="nav-number">3.2.1.1.2.2.</span> <span class="nav-text">第二次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造"><span class="nav-number">3.2.1.1.2.3.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四次构造"><span class="nav-number">3.2.1.1.2.4.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五次构造"><span class="nav-number">3.2.1.1.2.5.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第六次构造"><span class="nav-number">3.2.1.1.2.6.</span> <span class="nav-text">第六次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#最终结果"><span class="nav-number">3.2.1.1.2.7.</span> <span class="nav-text">最终结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-2"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-2"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#克鲁斯卡尔算法"><span class="nav-number">3.2.2.</span> <span class="nav-text">克鲁斯卡尔算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理及流程"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">算法原理及流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#原理"><span class="nav-number">3.2.2.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构成过程举例"><span class="nav-number">3.2.2.1.2.</span> <span class="nav-text">构成过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">3.2.2.1.2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次构造-1"><span class="nav-number">3.2.2.1.2.2.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二次构造-1"><span class="nav-number">3.2.2.1.2.3.</span> <span class="nav-text">第二次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造-1"><span class="nav-number">3.2.2.1.2.4.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造-2"><span class="nav-number">3.2.2.1.2.5.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四次构造-1"><span class="nav-number">3.2.2.1.2.6.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五次构造-1"><span class="nav-number">3.2.2.1.2.7.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第六次构造-1"><span class="nav-number">3.2.2.1.2.8.</span> <span class="nav-text">第六次构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-3"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-3"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最短路径"><span class="nav-number">3.3.</span> <span class="nav-text">最短路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dijkstra算法"><span class="nav-number">3.3.1.</span> <span class="nav-text">dijkstra算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造过程举例-1"><span class="nav-number">3.3.1.1.1.</span> <span class="nav-text">构造过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化-1"><span class="nav-number">3.3.1.1.1.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次构造-2"><span class="nav-number">3.3.1.1.1.2.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次构造-3"><span class="nav-number">3.3.1.1.1.3.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四次构造-2"><span class="nav-number">3.3.1.1.1.4.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五次构造-2"><span class="nav-number">3.3.1.1.1.5.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第六次构造-2"><span class="nav-number">3.3.1.1.1.6.</span> <span class="nav-text">第六次构造</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第七次构造"><span class="nav-number">3.3.1.1.1.7.</span> <span class="nav-text">第七次构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-4"><span class="nav-number">3.3.1.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-4"><span class="nav-number">3.3.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弗洛依德算法-待填坑"><span class="nav-number">3.3.2.</span> <span class="nav-text">弗洛依德算法(待填坑)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法原理-1"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法实现-5"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-5"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓扑排序"><span class="nav-number">3.4.</span> <span class="nav-text">拓扑排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理-2"><span class="nav-number">3.4.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-6"><span class="nav-number">3.4.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-6"><span class="nav-number">3.4.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键路径"><span class="nav-number">3.5.</span> <span class="nav-text">关键路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理-3"><span class="nav-number">3.5.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现-7"><span class="nav-number">3.5.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试-7"><span class="nav-number">3.5.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
