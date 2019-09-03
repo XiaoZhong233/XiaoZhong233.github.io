@@ -55,19 +55,21 @@
   };
 </script>
 
-  <meta name="description" content="useradd功能描述：添加新用户 执行权限：root 命令所在路径：/usr/sbin/useradd 1useradd xxx #用户名">
-<meta name="keywords" content="linux">
+  <meta name="description" content="邻接表实现数据格式如图所示：12345678graph = &amp;#123;    &quot;A&quot;: &amp;#123;&quot;B&quot;: 5, &quot;C&quot;: 1&amp;#125;,    &quot;B&quot;: &amp;#123;&quot;A&quot;: 5, &quot;C&quot;: 2, &quot;D&quot;: 1&amp;#125;,    &quot;C&quot;: &amp;#123;&quot;A&quot;: 1, &quot;B&quot;: 2, &quot;D&quot;: 4, &quot;E&quot;: 8&amp;#125;,    &quot;D&quot;: &amp;#123;&quot;B&quot;: 1, &quot;C&quot;: 4, &quot;">
+<meta name="keywords" content="python,数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux常见命令-用户管理命令">
-<meta property="og:url" content="localhost:4000/2019/08/16/Linux常见命令-用户管理命令/index.html">
+<meta property="og:title" content="图的存储结构实现：邻接表">
+<meta property="og:url" content="localhost:4000/2019/09/02/图的存储结构实现：邻接表/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="useradd功能描述：添加新用户 执行权限：root 命令所在路径：/usr/sbin/useradd 1useradd xxx #用户名">
+<meta property="og:description" content="邻接表实现数据格式如图所示：12345678graph = &amp;#123;    &quot;A&quot;: &amp;#123;&quot;B&quot;: 5, &quot;C&quot;: 1&amp;#125;,    &quot;B&quot;: &amp;#123;&quot;A&quot;: 5, &quot;C&quot;: 2, &quot;D&quot;: 1&amp;#125;,    &quot;C&quot;: &amp;#123;&quot;A&quot;: 1, &quot;B&quot;: 2, &quot;D&quot;: 4, &quot;E&quot;: 8&amp;#125;,    &quot;D&quot;: &amp;#123;&quot;B&quot;: 1, &quot;C&quot;: 4, &quot;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-16T15:26:49.872Z">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
+<meta property="og:updated_time" content="2019-09-03T11:50:40.340Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux常见命令-用户管理命令">
-<meta name="twitter:description" content="useradd功能描述：添加新用户 执行权限：root 命令所在路径：/usr/sbin/useradd 1useradd xxx #用户名">
-  <link rel="canonical" href="localhost:4000/2019/08/16/Linux常见命令-用户管理命令/">
+<meta name="twitter:title" content="图的存储结构实现：邻接表">
+<meta name="twitter:description" content="邻接表实现数据格式如图所示：12345678graph = &amp;#123;    &quot;A&quot;: &amp;#123;&quot;B&quot;: 5, &quot;C&quot;: 1&amp;#125;,    &quot;B&quot;: &amp;#123;&quot;A&quot;: 5, &quot;C&quot;: 2, &quot;D&quot;: 1&amp;#125;,    &quot;C&quot;: &amp;#123;&quot;A&quot;: 1, &quot;B&quot;: 2, &quot;D&quot;: 4, &quot;E&quot;: 8&amp;#125;,    &quot;D&quot;: &amp;#123;&quot;B&quot;: 1, &quot;C&quot;: 4, &quot;">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/09/02/图的存储结构实现：邻接表/">
 
 
 <script id="page-configurations">
@@ -81,7 +83,7 @@
   };
 </script>
 
-  <title>Linux常见命令-用户管理命令 | 钟浩伟的个人博客</title>
+  <title>图的存储结构实现：邻接表 | 钟浩伟的个人博客</title>
   
 
 
@@ -247,7 +249,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/Linux常见命令-用户管理命令/">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/02/图的存储结构实现：邻接表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="钟浩伟">
@@ -261,7 +263,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">Linux常见命令-用户管理命令
+          <h1 class="post-title" itemprop="name headline">图的存储结构实现：邻接表
 
             
           </h1>
@@ -278,7 +280,7 @@
                 
               
 
-              <time title="创建时间：2019-08-16 23:04:27" itemprop="dateCreated datePublished" datetime="2019-08-16T23:04:27+08:00">2019-08-16</time>
+              <time title="创建时间：2019-09-02 19:49:22" itemprop="dateCreated datePublished" datetime="2019-09-02T19:49:22+08:00">2019-09-02</time>
             </span>
           
             <span class="post-meta-item">
@@ -287,7 +289,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
 
                 
                 
@@ -306,36 +308,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="useradd"><a href="#useradd" class="headerlink" title="useradd"></a>useradd</h1><p>功能描述：添加新用户</p>
-<p>执行权限：root</p>
-<p>命令所在路径：/usr/sbin/useradd</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">useradd</span> xxx <span class="comment">#用户名</span></span><br></pre></td></tr></table></figure>
+        <h2 id="邻接表实现"><a href="#邻接表实现" class="headerlink" title="邻接表实现"></a>邻接表实现</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog" alt="20190825160305"></p><p>数据格式如图所示：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph = &#123;</span><br><span class="line">    <span class="string">"A"</span>: &#123;<span class="string">"B"</span>: <span class="number">5</span>, <span class="string">"C"</span>: <span class="number">1</span>&#125;,</span><br><span class="line">    <span class="string">"B"</span>: &#123;<span class="string">"A"</span>: <span class="number">5</span>, <span class="string">"C"</span>: <span class="number">2</span>, <span class="string">"D"</span>: <span class="number">1</span>&#125;,</span><br><span class="line">    <span class="string">"C"</span>: &#123;<span class="string">"A"</span>: <span class="number">1</span>, <span class="string">"B"</span>: <span class="number">2</span>, <span class="string">"D"</span>: <span class="number">4</span>, <span class="string">"E"</span>: <span class="number">8</span>&#125;,</span><br><span class="line">    <span class="string">"D"</span>: &#123;<span class="string">"B"</span>: <span class="number">1</span>, <span class="string">"C"</span>: <span class="number">4</span>, <span class="string">"E"</span>: <span class="number">3</span>, <span class="string">"F"</span>: <span class="number">6</span>&#125;,</span><br><span class="line">    <span class="string">"E"</span>: &#123;<span class="string">"C"</span>: <span class="number">8</span>, <span class="string">"D"</span>: <span class="number">3</span>&#125;,</span><br><span class="line">    <span class="string">"F"</span>: &#123;<span class="string">"D"</span>: <span class="number">6</span>&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><a id="more"></a>
 
-<a id="more"></a>
 
-<h1 id="passwd"><a href="#passwd" class="headerlink" title="passwd"></a>passwd</h1><p>如果需要给用户密码好让该用户访问系统，则需要用到该命令</p>
-<p>功能描述：设置用户密码</p>
-<p>执行权限：所有用户</p>
-<p>命令所在路径：/usr/bin/passwd</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">passwd</span> xxx <span class="comment">#用户名</span></span><br></pre></td></tr></table></figure>
 
-<p>如果不加参数，则更改当前用户的密码</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+<p>如上图所示，该类是一个无向网，如果需要改成有向网，只需要更改<code>add_edge</code>这个方法</p>
+<p>新建一个<code>GraphAL.py</code>文件，在文件中添加：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 邻接表实现无向网（图）（字典形式）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphAL</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, graph=&#123;&#125;)</span>:</span></span><br><span class="line">        self._graph = graph</span><br><span class="line">        self._vnum = len(graph)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_invalid</span><span class="params">(self, vertex)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._graph.__contains__(vertex)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_vertex</span><span class="params">(self, vertex)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self._invalid(vertex):</span><br><span class="line">            <span class="keyword">raise</span> GraphError(<span class="string">"添加顶点失败，已经有该顶点"</span>)</span><br><span class="line">        self._graph[vertex] = &#123;&#125;</span><br><span class="line">        self._vnum += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_edge</span><span class="params">(self, vi, vj, val)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(vi) <span class="keyword">or</span> <span class="keyword">not</span> self._invalid(vj):</span><br><span class="line">            <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + vi + <span class="string">"或者"</span> + vj + <span class="string">"这样的顶点"</span>)</span><br><span class="line">        self._graph[vi].update(&#123;vj: val&#125;)</span><br><span class="line">        self._graph[vj].update(&#123;vi: val&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_edge</span><span class="params">(self, vi, vj)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(vi) <span class="keyword">or</span> <span class="keyword">not</span> self._invalid(vj):</span><br><span class="line">            <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + vi + <span class="string">"或者"</span> + vj + <span class="string">"这样的顶点"</span>)</span><br><span class="line">        <span class="keyword">return</span> self._graph[vi][vj]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_vertexNum</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._graph.__len__()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在无向网（图）中是边，有向网（图）是出边，取决于数据</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">out_edge</span><span class="params">(self, vertex)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(vertex):</span><br><span class="line">            <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + vertex + <span class="string">"这样的顶点"</span>)</span><br><span class="line">        <span class="keyword">return</span> self._graph[vertex]</span><br></pre></td></tr></table></figure>
 
-<h1 id="who"><a href="#who" class="headerlink" title="who"></a>who</h1><p>功能描述：查看登录用户信息</p>
-<p>执行权限：所有用户</p>
-<p>命令所在路径：/usr/bin/who</p>
-<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium<span class="string">-2</span>-linux<span class="string">-20190722215607</span> /]# who</span><br><span class="line">root     tty1         2019<span class="string">-08</span><span class="string">-07</span> 11:17</span><br><span class="line">root     pts/4        2019<span class="string">-08</span><span class="string">-16</span> 22:08 (183.39.158.131)</span><br></pre></td></tr></table></figure>
-
-<p>第一个部分是登录的用户名，第二个是登录终端（tty1是本地登录，pts表示远程登录），第三个是登录的时间，最后的是登录的主机ip（缺省为本地登录）</p>
-<h1 id="w"><a href="#w" class="headerlink" title="w"></a>w</h1><p>功能描述：查看登录用户详细信息</p>
-<p>执行权限：所有用户</p>
-<p>命令所在路径： /usr/bin/w</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@ecs-s2-medium-2-linux-20190722215607 /]# w</span><br><span class="line"> 23:17:56 up 25 days, 2 min,  2 users,  load average: 0.00, 0.01, 0.05</span><br><span class="line">USER     TTY      <span class="keyword">FROM</span>             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">root     tty1                      07Aug19  9days  0.01s  0.01s -bash</span><br><span class="line">root     pts/4    183.39.158.131   22:08    4.00s  0.02s  0.00s w</span><br></pre></td></tr></table></figure>
-
-<p><code>load average: 0.00, 0.01, 0.05</code>表示1分钟，5分钟，10分钟内负载百分比</p>
-<p><code>IDLE</code>表示该用户空闲了多久，<code>PCPU</code>表示CPU时间 ，<code>JCPU</code>表示总共占用的CPU实际</p>
-<p><code>WHAT</code>表示用户当前执行的命令</p>
+<p>你也可以不传入图的参数，会默认创建一个新图。通过<code>add_vertex</code>和<code>add_edge</code>即可完成图的构建。</p>
 
     </div>
 
@@ -348,14 +329,35 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\08\16\Linux常见命令-帮助命令\" rel="bookmark">Linux常见命令-帮助命令</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\03\AOE网及关键路径\" rel="bookmark">AOE网及关键路径实现</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\08\17\linux常用命令-压缩解压命令\" rel="bookmark">linux常用命令-压缩解压命令</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\拓扑排序及实现\" rel="bookmark">拓扑排序及实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-Prim算法实现\" rel="bookmark">最小生成树:Prim算法实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-克鲁斯卡尔算法实现\" rel="bookmark">最小生成树:克鲁斯卡尔算法实现</a></div>
       
     </li>
   
@@ -381,7 +383,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/python-数据结构/" rel="tag"># python,数据结构</a>
             
           </div>
         
@@ -391,8 +393,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/08/16/Linux常见命令-帮助命令/" rel="next" title="Linux常见命令-帮助命令">
-                  <i class="fa fa-chevron-left"></i> Linux常见命令-帮助命令
+                <a href="/2019/08/25/基于Python的图算法实现/" rel="next" title="基于Python的图算法实现">
+                  <i class="fa fa-chevron-left"></i> 基于Python的图算法实现
                 </a>
               
             </div>
@@ -401,8 +403,8 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2019/08/17/linux常用命令-压缩解压命令/" rel="prev" title="linux常用命令-压缩解压命令">
-                  linux常用命令-压缩解压命令 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/09/03/图的遍历-BFS和DFS/" rel="prev" title="图的遍历:BFS和DFS">
+                  图的遍历:BFS和DFS <i class="fa fa-chevron-right"></i>
                 </a>
               
             </div>
@@ -585,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#useradd"><span class="nav-number">1.</span> <span class="nav-text">useradd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#passwd"><span class="nav-number">2.</span> <span class="nav-text">passwd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#who"><span class="nav-number">3.</span> <span class="nav-text">who</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#w"><span class="nav-number">4.</span> <span class="nav-text">w</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#邻接表实现"><span class="nav-number">1.</span> <span class="nav-text">邻接表实现</span></a></li></ol></div>
             
 
           </div>
