@@ -55,19 +55,19 @@
   };
 </script>
 
-  <meta name="description" content="关键路径算法原理算法实现123456789101112131415161718192021222324252627282930313233343536373839404142434445# 关键路径def criticalPath(self, delay=0):    topo = self.topological_sort()    if not topo:        raise Graph">
+  <meta name="description" content="关键路径算法原理AOE网是另一种常用的带权有向图。这是一种重要的PERT模型（Program Evaluation and Review Technique,规划评估和评审技术），最早是美国军方支持开发出来的，用于大型工程的计划与管理，有着广泛的实际工程应用。抽象地看：AOE网是一种无环的带权有向图，其中">
 <meta name="keywords" content="python,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AOE网及关键路径实现">
 <meta property="og:url" content="localhost:4000/2019/09/03/AOE网及关键路径/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="关键路径算法原理算法实现123456789101112131415161718192021222324252627282930313233343536373839404142434445# 关键路径def criticalPath(self, delay=0):    topo = self.topological_sort()    if not topo:        raise Graph">
+<meta property="og:description" content="关键路径算法原理AOE网是另一种常用的带权有向图。这是一种重要的PERT模型（Program Evaluation and Review Technique,规划评估和评审技术），最早是美国军方支持开发出来的，用于大型工程的计划与管理，有着广泛的实际工程应用。抽象地看：AOE网是一种无环的带权有向图，其中">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog">
-<meta property="og:updated_time" content="2019-09-03T11:47:16.154Z">
+<meta property="og:updated_time" content="2019-09-03T12:01:49.456Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AOE网及关键路径实现">
-<meta name="twitter:description" content="关键路径算法原理算法实现123456789101112131415161718192021222324252627282930313233343536373839404142434445# 关键路径def criticalPath(self, delay=0):    topo = self.topological_sort()    if not topo:        raise Graph">
+<meta name="twitter:description" content="关键路径算法原理AOE网是另一种常用的带权有向图。这是一种重要的PERT模型（Program Evaluation and Review Technique,规划评估和评审技术），最早是美国军方支持开发出来的，用于大型工程的计划与管理，有着广泛的实际工程应用。抽象地看：AOE网是一种无环的带权有向图，其中">
 <meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog">
   <link rel="canonical" href="localhost:4000/2019/09/03/AOE网及关键路径/">
 
@@ -308,9 +308,64 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关键路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">criticalPath</span><span class="params">(self, delay=<span class="number">0</span>)</span>:</span></span><br><span class="line">    topo = self.topological_sort()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> topo:</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"存在有向环！"</span>)</span><br><span class="line">    ve = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最早开始时间</span></span><br><span class="line">    vl = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最迟开始时间</span></span><br><span class="line">    cp = []  <span class="comment"># 关键路径</span></span><br><span class="line">    result = &#123;&#125;  <span class="comment"># 返回结果</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最早发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():  <span class="comment"># 获取拓扑节点的邻接点，计算ve</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 邻接节点的下标</span></span><br><span class="line">            <span class="keyword">if</span> ve[j] &lt; ve[i] + w:  <span class="comment"># 更新邻接点的最早发生时间，选大的时间</span></span><br><span class="line">                ve[j] = ve[i] + w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最晚发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):  <span class="comment"># 给每个事件的最迟发生时间置初值，初值为最早发生时间中的最大值</span></span><br><span class="line">        vl[i] = ve[topo.__len__() - <span class="number">1</span>] + delay</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(topo.__len__())):</span><br><span class="line">        k = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_inEdge(k).keys():  <span class="comment"># 获取拓扑节点的逆邻接点，计算vl</span></span><br><span class="line">            w = self._graph[node][k]  <span class="comment"># 逆邻接点和当前节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 逆邻接点的下标</span></span><br><span class="line">            <span class="keyword">if</span> vl[j] &gt; vl[i] - w:  <span class="comment"># 更新逆邻接点的最晚发生时间，选小的时间</span></span><br><span class="line">                vl[j] = vl[i] - w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------判断每一活动是否为关键路径--------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]</span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():</span><br><span class="line">            j = topo.index(node)  <span class="comment"># 获得邻接顶点的下标</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            e = ve[i]  <span class="comment"># 计算活动&lt;start,node&gt;的最早开始时间</span></span><br><span class="line">            l = vl[j] - w - delay  <span class="comment"># 计算活动&lt;start,node&gt;的最晚开始时间</span></span><br><span class="line">            <span class="keyword">if</span> e == l:</span><br><span class="line">                cp.append((start, node))  <span class="comment"># 如果相等就说明为关键路径</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        result[topo[i]] = (ve[i], vl[i])</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> result, cp</span><br></pre></td></tr></table></figure><a id="more"></a>
+        <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><p>AOE网是另一种常用的带权有向图。这是一种重要的PERT模型（Program Evaluation and Review Technique,规划评估和评审技术），最早是美国军方支持开发出来的，用于大型工程的计划与管理，有着广泛的实际工程应用。</p><p>抽象地看：AOE网是一种无环的带权有向图，其中</p><a id="more"></a>
 
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog" alt="20190831212504"></p>
+<ul>
+<li>顶点表示事件，有向边表示活动，边上的权值通常表示活动的持续时间。</li>
+<li>图中的一个顶点表示的事件，也就是他的入边所表示的活动已经完成，他的出边的活动刚刚开始，把这一情况看作事件。</li>
+</ul>
+<p>实际工程或复杂事物里的一批相关活动（工作项目、任务等），可以用一个AOE网抽象的描述，然后就可以基于这个网考虑活动的安排了。</p>
+<pre class="mermaid">graph LR
+    V0((V0))
+    V1((V1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+    V5((V5))
+    V6((V6))
+    V7((V7))
+    V8((V8))
+V0--6-->V1
+V0--4-->V2
+V0--5-->V3
+V1--1-->V4
+V2--1-->V4
+V3--2-->V5
+V4--9-->V6
+V4--7-->V7
+V5--4-->V7
+V6--2-->V8
+V7--4-->V8</pre>
+
+
+
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关键路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">criticalPath</span><span class="params">(self, delay=<span class="number">0</span>)</span>:</span></span><br><span class="line">    topo = self.topological_sort()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> topo:</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"存在有向环！"</span>)</span><br><span class="line">    ve = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最早开始时间</span></span><br><span class="line">    vl = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最迟开始时间</span></span><br><span class="line">    cp = []  <span class="comment"># 关键路径</span></span><br><span class="line">    result = &#123;&#125;  <span class="comment"># 返回结果</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最早发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():  <span class="comment"># 获取拓扑节点的邻接点，计算ve</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 邻接节点的下标</span></span><br><span class="line">            <span class="keyword">if</span> ve[j] &lt; ve[i] + w:  <span class="comment"># 更新邻接点的最早发生时间，选大的时间</span></span><br><span class="line">                ve[j] = ve[i] + w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最晚发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):  <span class="comment"># 给每个事件的最迟发生时间置初值，初值为最早发生时间中的最大值</span></span><br><span class="line">        vl[i] = ve[topo.__len__() - <span class="number">1</span>] + delay</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(topo.__len__())):</span><br><span class="line">        k = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_inEdge(k).keys():  <span class="comment"># 获取拓扑节点的逆邻接点，计算vl</span></span><br><span class="line">            w = self._graph[node][k]  <span class="comment"># 逆邻接点和当前节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 逆邻接点的下标</span></span><br><span class="line">            <span class="keyword">if</span> vl[j] &gt; vl[i] - w:  <span class="comment"># 更新逆邻接点的最晚发生时间，选小的时间</span></span><br><span class="line">                vl[j] = vl[i] - w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------判断每一活动是否为关键路径--------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]</span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():</span><br><span class="line">            j = topo.index(node)  <span class="comment"># 获得邻接顶点的下标</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            e = ve[i]  <span class="comment"># 计算活动&lt;start,node&gt;的最早开始时间</span></span><br><span class="line">            l = vl[j] - w - delay  <span class="comment"># 计算活动&lt;start,node&gt;的最晚开始时间</span></span><br><span class="line">            <span class="keyword">if</span> e == l:</span><br><span class="line">                cp.append((start, node))  <span class="comment"># 如果相等就说明为关键路径</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        result[topo[i]] = (ve[i], vl[i])</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> result, cp</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre class="mermaid">graph LR
+    V0((V0))
+    V1((V1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+    V5((V5))
+    V6((V6))
+    V7((V7))
+    V8((V8))
+V0--6-->V1
+V0--4-->V2
+V0--5-->V3
+V1--1-->V4
+V2--1-->V4
+V3--2-->V5
+V4--9-->V6
+V4--7-->V7
+V5--4-->V7
+V6--2-->V8
+V7--4-->V8</pre>
+
+
+
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831212504.png!blog" alt="20190831212504"></p>
 
     </div>
 
@@ -323,13 +378,6 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\09\02\图的存储结构实现：邻接表\" rel="bookmark">图的存储结构实现：邻接表</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
       
     </li>
@@ -337,7 +385,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\09\03\拓扑排序及实现\" rel="bookmark">拓扑排序及实现</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\02\图的存储结构实现：邻接表\" rel="bookmark">图的存储结构实现：邻接表</a></div>
       
     </li>
   
@@ -345,6 +393,13 @@
       
       
       <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-Prim算法实现\" rel="bookmark">最小生成树:Prim算法实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\拓扑排序及实现\" rel="bookmark">拓扑排序及实现</a></div>
       
     </li>
   
