@@ -241,6 +241,614 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/AOE网及关键路径/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/AOE网及关键路径/" class="post-title-link" itemprop="url">AOE网及关键路径实现</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:46:30" itemprop="dateCreated datePublished" datetime="2019-09-03T19:46:30+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关键路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">criticalPath</span><span class="params">(self, delay=<span class="number">0</span>)</span>:</span></span><br><span class="line">    topo = self.topological_sort()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> topo:</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"存在有向环！"</span>)</span><br><span class="line">    ve = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最早开始时间</span></span><br><span class="line">    vl = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(topo))]  <span class="comment"># 事件最迟开始时间</span></span><br><span class="line">    cp = []  <span class="comment"># 关键路径</span></span><br><span class="line">    result = &#123;&#125;  <span class="comment"># 返回结果</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最早发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():  <span class="comment"># 获取拓扑节点的邻接点，计算ve</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 邻接节点的下标</span></span><br><span class="line">            <span class="keyword">if</span> ve[j] &lt; ve[i] + w:  <span class="comment"># 更新邻接点的最早发生时间，选大的时间</span></span><br><span class="line">                ve[j] = ve[i] + w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------计算事件的最晚发生时间-----------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):  <span class="comment"># 给每个事件的最迟发生时间置初值，初值为最早发生时间中的最大值</span></span><br><span class="line">        vl[i] = ve[topo.__len__() - <span class="number">1</span>] + delay</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(topo.__len__())):</span><br><span class="line">        k = topo[i]  <span class="comment"># 取出拓扑节点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_inEdge(k).keys():  <span class="comment"># 获取拓扑节点的逆邻接点，计算vl</span></span><br><span class="line">            w = self._graph[node][k]  <span class="comment"># 逆邻接点和当前节点的边</span></span><br><span class="line">            j = topo.index(node)  <span class="comment"># 逆邻接点的下标</span></span><br><span class="line">            <span class="keyword">if</span> vl[j] &gt; vl[i] - w:  <span class="comment"># 更新逆邻接点的最晚发生时间，选小的时间</span></span><br><span class="line">                vl[j] = vl[i] - w</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># --------------------------------判断每一活动是否为关键路径--------------------------</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        start = topo[i]</span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.get_outEdge(start).keys():</span><br><span class="line">            j = topo.index(node)  <span class="comment"># 获得邻接顶点的下标</span></span><br><span class="line">            w = self._graph[start][node]  <span class="comment"># 当前节点与邻接节点的边</span></span><br><span class="line">            e = ve[i]  <span class="comment"># 计算活动&lt;start,node&gt;的最早开始时间</span></span><br><span class="line">            l = vl[j] - w - delay  <span class="comment"># 计算活动&lt;start,node&gt;的最晚开始时间</span></span><br><span class="line">            <span class="keyword">if</span> e == l:</span><br><span class="line">                cp.append((start, node))  <span class="comment"># 如果相等就说明为关键路径</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(topo.__len__()):</span><br><span class="line">        result[topo[i]] = (ve[i], vl[i])</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> result, cp</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/AOE网及关键路径/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/拓扑排序及实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/拓扑排序及实现/" class="post-title-link" itemprop="url">拓扑排序及实现</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:45:00" itemprop="dateCreated datePublished" datetime="2019-09-03T19:45:00+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><p>拓扑排序是有向图（网）中的内容，只在有向网（图）的范畴中讨论。</p><p>先看一个实际生活中可能遇到的问题：选课问题，例如上大一的时候你肯定要先学C语言，然后才能学数据结构。这个时候C语言和数据结构就构成了一个排列问题，<strong>谁在前谁在后</strong>。用图中的顶点表示一个活动，边表示活动之间的顺序关系。这样的图就称为AOV网（顶点活动网）</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/拓扑排序及实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最短路径-迪杰斯特拉算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/最短路径-迪杰斯特拉算法实现/" class="post-title-link" itemprop="url">最短路径:迪杰斯特拉算法实现</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:42:02" itemprop="dateCreated datePublished" datetime="2019-09-03T19:42:02+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h1><h2 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h2><h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog" alt="20190825160305"></p><p>选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831190937.png!blog" alt="20190831190937"></p><p>然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/最短路径-迪杰斯特拉算法实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最小生成树-克鲁斯卡尔算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/最小生成树-克鲁斯卡尔算法实现/" class="post-title-link" itemprop="url">最小生成树:克鲁斯卡尔算法实现</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:37:50" itemprop="dateCreated datePublished" datetime="2019-09-03T19:37:50+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h1><h2 id="算法原理及流程"><a href="#算法原理及流程" class="headerlink" title="算法原理及流程"></a>算法原理及流程</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在一个连通图中不断选取权值最小的边，然后连起来，就是这样。</p><p>假设给定图G，结果图T</p><p>基本步骤如下：</p><ol>
+<li>将G中的所有边按权值递增的顺序进行排序</li>
+<li>选择权值最短的边且边的两端点属于不同连通分量（如果两端点属于同一个连通分量中，那么就说明该子图是连通图！所以不行），然后该边与T中已选择的边进行连接，每次边连接都会使得T的连通分量减1</li>
+<li>当边数小于顶点数时，不断重复1,2</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/最小生成树-克鲁斯卡尔算法实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最小生成树-Prim算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/最小生成树-Prim算法实现/" class="post-title-link" itemprop="url">最小生成树:Prim算法实现</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:32:57" itemprop="dateCreated datePublished" datetime="2019-09-03T19:32:57+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h1><h2 id="算法原理及算法流程"><a href="#算法原理及算法流程" class="headerlink" title="算法原理及算法流程"></a>算法原理及算法流程</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>根据（MST性质：网络G必有一颗最小生成树），具体证明不再赘述，大概思想就是假设你现有一个图的集合G，从G中的一个顶点出发，不断的选择最短的一条连接边，扩充到已选边集N中，直至N包含了图G中的所有顶点。</p><h3 id="构造过程举例"><a href="#构造过程举例" class="headerlink" title="构造过程举例"></a>构造过程举例</h3><p>假设现在有这样一颗图</p><h6 id="第一次构造"><a href="#第一次构造" class="headerlink" title="第一次构造"></a>第一次构造</h6><p>V1的邻接节点全部入队。并且由于该队列是优先级队列，会按照权重排序</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/最小生成树-Prim算法实现/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/图的遍历-BFS和DFS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2019/09/03/图的遍历-BFS和DFS/" class="post-title-link" itemprop="url">图的遍历:BFS和DFS</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:24:07" itemprop="dateCreated datePublished" datetime="2019-09-03T19:24:07+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h1><h2 id="BFS（广度优先搜索）"><a href="#BFS（广度优先搜索）" class="headerlink" title="BFS（广度优先搜索）"></a>BFS（广度优先搜索）</h2><h3 id="算法原理及步骤"><a href="#算法原理及步骤" class="headerlink" title="算法原理及步骤"></a>算法原理及步骤</h3><p>按照广度优先原则遍历图，利用了队列，有点像树的层次遍历。广度优先遍历的结果不唯一。整个遍历过程大概是这样的：给定一个起始顶点，将该起始顶点入队</p><ol>
+<li>顶点出队，如果当前顶点未被标记访问，则访问该顶点，然后标记为已访问，如果当前顶点已访问则直接丢弃该顶点</li>
+<li>当前访问顶点的邻接顶点入队</li>
+<li>当队列不为空的时候，循环1,2步</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/09/03/图的遍历-BFS和DFS/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/25/基于Python的图算法实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -645,618 +1253,11 @@
   </article>
 
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/18/Linux常用命令-网络命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/18/Linux常用命令-网络命令/" class="post-title-link" itemprop="url">Linux常用命令-网络命令</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-18 21:11:39" itemprop="dateCreated datePublished" datetime="2019-08-18T21:11:39+08:00">2019-08-18</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="write命令"><a href="#write命令" class="headerlink" title="write命令"></a>write命令</h1><p>功能：给用户发信息，以<code>Ctrl</code>+<code>C</code>结束，通信双方要求已登录。</p><p>用法：wirte &lt;用户名&gt;</p><p>执行权限：所有用户</p><p>实例：</p><p>在<code>zhong</code>这个用户下给root用户发信息</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190818212049.png!blog" alt="20190818212049"></p><p>在root用户中就可以看见了</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190818212107.png!blog" alt="20190818212107"></p><h1 id="wall命令"><a href="#wall命令" class="headerlink" title="wall命令"></a>wall命令</h1><p>英文缩写：wirte all</p><p>功能：发广播信息，所有登录用户都能收到</p><p>执行权限：所有用户</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/18/Linux常用命令-网络命令/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/17/linux常用命令-压缩解压命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/17/linux常用命令-压缩解压命令/" class="post-title-link" itemprop="url">linux常用命令-压缩解压命令</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-17 22:08:03" itemprop="dateCreated datePublished" datetime="2019-08-17T22:08:03+08:00">2019-08-17</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="打包命令"><a href="#打包命令" class="headerlink" title="打包命令"></a>打包命令</h1><p>在总结解压前，需要先了解打包命令，Linux的有些压缩格式是无法直接压缩目录的，需要用到<code>tar</code>命令进行打包成文件。</p>
-<p>使用方法：<code>tar -cf[v] 打包后的文件名 需要打包的目录名</code></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/17/linux常用命令-压缩解压命令/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/Linux常见命令-用户管理命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/16/Linux常见命令-用户管理命令/" class="post-title-link" itemprop="url">Linux常见命令-用户管理命令</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-16 23:04:27" itemprop="dateCreated datePublished" datetime="2019-08-16T23:04:27+08:00">2019-08-16</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="useradd"><a href="#useradd" class="headerlink" title="useradd"></a>useradd</h1><p>功能描述：添加新用户</p>
-<p>执行权限：root</p>
-<p>命令所在路径：/usr/sbin/useradd</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">useradd</span> xxx <span class="comment">#用户名</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/16/Linux常见命令-用户管理命令/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/Linux常见命令-帮助命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/16/Linux常见命令-帮助命令/" class="post-title-link" itemprop="url">Linux常见命令-帮助命令</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-16 23:00:21" itemprop="dateCreated datePublished" datetime="2019-08-16T23:00:21+08:00">2019-08-16</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="man命令"><a href="#man命令" class="headerlink" title="man命令"></a>man命令</h1><p>man可以查看命令的帮组和配置文件的帮助</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/16/Linux常见命令-帮助命令/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/hexo部署云服务器的全过程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/16/hexo部署云服务器的全过程/" class="post-title-link" itemprop="url">hexo部署云服务器的全过程</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-16 20:17:17" itemprop="dateCreated datePublished" datetime="2019-08-16T20:17:17+08:00">2019-08-16</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于不想部署在github上，因为Github的访问速度在国内比较慢，所以有了此文。</p>
-<p>部署之前先了解一下hexo利于git更新的流程，部署在Github上和部署在云服务器上没有特别大的本质区别。</p>
-<p>整个流程就是本地将 *.md 渲染成静态文件，然后Git推送到服务器的repository,服务器再通过 git-hooks 同步网站根目录。再利于nginx托管这些静态资源，就可以实现快速的访问。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/16/hexo部署云服务器的全过程/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/16/Scrapy爬取CSDN博客列表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/08/16/Scrapy爬取CSDN博客列表/" class="post-title-link" itemprop="url">Scrapy爬取CSDN博客列表</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-08-16 13:48:43" itemprop="dateCreated datePublished" datetime="2019-08-16T13:48:43+08:00">2019-08-16</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Scrapy是一个为了爬取网站数据，提取结构性数据而编写的应用框架。 其可以应用在数据挖掘，信息处理或存储历史数据等一系列的程序中。其最初是为了页面抓取 (更确切来说, 网络抓取 )所设计的， 也可以应用在获取API所返回的数据(例如 Amazon Associates Web Services ) 或者通用的网络爬虫。Scrapy用途广泛，可以用于数据挖掘、监测和自动化测试。</p>
-<p>具体可查看文档 <a href="https://scrapy-chs.readthedocs.io/zh_CN/0.24/intro/overview.html" title="scrapy中文文档" target="_blank" rel="noopener">scrapy中文文档</a></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/08/16/Scrapy爬取CSDN博客列表/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1292,7 +1293,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

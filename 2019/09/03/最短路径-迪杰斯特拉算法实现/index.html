@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="最短路径dijkstra算法算法原理在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。">
+<meta name="keywords" content="python,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短路径:迪杰斯特拉算法实现">
+<meta property="og:url" content="localhost:4000/2019/09/03/最短路径-迪杰斯特拉算法实现/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="最短路径dijkstra算法算法原理在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831190937.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831205632.png!blog">
+<meta property="og:updated_time" content="2019-09-03T11:44:02.003Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最短路径:迪杰斯特拉算法实现">
+<meta name="twitter:description" content="最短路径dijkstra算法算法原理在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/09/03/最短路径-迪杰斯特拉算法实现/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>最短路径:迪杰斯特拉算法实现 | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最短路径-迪杰斯特拉算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">最短路径:迪杰斯特拉算法实现
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:42:02" itemprop="dateCreated datePublished" datetime="2019-09-03T19:42:02+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h1><h2 id="dijkstra算法"><a href="#dijkstra算法" class="headerlink" title="dijkstra算法"></a>dijkstra算法</h2><h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>在看迪杰斯特拉算法之前，可以先回顾下BFS算法的过程。BFS的实现是通过一个队列实现。还是这张图</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190825160305.png!blog" alt="20190825160305"></p><p>选择假设BFS从A节点开始，A节点出队后，将A的邻接节点B,C入队</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831190937.png!blog" alt="20190831190937"></p><p>然后B出队，D入队，C出队，E入队。整个BFS的流程大概如此，在这之中，可以看到BFS队列中不同节点离A的距离，每个出队的结点对于他的邻接节点的距离都是1，并且在队列中他们也是紧紧挨着的。</p><a id="more"></a>
+
+
+
+
+<p>假如可以把这些顶点进行排序，然后不断更新队中节点到A的距离值，那么应该可以一步步的获得当前节点到A节点的最短距离了。</p>
+<p>该算法有两个难点：</p>
+<ol>
+<li>如何排序</li>
+</ol>
+<p>我使用的是python的优先队列，该队列是基于堆这一种数据结构实现的，你也可以自行选择排序算法进行排序</p>
+<ol start="2">
+<li>如何更新距离</li>
+</ol>
+<p>在BFS中每个节点到A的距离是固定的，是不会发生更新操作的，这是由于BFS算法实现过程中有个访问标志会标志某个节点是否已被访问，该标志保证了每个节点只访问一次。但是在迪杰斯特拉算法中，这样是不行的，因为想要在每个节点出队后，都要将该结点的邻接节点到目标点（这个例子中是A点）的距离进行比较更新，选择权值和小的。</p>
+<p>看下面这个网</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog" alt="20190831193520"></p>
+<p>当遍历到B的时候A到B有两条路，一条是A-B，另一条是A-C-B，前者的距离为5，比较长，后者的距离为3（1+2）。在迪杰斯特拉中就会选择路径A-C-B这条路径。</p>
+<p>在实际的算法实现中，距离的比较是通过一个<code>distance</code>的列表实现的，该列表距离了每个顶点到目标点的最短距离。然后在下一次遍历中不断得更新这个距离就可以了。</p>
+<h4 id="构造过程举例"><a href="#构造过程举例" class="headerlink" title="构造过程举例"></a>构造过程举例</h4><p>假设还是上面这个图。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831193520.png!blog" alt="20190831193520"></p>
+<p>要求图中顶点到A的最短距离</p>
+<h5 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h5><p>初始化距离列表,inf 表示无穷，A的目标点，所以距离为0</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,inf]
+    C[C,inf]
+    D[D,inf]
+    E[E,inf]
+    F[F,inf]</pre>
+
+<p>初始化优先级队列，目标节点A入队</p>
+<pre class="mermaid">graph TB
+    A((A,0))</pre>
+
+
+
+<p>当队列不为空时，循环。</p>
+<h5 id="第一次构造"><a href="#第一次构造" class="headerlink" title="第一次构造"></a>第一次构造</h5><ol>
+<li>A出队,并标记为已访问，遍历A的邻接节点B、C，同时将A到B的距离5(0+5)和A到C的距离1(0+1)，与<code>distance</code>列表中的距离进行比较，由于<code>distance</code>中的距离都是无穷，所以<code>distance</code>中C的距离更新为1，B的距离更新为<code>5</code></li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,5]
+    C[C,1]
+    D[D,inf]
+    E[E,inf]
+    F[F,inf]</pre>
+
+<ol start="2">
+<li>B,C节点由于距离被更新了。需要参与下一次比较，所以B、C入队</li>
+</ol>
+<pre class="mermaid">graph LR
+    B((B,5))
+    C((C,1))
+C-->B</pre>
+
+
+
+<p>第二次构造</p>
+<ol>
+<li>C出队，并标记为已访问，遍历C的邻接节点A,B,D,E，将C-A的距离1，C-B的距离3(1+2)和C-D的距离5(1+4)和C-E的距离9（1+8），与<code>distance</code>列表中的B,C,E的距离进行比较，更新为其中的较小值</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,5]
+    E[E,9]
+    F[F,inf]</pre>
+
+<ol start="2">
+<li>由于B,D,E的距离被更新了。需要参与下一次的比较，所以B,C,E需要入队，带着他们的更新后的权值</li>
+</ol>
+<pre class="mermaid">graph LR
+    B((B,5))
+    B1((B,3))
+    D((D,5))
+    E((E,9))
+
+B1-->B
+B-->D
+D-->E</pre>
+
+
+
+<h5 id="第三次构造"><a href="#第三次构造" class="headerlink" title="第三次构造"></a>第三次构造</h5><ol>
+<li>B出队，并标记为已访问，遍历B的子节点D,C,A，将B-D（3+1=4）,B-C（3+2=5）,B-A（3+5）的距离分别与<code>distance</code>中的D,C,A距离进行比较，取小的值，发现只有D的距离被更新为了4</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,9]
+    F[F,inf]</pre>
+
+<ol start="3">
+<li>由于D被更新了，需要参与下一次的比较，所以D入队，带着D更新后的权值</li>
+</ol>
+<pre class="mermaid">graph LR
+    D1((D,4))
+    B((B,5))
+    D((D,5))
+    E((E,9))
+
+D1-->B
+B-->D
+D-->E</pre>
+
+
+
+<h5 id="第四次构造"><a href="#第四次构造" class="headerlink" title="第四次构造"></a>第四次构造</h5><ol>
+<li>D出队，并标记为已访问，遍历D的子节点B,C,E,F。将D-B（4+1=5）,D-C（4+4=8）,D-E(4+3=7),D-F(4+6=10)的距离分别与<code>distance</code>中的B,C,E,F距离进行比较，取小的值</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+<ol start="3">
+<li>由于只有E,F的距离被更新为7,和10，所以E，F需要带着他们更新后的权值入队，参与下一次的比较。</li>
+</ol>
+<pre class="mermaid">graph LR
+
+    B((B,5))
+    D((D,5))
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+
+B-->D
+D-->E1
+E1-->E
+E-->F</pre>
+
+
+
+
+
+<h5 id="第五次构造"><a href="#第五次构造" class="headerlink" title="第五次构造"></a>第五次构造</h5><ol>
+<li>队首B出队，由于B被标记已访问，所以直接扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    D((D,5))
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+D-->E1
+E1-->E
+E-->F</pre>
+
+<ol start="2">
+<li>队首D出队，由于D已经被标记已访问，扔掉。进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+
+    E1((E,7))
+    E((E,9))
+    F((F,10))
+
+E1-->E
+E-->F</pre>
+
+<ol start="3">
+<li><p>队首E出队，标记为已访问。遍历其邻接节点C,D，将E-C（7+4=11），E-D（7+3=10）与<code>distance</code>中的C,D值进行比较，取小的值，发现C,D都不需要更新。</p>
+</li>
+<li><p>由于没有节点被更新，所以没有节点入队。此时的<code>distance</code>如下图</p>
+</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+
+
+<h5 id="第六次构造"><a href="#第六次构造" class="headerlink" title="第六次构造"></a>第六次构造</h5><ol>
+<li>队首E出队，由于E被标记为已访问，扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    E((E,9))
+    F((F,10))
+
+E-->F</pre>
+
+<ol start="2">
+<li>队首E出队，由于E被标记为已访问，扔掉，进入下一个循环</li>
+</ol>
+<pre class="mermaid">graph LR
+    F((F,10))</pre>
+
+<ol start="3">
+<li>队首F出队,发现他没有子节点，所以<code>distance</code>不会被更新，队列将不会加入新的结点。此时的<code>distance</code>如下图</li>
+</ol>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+<h5 id="第七次构造"><a href="#第七次构造" class="headerlink" title="第七次构造"></a>第七次构造</h5><p>由于此时队列为空，所以循环结束，迪杰斯特拉算法求解完毕！此时的<code>distance</code>就是每个节点到目标点A的最短距离了。</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+
+
+
+<p>迪杰斯特拉算法就是基于这种”宽度优先遍历”的思想，按路径的长度选择下一个最短节点然后逐步扩张（这一点也很像用MST性质实现的prim算法）。这个算法在探索中也会更新已经节点的最短路径，每一步都可以找到一个确定的最短路径，这就是典型的动态规划思想（在计算中保留一些信息，用来支持下一步的决策信息）</p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 迪杰斯特拉法算最短路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dijkstra</span><span class="params">(self, start)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self._invalid(start):</span><br><span class="line">        <span class="keyword">raise</span> GraphError(<span class="string">"不存在"</span> + start + <span class="string">"这样的顶点"</span>)</span><br><span class="line">    graph = self._graph</span><br><span class="line">    pqueue = []  <span class="comment"># 优先级队列</span></span><br><span class="line">    heapq.heappush(pqueue, (<span class="number">0</span>, start))  <span class="comment"># 根顶点进队，最高优先级</span></span><br><span class="line">    seen = set()  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">    parent = &#123;start: <span class="literal">None</span>&#125;  <span class="comment"># 生成树</span></span><br><span class="line">    distance = self.__init_distance(start)  <span class="comment"># 初始化距离</span></span><br><span class="line">    <span class="keyword">while</span> pqueue.__len__() &gt; <span class="number">0</span>:</span><br><span class="line">        pair = heapq.heappop(pqueue)  <span class="comment"># pop弹出的是元组，第一个参数是距离（优先级），第二个是顶点</span></span><br><span class="line">        dist = pair[<span class="number">0</span>]</span><br><span class="line">        vertex = pair[<span class="number">1</span>]</span><br><span class="line">        seen.add(vertex)  <span class="comment"># 记录访问过的顶点</span></span><br><span class="line">        nodes = graph[vertex].keys()  <span class="comment"># 获取其顶点的邻接顶点</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">            <span class="keyword">if</span> node <span class="keyword">not</span> <span class="keyword">in</span> seen:</span><br><span class="line">                <span class="keyword">if</span> dist + graph[vertex][node] &lt; distance[node]:  <span class="comment"># 如果当前顶点到开始顶点的距离小于距离列表中的值，更新距离</span></span><br><span class="line">                    heapq.heappush(pqueue, (dist + graph[vertex][node], node))</span><br><span class="line">                    parent[node] = vertex</span><br><span class="line">                    distance[node] = dist + graph[vertex][node]</span><br><span class="line">        <span class="comment"># 输出遍历结果</span></span><br><span class="line">        <span class="comment"># print(vertex)</span></span><br><span class="line">    <span class="keyword">return</span> distance, parent</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831205632.png!blog" alt="20190831205632"></p>
+<p>可以发现，如刚才推导的结果一模一样。</p>
+<pre class="mermaid">graph TB
+    A[A,0]
+    B[B,3]
+    C[C,1]
+    D[D,4]
+    E[E,7]
+    F[F,10]</pre>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\AOE网及关键路径\" rel="bookmark">AOE网及关键路径实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\拓扑排序及实现\" rel="bookmark">拓扑排序及实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-Prim算法实现\" rel="bookmark">最小生成树:Prim算法实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-克鲁斯卡尔算法实现\" rel="bookmark">最小生成树:克鲁斯卡尔算法实现</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束感谢您的阅读,如有疑问，请联系<a href="mailto:610596547@qq.com">610596547@qq.com</a>-------------</div>
+    
+</div>
+      
+    </div>
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python-数据结构/" rel="tag"># python,数据结构</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/03/最小生成树-克鲁斯卡尔算法实现/" rel="next" title="最小生成树:克鲁斯卡尔算法实现">
+                  <i class="fa fa-chevron-left"></i> 最小生成树:克鲁斯卡尔算法实现
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/03/拓扑排序及实现/" rel="prev" title="拓扑排序及实现">
+                  拓扑排序及实现 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://139.159.245.212:1998" title="Profile &rarr; http://139.159.245.212:1998" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#最短路径"><span class="nav-number">1.</span> <span class="nav-text">最短路径</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dijkstra算法"><span class="nav-number">1.1.</span> <span class="nav-text">dijkstra算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造过程举例"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">构造过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#初始化"><span class="nav-number">1.1.1.1.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第一次构造"><span class="nav-number">1.1.1.1.2.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三次构造"><span class="nav-number">1.1.1.1.3.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四次构造"><span class="nav-number">1.1.1.1.4.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五次构造"><span class="nav-number">1.1.1.1.5.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第六次构造"><span class="nav-number">1.1.1.1.6.</span> <span class="nav-text">第六次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第七次构造"><span class="nav-number">1.1.1.1.7.</span> <span class="nav-text">第七次构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">1.1.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+
+<div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'default',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>

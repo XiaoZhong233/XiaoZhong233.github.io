@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="克鲁斯卡尔算法算法原理及流程原理在一个连通图中不断选取权值最小的边，然后连起来，就是这样。假设给定图G，结果图T基本步骤如下： 将G中的所有边按权值递增的顺序进行排序 选择权值最短的边且边的两端点属于不同连通分量（如果两端点属于同一个连通分量中，那么就说明该子图是连通图！所以不行），然后该边与T中已选择的边进行连接，每次边连接都会使得T的连通分量减1 当边数小于顶点数时，不断重复1,2">
+<meta name="keywords" content="python,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最小生成树:克鲁斯卡尔算法实现">
+<meta property="og:url" content="localhost:4000/2019/09/03/最小生成树-克鲁斯卡尔算法实现/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="克鲁斯卡尔算法算法原理及流程原理在一个连通图中不断选取权值最小的边，然后连起来，就是这样。假设给定图G，结果图T基本步骤如下： 将G中的所有边按权值递增的顺序进行排序 选择权值最短的边且边的两端点属于不同连通分量（如果两端点属于同一个连通分量中，那么就说明该子图是连通图！所以不行），然后该边与T中已选择的边进行连接，每次边连接都会使得T的连通分量减1 当边数小于顶点数时，不断重复1,2">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831002634.png!blog">
+<meta property="og:updated_time" content="2019-09-03T11:41:05.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最小生成树:克鲁斯卡尔算法实现">
+<meta name="twitter:description" content="克鲁斯卡尔算法算法原理及流程原理在一个连通图中不断选取权值最小的边，然后连起来，就是这样。假设给定图G，结果图T基本步骤如下： 将G中的所有边按权值递增的顺序进行排序 选择权值最短的边且边的两端点属于不同连通分量（如果两端点属于同一个连通分量中，那么就说明该子图是连通图！所以不行），然后该边与T中已选择的边进行连接，每次边连接都会使得T的连通分量减1 当边数小于顶点数时，不断重复1,2">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831002634.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/09/03/最小生成树-克鲁斯卡尔算法实现/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>最小生成树:克鲁斯卡尔算法实现 | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最小生成树-克鲁斯卡尔算法实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">最小生成树:克鲁斯卡尔算法实现
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-03 19:37:50" itemprop="dateCreated datePublished" datetime="2019-09-03T19:37:50+08:00">2019-09-03</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h1><h2 id="算法原理及流程"><a href="#算法原理及流程" class="headerlink" title="算法原理及流程"></a>算法原理及流程</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在一个连通图中不断选取权值最小的边，然后连起来，就是这样。</p><p>假设给定图G，结果图T</p><p>基本步骤如下：</p><ol>
+<li>将G中的所有边按权值递增的顺序进行排序</li>
+<li>选择权值最短的边且边的两端点属于不同连通分量（如果两端点属于同一个连通分量中，那么就说明该子图是连通图！所以不行），然后该边与T中已选择的边进行连接，每次边连接都会使得T的连通分量减1</li>
+<li>当边数小于顶点数时，不断重复1,2</li>
+</ol><a id="more"></a>
+
+
+
+<p>如果当做完上面这些步骤后，得出的结果T中不能包含G中的所有顶点，则说明原图G是不连通的（也就是不是任意一个节点到另一个节点都走的通）</p>
+<p>这里有两个难点：</p>
+<ol>
+<li><p>最短边的选取</p>
+<p>思路①：采用优先队列，在python中可以通过优先级队列实现，其他语言像C++,Java中也有类似实现的数据结构。</p>
+<p>思路②：不断的扫描候选边列表，然后进行排序。这种方法就比较麻烦了，写的代码比较多，不过也很灵活，具体排序方式你可以选择。</p>
+</li>
+<li><p>如何判断边的两个端点的连通分量</p>
+<p>思路①：不断的检查两个端点之间是否有路径，有路径就说明在同一个子图中，连通分量相同。不过这样也太麻烦了点还浪费计算时间</p>
+<p>思路②：前人提出的一种方法，为每个连通分量确定一个代表元，如果两个顶点的代表元相同，则表示他们连通成环。例如下图</p>
+<pre class="mermaid">   graph TD
+    V1((v1))
+    V2((V2))
+    V3((V3))
+    V4((V4))</pre>
+
+<p>当初始化的时候<code>v1,v2,v3,v4</code>的代表元就是他们的序号也就对应<code>0,1,2,3</code></p>
+<p>当<code>v1</code>  <code>v2</code> 构成新边的时候，就要把<code>v2</code>的代表元改为<code>v1</code> 的代表元<code>0</code> 。</p>
+<p>这时候<code>v1,v2,v3,v4</code>的代表元就更新为<code>0,0,2,3</code></p>
+<pre class="mermaid">   graph TD
+    V1((v1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+V1---V2</pre>
+
+<p><code>v1</code> <code>v2</code>是的连通分量相同并且他们的代表元也是相同的。</p>
+<p>类似，如果想要连接<code>v2</code> <code>v3</code>，此时<code>v2</code> <code>v3</code> 的代表元不同，因此连接了也不会构成环。 直接把<code>v3</code>的代表元修改为<code>v2</code>的代表元即可，即<code>0</code></p>
+<pre class="mermaid">   graph LR
+    V1((v1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+V1---V2
+V2---V3</pre>
+
+<p>此时<code>v1</code> <code>v2</code> <code>v3</code>是连通的，他们的代表元是<code>0,0,0</code></p>
+<p>如果下一次操作中，想要把<code>v3</code> 连接到<code>v1</code> ，检查他们的代表元，都是<code>0</code>所以连接起来一定会构成环</p>
+<pre class="mermaid">   graph LR
+    V1((v1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+V1---V2
+V2---V3
+V3---V1</pre>
+
+<p>因此，可以使用代表元判断欲加入的边是否会与已选择集合T中的边构成环路。</p>
+</li>
+</ol>
+<h3 id="构成过程举例"><a href="#构成过程举例" class="headerlink" title="构成过程举例"></a>构成过程举例</h3><p>假设还是之前的这颗图G，其结果集T中目前还为空</p>
+<pre class="mermaid">graph RL
+    V1((V1))
+    V2((V2))
+    V3((V3))
+    V4((V4))
+    V5((V5))
+    V6((V6))
+V1--6---V2
+V1--1---V3
+V1--5---V4
+V2--5---V3
+V3--5---V4
+V3--6---V5
+V3--4---V6</pre>
+
+
+
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>全部边入队，自动在优先队列中根据权值排好序</p>
+<pre class="mermaid">graph LR
+    v46((v4,v6,2))
+    v56((V5,V6,6))
+    v32((v2,v3,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v36((v3,v6,4))
+    v25((v2,v5,3))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+    v13((v1,v3,1))
+v13---v46
+v46---v25
+v25---v36
+v36---v14
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<p>并且初始化代表元列表，初始值为他们的下标。</p>
+<p>例如<code>v1</code>的代表元初始值为1，<code>v2</code>的代表元初始值为2….<code>vn</code>的代表元初始值为n</p>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,3]
+    v4[v4,4]
+    v5[v5,5]
+    v6[v6,6]</pre>
+
+
+
+<h5 id="第一次构造"><a href="#第一次构造" class="headerlink" title="第一次构造"></a>第一次构造</h5><ol>
+<li>队首出队，所以<code>&lt;v1,v3&gt;</code>边出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v64((v6,v4,2))
+    v65((V6,V5,6))
+    v32((v3,v2,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v36((v3,v6,4))
+    v25((v2,v5,3))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+    v13((v1,v3,1))
+v13---v64
+v64---v25
+v25---v36
+v36---v14
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v65</pre>
+
+
+
+<ol>
+<li>检查<code>v1</code>  <code>v3</code>的代表元，很明显不同,所以将<code>&lt;v1,v3&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+V1--1---V3</pre>
+
+<ol start="3">
+<li>合并代表元,修改等于代表元值为3的代表元的值，改为<code>v1</code>的代表元即1</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,4]
+    v5[v5,5]
+    v6[v6,6]</pre>
+
+
+
+<h5 id="第二次构造"><a href="#第二次构造" class="headerlink" title="第二次构造"></a>第二次构造</h5><ol>
+<li>队首出队，所以<code>&lt;v4,v6&gt;</code>边出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v46((v4,v6,2))
+    v56((V5,V6,6))
+    v32((v2,v3,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v36((v3,v6,4))
+    v25((v2,v5,3))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+
+
+v46---v25
+v25---v36
+v36---v14
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v4</code>  <code>v6</code>的代表元，很明显不同,所以将<code>&lt;v4,v6&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+V1--1---V3
+V6--2---V4</pre>
+
+<ol start="3">
+<li>合并代表元,修改等于代表元值为6的代表元的值，改为<code>v4</code>的代表元的值即4</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,4]
+    v5[v5,5]
+    v6[v6,4]</pre>
+
+
+
+<h5 id="第三次构造"><a href="#第三次构造" class="headerlink" title="第三次构造"></a>第三次构造</h5><ol>
+<li>队首出队，所以<code>&lt;v2,v5&gt;</code>边出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v56((V5,V6,6))
+    v32((v3,v2,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v36((v3,v6,4))
+    v25((v2,v5,3))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+v25---v36
+v36---v14
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v2</code>  <code>v5</code>的代表元，很明显不同,所以将<code>&lt;v2,v5&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph TD
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5</pre>
+
+<ol start="3">
+<li>合并代表元,修改等于代表元值为5的代表元的值，改为<code>v2</code>的代表元的值即2</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,4]
+    v5[v5,2]
+    v6[v6,4]</pre>
+
+
+
+<h5 id="第三次构造-1"><a href="#第三次构造-1" class="headerlink" title="第三次构造"></a>第三次构造</h5><ol>
+<li>队首<code>&lt;v3,v6&gt;</code>出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v56((v5,V6,6))
+    v32((v3,v2,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v36((v3,v6,4))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+v36---v14
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v3</code>  <code>v6</code>的代表元，不同,所以将<code>&lt;v3,v6&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5
+V3--4---V6</pre>
+
+<ol start="3">
+<li>合并代表元,修改等于代表元值为4的代表元的值，改为<code>v3</code>代表元的值即1</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,1]
+    v5[v5,2]
+    v6[v6,1]</pre>
+
+
+
+
+
+<h5 id="第四次构造"><a href="#第四次构造" class="headerlink" title="第四次构造"></a>第四次构造</h5><ol>
+<li>队首<code>&lt;v1,v4&gt;</code>出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v56((V5,V6,6))
+    v32((v3,v2,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v14((v1,v4,5))
+    v12((v1,v2,6))
+v14---v34
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v1</code>  <code>v4</code>的代表元，相同,所以不将<code>&lt;v1,v4&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5
+V3--4---V6</pre>
+
+<ol start="3">
+<li>此时代表元不进行任何操作</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,1]
+    v5[v5,2]
+    v6[v6,1]</pre>
+
+
+
+<h5 id="第五次构造"><a href="#第五次构造" class="headerlink" title="第五次构造"></a>第五次构造</h5><ol>
+<li>队首<code>&lt;v3,v4&gt;</code>出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v56((V5,V6,6))
+    v32((v3,v2,5))
+    v34((v3,v4,5))
+    v35((v3,v5,6))
+    v12((v1,v2,6))
+v34---v32
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v3</code> <code>v4</code>的代表元，相同，所以不将<code>&lt;v3,v4&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5
+V3--4---V6</pre>
+
+<ol start="3">
+<li>此时代表元不进行任何操作</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,2]
+    v3[v3,1]
+    v4[v4,1]
+    v5[v5,2]
+    v6[v6,1]</pre>
+
+
+
+<h5 id="第六次构造"><a href="#第六次构造" class="headerlink" title="第六次构造"></a>第六次构造</h5><ol>
+<li><code>&lt;v2,v3&gt;</code>出队</li>
+</ol>
+<pre class="mermaid">graph LR
+    v56((V5,V6,6))
+    v32((v3,v2,5))
+    v35((v3,v5,6))
+    v12((v1,v2,6))
+v32---v12
+v12---v35
+v35---v56</pre>
+
+<ol start="2">
+<li>检查<code>v2</code> <code>v3</code>的代表元，不同，所以将<code>&lt;v2,v3&gt;</code>加入T集合中</li>
+</ol>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5
+V3--4---V6
+V3--5---V2</pre>
+
+<ol start="3">
+<li>合并代表元,修改等于代表元为2的代表元的值，改为<code>v3</code>代表元的值即1</li>
+</ol>
+<pre class="mermaid">graph BT
+    v1[v1,1]
+    v2[v2,1]
+    v3[v3,1]
+    v4[v4,1]
+    v5[v5,1]
+    v6[v6,1]</pre>
+
+<p>可以发现，当前T集合中已经有5条边了，最小生成树已经生成完毕。同时观察到，代表元中的值也相同了，表示他们都在同一个子图中了。</p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kruskal算法，最小生成树，前提该图必须是连通网</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kruskal</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 初始化代表元和结果图</span></span><br><span class="line">    result, reps, pqueue, edgesCount = GraphAL(graph=&#123;&#125;), &#123;&#125;, [], <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> self._graph.keys():</span><br><span class="line">        reps[key] = key</span><br><span class="line">    <span class="comment"># 边入队，按优先级排序,选出最短边</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> self._graph:</span><br><span class="line">        <span class="keyword">for</span> end <span class="keyword">in</span> self._graph[key].keys():</span><br><span class="line">            edges = self._graph[key][end]</span><br><span class="line">            heapq.heappush(pqueue, (edges, key, end))  <span class="comment"># 边入队</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># 当边数达到n-1条时，即成功得到最小生成树时停止</span></span><br><span class="line">    <span class="keyword">while</span> edgesCount &lt; self.get_vertexNum() - <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">not</span> pqueue.__len__() == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 出队</span></span><br><span class="line">        pair = list(heapq.heappop(pqueue))</span><br><span class="line">        <span class="comment"># 判断是否有该顶点,如果没有就要加入</span></span><br><span class="line">        <span class="keyword">if</span> pair[<span class="number">1</span>] <span class="keyword">not</span> <span class="keyword">in</span> result._graph:</span><br><span class="line">            result.add_vertex(pair[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">if</span> pair[<span class="number">2</span>] <span class="keyword">not</span> <span class="keyword">in</span> result._graph:</span><br><span class="line">            result.add_vertex(pair[<span class="number">2</span>])</span><br><span class="line">        <span class="comment"># 检查两点是否属于不同连通分量</span></span><br><span class="line">        <span class="keyword">if</span> reps[pair[<span class="number">1</span>]] != reps[pair[<span class="number">2</span>]]:</span><br><span class="line">            result.add_edge(pair[<span class="number">1</span>], pair[<span class="number">2</span>], pair[<span class="number">0</span>])</span><br><span class="line">            edgesCount += <span class="number">1</span></span><br><span class="line">            <span class="comment"># 合并连通分量</span></span><br><span class="line">            rep, orep = reps[pair[<span class="number">1</span>]], reps[pair[<span class="number">2</span>]]</span><br><span class="line">            <span class="keyword">for</span> key <span class="keyword">in</span> reps.keys():</span><br><span class="line">                <span class="keyword">if</span> reps[key] == orep:</span><br><span class="line">                    reps[key] = rep</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190831002634.png!blog" alt="20190831002634"></p>
+<p>与刚才结果自动推的完全一致。</p>
+<pre class="mermaid">graph LR
+    V1((v1))
+    V3((V3))
+    V6((V6))
+    V4((V4))
+    V2((V2))
+    V5((V5))
+V1--1---V3
+V6--2---V4
+V2--3---V5
+V3--4---V6
+V3--5---V2</pre>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\AOE网及关键路径\" rel="bookmark">AOE网及关键路径实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\拓扑排序及实现\" rel="bookmark">拓扑排序及实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最小生成树-Prim算法实现\" rel="bookmark">最小生成树:Prim算法实现</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\09\03\最短路径-迪杰斯特拉算法实现\" rel="bookmark">最短路径:迪杰斯特拉算法实现</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束感谢您的阅读,如有疑问，请联系<a href="mailto:610596547@qq.com">610596547@qq.com</a>-------------</div>
+    
+</div>
+      
+    </div>
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/python-数据结构/" rel="tag"># python,数据结构</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/03/最小生成树-Prim算法实现/" rel="next" title="最小生成树:Prim算法实现">
+                  <i class="fa fa-chevron-left"></i> 最小生成树:Prim算法实现
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/03/最短路径-迪杰斯特拉算法实现/" rel="prev" title="最短路径:迪杰斯特拉算法实现">
+                  最短路径:迪杰斯特拉算法实现 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://139.159.245.212:1998" title="Profile &rarr; http://139.159.245.212:1998" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#克鲁斯卡尔算法"><span class="nav-number">1.</span> <span class="nav-text">克鲁斯卡尔算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法原理及流程"><span class="nav-number">1.1.</span> <span class="nav-text">算法原理及流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构成过程举例"><span class="nav-number">1.1.2.</span> <span class="nav-text">构成过程举例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一次构造"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">第一次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二次构造"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">第二次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三次构造"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三次构造-1"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">第三次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四次构造"><span class="nav-number">1.1.2.1.5.</span> <span class="nav-text">第四次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五次构造"><span class="nav-number">1.1.2.1.6.</span> <span class="nav-text">第五次构造</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第六次构造"><span class="nav-number">1.1.2.1.7.</span> <span class="nav-text">第六次构造</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">1.1.3.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">1.1.4.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+
+<div id="days"></div>
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'default',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>
