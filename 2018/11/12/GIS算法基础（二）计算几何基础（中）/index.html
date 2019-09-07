@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="代码已经放在github上，需要的同学自取：https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/CalculateBasic.java目录一、线段的拐向的判断二、判断点是否在线段上三、判断两线段是否相交①快速排斥试验②跨立试验">
+<meta name="keywords" content="GIS算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIS算法基础（二）计算几何基础（中）">
+<meta property="og:url" content="localhost:4000/2018/11/12/GIS算法基础（二）计算几何基础（中）/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="代码已经放在github上，需要的同学自取：https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/CalculateBasic.java目录一、线段的拐向的判断二、判断点是否在线段上三、判断两线段是否相交①快速排斥试验②跨立试验">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203007.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203025.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203043.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203103.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203118.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203129.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203145.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203242.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203257.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203315.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203326.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:updated_time" content="2019-09-07T12:33:34.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GIS算法基础（二）计算几何基础（中）">
+<meta name="twitter:description" content="代码已经放在github上，需要的同学自取：https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/CalculateBasic.java目录一、线段的拐向的判断二、判断点是否在线段上三、判断两线段是否相交①快速排斥试验②跨立试验">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203007.png!blog">
+  <link rel="canonical" href="localhost:4000/2018/11/12/GIS算法基础（二）计算几何基础（中）/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>GIS算法基础（二）计算几何基础（中） | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2018/11/12/GIS算法基础（二）计算几何基础（中）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">GIS算法基础（二）计算几何基础（中）
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-12 21:08:38" itemprop="dateCreated datePublished" datetime="2018-11-12T21:08:38+08:00">2018-11-12</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GIS/" itemprop="url" rel="index"><span itemprop="name">GIS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>代码已经放在github上，需要的同学自取：</p><p><a href="https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/CalculateBasic.java" target="_blank" rel="noopener">https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/CalculateBasic.java</a></p><p><strong>目录</strong></p><p><a href="#一、线段的拐向的判断">一、线段的拐向的判断</a></p><p><a href="#二、判断点是否在线段上">二、判断点是否在线段上</a></p><p><a href="#三、判断两线段是否相交">三、判断两线段是否相交</a></p><p><a href="#①快速排斥试验">①快速排斥试验</a></p><p><a href="#②跨立试验">②跨立试验</a></p><a id="more"></a>
+
+
+
+
+
+
+
+<p><a href="#快速排斥试验：">快速排斥试验：</a></p>
+<p><a href="#跨立试验">跨立试验</a></p>
+<p><a href="#一、射线法的实现">一、射线法的实现</a></p>
+<p><a href="#转角法">转角法</a></p>
+<p><a href="#二、转角法的实现">二、转角法的实现</a></p>
+<hr>
+<p>地理数据在计算机中表示大致分为两种，<strong>矢量数据</strong>和<strong>栅格数据</strong>。</p>
+<p>要计算地理数据的空间关系，一般是矢量数据之间的比较。例如：点，线，面之间的比较。</p>
+<p>如何判断线段之间是否相交，线段与面的包含关系。点与面的包含关系等等这些空间关系，都用到计算几何的算法。</p>
+<p>空间关系的判定算法的内容有：</p>
+<p>1、线段的拐向判断</p>
+<p>2、判断两线段是否相交</p>
+<p>3、判断矩形是否包含点</p>
+<p>4、判断线段，折线，多边形是否在矩形中</p>
+<p>5、判断矩形是否在矩形中</p>
+<p>6、判断圆是否在矩形中</p>
+<p>7、判断点是否在多边形内</p>
+<p>8、判断线段是否在多边形内</p>
+<p>9、判断折线是否在多边形内</p>
+<p>。。。。。。等等</p>
+<p>话不多说。一个个的来看。</p>
+<h1 id="一、线段的拐向的判断"><a href="#一、线段的拐向的判断" class="headerlink" title="一、线段的拐向的判断"></a><strong>一、线段的拐向的判断</strong></h1><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203007.png!blog" alt="20190907203007"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p><strong>是</strong>现有p,q两个线段，如何判断p和q的方位问题呢？</p>
+<p>可以利用矢量的叉积判断：</p>
+<p>二维平面向量很的叉积很好计算 ：<br>例如： p=（x1,y1）,q=(x2,y2)<br>则 p×q=x1<em>y2-x2</em>y1; </p>
+<p>有这么三个关系：</p>
+<p><strong>若PxQ&gt;0，则说明P在Q的顺时针方向</strong></p>
+<p><strong>若PxQ&lt;0，则说明P在Q的逆时针方向</strong></p>
+<p><strong>若PxQ=0，则说明PQ共线(共线有可能反向也可能正向)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//2个向量的向量积(叉积)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">crossProduct</span><span class="params">(Vector2D v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x * v.y - y * v.x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>Vector2D是我构造的工具类，用于矢量的表示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> math;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scau.gz.zhw.Line;</span><br><span class="line"><span class="keyword">import</span> scau.gz.zhw.Point;</span><br><span class="line"></span><br><span class="line"><span class="comment">//平面向量(x,y)的基本运算规则,角度弧度的转换等实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vector2D</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> x;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> y;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Vector2D</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		x = <span class="number">0</span>;</span><br><span class="line">		y = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Vector2D</span><span class="params">(<span class="keyword">double</span> _x, <span class="keyword">double</span> _y)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		x = _x;</span><br><span class="line">		y = _y;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> a 起点</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> b 终点</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Vector2D</span><span class="params">(Point a,Point b)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.x=b.getX()-a.getX();</span><br><span class="line">		<span class="keyword">this</span>.y=b.getY()-a.getY();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Vector2D</span><span class="params">(Line line)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(line.getStart(), line.getEnd());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取弧度</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getRadian</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Math.atan2(y, x);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取角度</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getAngle</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> getRadian() / Math.PI * <span class="number">180</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">clone</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Vector2D(x,y);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getLength</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Math.sqrt(getLengthSQ());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getLengthSQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> x * x + y * y;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//向量置零</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">Zero</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		x = <span class="number">0</span>;</span><br><span class="line">		y = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isZero</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> x == <span class="number">0</span> &amp;&amp; y == <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//向量的长度设置为我们期待的value</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLength</span><span class="params">(<span class="keyword">double</span> value)</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">double</span> _angle = getAngle();</span><br><span class="line">		x = Math.cos(_angle) * value;</span><br><span class="line">		y = Math.sin(_angle) * value;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//向量的标准化（方向不变，长度为1）</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">normalize</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">double</span> length = getLength();</span><br><span class="line">		x = x / length;</span><br><span class="line">		y = y / length;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//是否已经标准化</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isNormalized</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> getLength() == <span class="number">1.0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//向量的方向翻转</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">reverse</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		x = -x;</span><br><span class="line">		y = -y;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//2个向量的数量积(点积)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">dotProduct</span><span class="params">(Vector2D v)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> x * v.x + y * v.y;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//2个向量的向量积(叉积)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">crossProduct</span><span class="params">(Vector2D v)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> x * v.y - y * v.x;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//计算2个向量的夹角弧度</span></span><br><span class="line">	<span class="comment">//参考点积公式:v1 * v2 = cos&lt;v1,v2&gt; * |v1| *|v2|</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">radianBetween</span><span class="params">(Vector2D v1, Vector2D v2)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!v1.isNormalized()) v1 = v1.clone().normalize(); <span class="comment">// |v1| = 1</span></span><br><span class="line">		<span class="keyword">if</span>(!v2.isNormalized()) v2 = v2.clone().normalize(); <span class="comment">// |v2| = 1</span></span><br><span class="line">		<span class="keyword">return</span> Math.acos(v1.dotProduct(v2)); </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//弧度 = 角度乘以PI后再除以180、 推理可得弧度换算角度的公式</span></span><br><span class="line">	<span class="comment">//弧度转角度</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">radian2Angle</span><span class="params">(<span class="keyword">double</span> radian)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> radian / Math.PI * <span class="number">180</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//向量加</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">add</span><span class="params">(Vector2D v)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Vector2D(x + v.x, y + v.y);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//向量减</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">subtract</span><span class="params">(Vector2D v)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Vector2D(x - v.x, y - v.y);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//向量乘</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">multiply</span><span class="params">(<span class="keyword">double</span> value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Vector2D(x * value, y * value);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//向量除</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Vector2D <span class="title">divide</span><span class="params">(<span class="keyword">double</span> value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Vector2D(x / value, y / value);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getX</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> x;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getY</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> y;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Line <span class="title">toLine</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Line(<span class="keyword">new</span> Point(<span class="number">0</span>, <span class="number">0</span>),<span class="keyword">new</span> Point(x, y));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showGUI</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		toLine().showGUI();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> String.format(<span class="string">"(%.2f,%.2f)"</span>, x,y);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>判断叉积函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getDirection</span><span class="params">(Vector2D p,Vector2D q)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(p.crossProduct(q)&gt;<span class="number">0</span>) &#123;</span><br><span class="line">		System.out.println(<span class="string">"顺时针"</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (p.crossProduct(q)&lt;<span class="number">0</span>) &#123;</span><br><span class="line">		System.out.println(<span class="string">"逆时针"</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		System.out.println(<span class="string">"共线"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>测试结果：</p>
+<p><strong>说明：为了方便测试，我用java Swing简单写了一个GUI界面 可以绘制矢量的点，线，面，用来验证拐向函数的结果是否正确</strong></p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203025.png!blog" alt="20190907203025"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203043.png!blog" alt="20190907203043"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>②测试数据二：p=(100,100)  q=(-100,-100)</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203103.png!blog" alt="20190907203103"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>控制台结果：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203118.png!blog" alt="20190907203118"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="二、判断点是否在线段上"><a href="#二、判断点是否在线段上" class="headerlink" title="二、判断点是否在线段上"></a>二、判断点是否在线段上</h1><p>设点为Q，线段为P1P2，判断点Q在该线段上的依据是（Q-P1）X(P2-1) = 0，这样就保证Q在P1P2这条直线上，但是还是不能保证在P1P2的线段上，所以我们得多加个条件：且Q在P1,P2为对角顶点的矩形内</p>
+<p>算法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 判断点是否在线段上</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> p1 线段端点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> p2 线段端点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> q	需要判断的点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPointAtSegment</span><span class="params">(Point p1,Point p2,Point q)</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//判断点是否在线段围成的矩形区域内</span></span><br><span class="line">	<span class="keyword">if</span>(q.getX()&lt;=Math.max(p1.getX(), p2.getX()) &amp;&amp; q.getX()&gt;=Math.min(p1.getX(), p2.getX())</span><br><span class="line">			&amp;&amp; q.getY()&lt;= Math.max(p1.getY(), p2.getY()) &amp;&amp; q.getY()&gt;=Math.min(p1.getY(), p2.getY()))</span><br><span class="line">	&#123;</span><br><span class="line">	Vector2D qp1 = getVector(q, p1);</span><br><span class="line">	Vector2D p2p1 = getVector(p2, p1);</span><br><span class="line">	<span class="keyword">return</span> qp1.crossProduct(p2p1)==<span class="number">0</span>?<span class="keyword">true</span>:<span class="keyword">false</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="三、判断两线段是否相交"><a href="#三、判断两线段是否相交" class="headerlink" title="三、判断两线段是否相交"></a>三、判断两线段是否相交</h1><p>判断两线段是否相交，我的第一反应就是解方程，看两线段是否有交点，但是在GIS算法中，我们面对的是海量的数据，这样的算法因为计算量大并不高效。</p>
+<p>因此，我们最好得有个筛选的过程，把那些明显不会相交的线段剔除掉，这样就减小了一部分的计算量。</p>
+<p>其次，我们判断线段相交最好不要解方程，这样涉及的计算量大，可以用矢量的方法</p>
+<p>所以，分为两步确定两天线段是否相交：</p>
+<h3 id="①快速排斥试验"><a href="#①快速排斥试验" class="headerlink" title="①快速排斥试验"></a>①快速排斥试验</h3><p>设以线段a,b为对角线的矩形为R，设以线段c,d为对角线的矩形为T，如果R和T不相交，显然两线段不会相交</p>
+<h3 id="②跨立试验"><a href="#②跨立试验" class="headerlink" title="②跨立试验"></a>②跨立试验</h3><p>如果ab,cd相交，那么ab必跨过cd，那么（ac x ab ）x（bd xab）&lt;=0</p>
+<p>因为ab两边一定分别有个线段（在ab顺时针方向的向量与ab的叉积小于0，在ab逆时针方向的向量与ab叉积大于0），所以乘积是小于0的。至于为什么等于0，是因为ac,和bd有可能在cd上，即ac与ab共线或bd与ab共线或ab和cd共线，那么这种情况就是等于0了，也算相交的一种情况</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203129.png!blog" alt="20190907203129"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<hr>
+<h2 id="快速排斥试验："><a href="#快速排斥试验：" class="headerlink" title="快速排斥试验："></a>快速排斥试验：</h2><p>怎么判断两个矩形相不相交，可以这样判断：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203145.png!blog" alt="20190907203145"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p><strong>①ab的较低点低于cd的较高点 （y值比较）</strong></p>
+<p><strong>②cd的左端小于ab的右端(x值比较)</strong></p>
+<p><strong>③cd较低点低于ab的较高点(y值比较)</strong></p>
+<p><strong>④ab的左端小于cd的右端(x值比较)</strong></p>
+<p>算法实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//快速排斥试验，判断ab,cd围成的两矩形是否相交</span></span><br><span class="line"><span class="keyword">if</span>(Math.min(a.getY(), b.getY())&lt;=Math.max(c.getY(), d.getY()) &amp;&amp;</span><br><span class="line"> Math.min(c.getX(), d.getX())&lt;=Math.max(a.getX(), b.getX())&amp;&amp; </span><br><span class="line">Math.min(c.getY(), d.getY())&lt;= Math.max(a.getY(), b.getY()) &amp;&amp; </span><br><span class="line">Math.min(a.getX(), b.getX())&lt;= Math.max(c.getX(), d.getX())) &#123;</span><br><span class="line">			flag1 = <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="跨立试验"><a href="#跨立试验" class="headerlink" title="跨立试验"></a>跨立试验</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//跨立试验</span></span><br><span class="line">		<span class="keyword">if</span>(ac.crossProduct(ab) * bd.crossProduct(ab) &lt;=<span class="number">0</span>) &#123;</span><br><span class="line">			flag2 = <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>完整算法在这：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 判断两线段是否相交</span></span><br><span class="line"><span class="comment"> * @param a</span></span><br><span class="line"><span class="comment"> * @param b</span></span><br><span class="line"><span class="comment"> * @param c</span></span><br><span class="line"><span class="comment"> * @param d</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> boolean isTwoSegmentIntersect(<span class="type">Point</span> a,<span class="type">Point</span> b,<span class="type">Point</span> <span class="built_in">c</span>,<span class="type">Point</span> d) &#123;</span><br><span class="line">	boolean flag1 = <span class="literal">false</span>;</span><br><span class="line">	boolean flag2 = <span class="literal">false</span>;</span><br><span class="line">	<span class="comment">//快速排斥试验</span></span><br><span class="line">	<span class="keyword">if</span>(<span class="type">Math</span>.<span class="built_in">min</span>(a.getY(), b.getY())&lt;=<span class="type">Math</span>.<span class="built_in">max</span>(<span class="built_in">c</span>.getY(), d.getY()) &amp;&amp; <span class="type">Math</span>.<span class="built_in">min</span>(<span class="built_in">c</span>.getX(), d.getX())&lt;=<span class="type">Math</span>.<span class="built_in">max</span>(a.getX(), b.getX())</span><br><span class="line">			&amp;&amp; <span class="type">Math</span>.<span class="built_in">min</span>(<span class="built_in">c</span>.getY(), d.getY())&lt;= <span class="type">Math</span>.<span class="built_in">max</span>(a.getY(), b.getY()) &amp;&amp; <span class="type">Math</span>.<span class="built_in">min</span>(a.getX(), b.getX())&lt;= <span class="type">Math</span>.<span class="built_in">max</span>(<span class="built_in">c</span>.getX(), d.getX())) &#123;</span><br><span class="line">		flag1 = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">Vector2D</span> ab = getVector(a, b);</span><br><span class="line">	<span class="type">Vector2D</span> ac = getVector(a, <span class="built_in">c</span>);</span><br><span class="line">	<span class="type">Vector2D</span> bd = getVector(b, d);</span><br><span class="line">	<span class="comment">//跨立试验</span></span><br><span class="line">	<span class="keyword">if</span>(ac.crossProduct(ab) * bd.crossProduct(ab) &lt;=<span class="number">0</span>) &#123;</span><br><span class="line">		flag2 = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> flag1&amp;&amp;flag2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>三、判断点是否在多边形内</p>
+<p>判断点是否在多边形内有两种方法，一种是射线法，另一种是转角法。</p>
+<p>①射线法：引一条从P开始，穿过多边形边界的次数为交点数目。当交点数目为偶数时，点P在多边形外部</p>
+<p>为方便计算选取一条水平的、从被判断点的右边延伸的，平行于x轴的射线。</p>
+<p>为了使在某些特殊情况下判断穿越是否有效，有效穿越要符合以下几个规则：</p>
+<ol>
+<li><strong>方向向上的边包括开始点，不包括终止点</strong></li>
+<li><strong>方向向下的边包括终止点，不包括开始点</strong></li>
+<li><strong>水平边不参与测试</strong></li>
+<li><strong>射线和多边形的边的交点必须严格在点P的右边</strong></li>
+<li><strong>如果点在多边形边上，则直接判断为在多边形内部（这一条可以根据不同需要设定为不同的结果）</strong></li>
+</ol>
+<p><strong>射线法算法步骤：</strong></p>
+<p>说明:p射线是由点p延伸出的水平x轴正方向射线</p>
+<ol>
+<li>开始遍历多边形的每条边</li>
+<li>判断边是否水平，如果是就跳出本次循环</li>
+<li>如果点在多边形上，直接返回true</li>
+<li>判断p射线是否在边的左边，如果不在，就直接跳过该边的计算</li>
+<li>判断p射线是否穿过边的端点，是则利用上面所述规则1,2进行穿越测试</li>
+<li>遍历结束，根据穿越数得出结果</li>
+</ol>
+<p>话不多说，看算法实现吧：</p>
+<h2 id="一、射线法的实现"><a href="#一、射线法的实现" class="headerlink" title="一、射线法的实现"></a>一、射线法的实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isPointAtPolygon</span><span class="params">(Point[] points,Point p)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> crossNum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">		<span class="keyword">if</span>(Double.doubleToLongBits(points[points.length-<span class="number">1</span>].getX())==Double.doubleToLongBits(points[<span class="number">0</span>].getX()) &amp;&amp; </span><br><span class="line">				Double.doubleToLongBits(points[points.length-<span class="number">1</span>].getY()) == Double.doubleToLongBits((points[<span class="number">0</span>].getY())))&#123;</span><br><span class="line">			flag = <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//如果最后一个点不等于第一个点</span></span><br><span class="line">		<span class="comment">//自动闭合</span></span><br><span class="line">		ArrayList&lt;Line&gt; lines = <span class="keyword">new</span> ArrayList&lt;Line&gt;();</span><br><span class="line">		<span class="keyword">if</span>(!flag) &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;points.length;i++) &#123;</span><br><span class="line">				Line line = <span class="keyword">new</span> Line(points[i%points.length], points[(i+<span class="number">1</span>)%points.length]);</span><br><span class="line">				lines.add(line);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;points.length-<span class="number">1</span>;i++) &#123;</span><br><span class="line">				Line line = <span class="keyword">new</span> Line(points[i], points[i+<span class="number">1</span>]);</span><br><span class="line">				lines.add(line);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//遍历每条边</span></span><br><span class="line">		<span class="keyword">if</span>(type==<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">for</span>(Line line : lines) &#123;</span><br><span class="line">				<span class="comment">//rule#1:方向向上的边包括其开始点,不包括其终止点</span></span><br><span class="line">				<span class="comment">//rule#2:方向向下的边包括其终止点,不包括其开始点</span></span><br><span class="line">				<span class="comment">//rule#3:水平边不参与穿越测试</span></span><br><span class="line">				<span class="comment">//rule#4:射线和多边形的边的交点必须严格在点p的右边</span></span><br><span class="line">				</span><br><span class="line">				<span class="comment">//如果点在线段上则直接判定为在多边形内部</span></span><br><span class="line">				<span class="keyword">if</span>(isPointAtSegment(line.getStart(), line.getEnd(), p)) &#123;</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="comment">//rule#3</span></span><br><span class="line">				<span class="keyword">if</span>(!line.isHorizontal()) &#123;</span><br><span class="line">					</span><br><span class="line">					<span class="comment">//rule#4,保证p在边的右边</span></span><br><span class="line">					<span class="keyword">if</span>(Double.doubleToLongBits(p.getX()) &lt; Double.doubleToLongBits(line.getXByY(p.getY()))</span><br><span class="line">							&amp;&amp; Double.doubleToLongBits(line.getXByY(p.getY()))&gt;=Double.doubleToLongBits(Math.min(line.getStart().getX(),line.getEnd().getX()))</span><br><span class="line">							&amp;&amp; Double.doubleToLongBits(line.getXByY(p.getY()))&lt;=Double.doubleToLongBits(Math.max(line.getStart().getX(), line.getEnd().getX()))) &#123;</span><br><span class="line">						<span class="comment">//rule#1,2</span></span><br><span class="line">						<span class="comment">//当点的射线穿过每条边的端点时，规则1,2起作用</span></span><br><span class="line">						<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(line.getStart().getY())</span><br><span class="line">								||Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(line.getEnd().getY()) ) &#123;</span><br><span class="line">							<span class="keyword">if</span>(line.isUp()) &#123;</span><br><span class="line">								<span class="comment">//判断是穿过开始点还是终止点</span></span><br><span class="line">								<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(line.getStart().getY())) &#123;</span><br><span class="line">									<span class="comment">//方向为上，穿过开始点，则有效穿越</span></span><br><span class="line">									crossNum++;</span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									<span class="comment">//方向为上，穿过终止点，则无效穿越</span></span><br><span class="line">								&#125;</span><br><span class="line">							&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">								<span class="comment">//判断是穿过开始点还是终止点</span></span><br><span class="line">								<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(line.getStart().getY())) &#123;</span><br><span class="line">									<span class="comment">//方向为下，穿过开始点，则无效穿越</span></span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									<span class="comment">//方向为下，穿过终止点，则有效穿越</span></span><br><span class="line">									crossNum++;</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">							<span class="comment">//直接计算</span></span><br><span class="line">							++crossNum;	</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">				<span class="comment">//奇数在内，偶数在外</span></span><br><span class="line">				<span class="comment">//System.out.println("crossNum : " +crossNum);</span></span><br><span class="line">				<span class="keyword">return</span> crossNum%<span class="number">2</span>==<span class="number">0</span>?<span class="keyword">false</span>:<span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>注释说的很详细了，就不加赘述了。</p>
+<h3 id="转角法"><a href="#转角法" class="headerlink" title="转角法"></a>转角法</h3><p>转角法可以很精确地判断一个点是否在非简单多边形内部（就是多边形内部还有一些复杂的构造，后面有对比说明）。它需要计算多边形绕点有多少次。如果环绕数为零，那么点在多边形外部，非零，则点在多边形内部。</p>
+<p>转角法也和射线法类似，遵守这么些规则：</p>
+<ol>
+<li>方向向上的边包括开始点，不包括终止点</li>
+<li>方向向下的边包括终止点，不包括开始点</li>
+<li>水平边不参与测试</li>
+<li>射线和多边形的边的交点必须严格在点P的右边</li>
+<li>如果点在多边形边上，则直接判断为在多边形内部（这一条可以根据不同需要设定为不同的结果）</li>
+</ol>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203242.png!blog" alt="20190907203242"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>看上面这个多边形，如果从多边形的a边开始遍历 （水平边不参与穿越测试），因此a跳过</p>
+<p>规定点在边的左边（以边的前进方向为准）时环绕数+1，点在边的右边时（以边的前进方向为准）环绕数-1；</p>
+<p>那么上边这个p点环绕数（从a边开始）的计算过程就为（-1,-1,-1,-1） 结果为-4，不等于零，说明在多边形内部</p>
+<p>q点的环绕数计算过程（从a边开始）为（+1，-1，-1，+1），结果为0，说明在多边形外部。</p>
+<p>关于如何判断点在边的右边还是左边，可以从点向右做一条水平射线(为了保证边与射线的交点在点的右边) 判断该射线与边的叉积即可</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203257.png!blog" alt="20190907203257"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="二、转角法的实现"><a href="#二、转角法的实现" class="headerlink" title="二、转角法的实现"></a>二、转角法的实现</h2><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">boolean</span> isPointAtPolygon(Point[] points,Point p)&#123;</span><br><span class="line"><span class="comment">//转角法需要判断从p向右出发的水平射线与线段方向的关系，即p是否在边的左边</span></span><br><span class="line">			<span class="comment">//int count = 0;</span></span><br><span class="line">			<span class="keyword">for</span>(Line <span class="built_in">line</span>:lines) &#123;</span><br><span class="line">				<span class="comment">//如果点在线段上则直接判定为在多边形内部</span></span><br><span class="line">				<span class="keyword">if</span>(isPointAtSegment(<span class="built_in">line</span>.getStart(), <span class="built_in">line</span>.getEnd(), p)) &#123;</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span>(!<span class="built_in">line</span>.isHorizontal()) &#123;</span><br><span class="line">					<span class="comment">//构造从p出发的水平向右射线，rule#3</span></span><br><span class="line">					Vector2D pVector2d = <span class="keyword">new</span> Vector2D(p.getX(),<span class="number">0</span>);</span><br><span class="line">					<span class="comment">//保证p在边的左边，rule#4</span></span><br><span class="line">					<span class="keyword">if</span>(Double.doubleToLongBits(p.getX()) &lt; Double.doubleToLongBits(<span class="built_in">line</span>.getXByY(p.getY()))</span><br><span class="line">							&amp;&amp; Double.doubleToLongBits(<span class="built_in">line</span>.getXByY(p.getY()))&gt;=Double.doubleToLongBits(Math.<span class="built_in">min</span>(<span class="built_in">line</span>.getStart().getX(),<span class="built_in">line</span>.getEnd().getX()))</span><br><span class="line">							&amp;&amp; Double.doubleToLongBits(<span class="built_in">line</span>.getXByY(p.getY()))&lt;=Double.doubleToLongBits(Math.<span class="built_in">max</span>(<span class="built_in">line</span>.getStart().getX(), <span class="built_in">line</span>.getEnd().getX()))) &#123;</span><br><span class="line">						<span class="comment">//System.out.println("id : "+count++ +" direction: "+line.getDirection());</span></span><br><span class="line">						</span><br><span class="line">						<span class="comment">//边向上,p在边左边-&gt;p的向右出发的水平射线在边的顺时针方向</span></span><br><span class="line">						<span class="keyword">if</span>(<span class="built_in">line</span>.isUp()) &#123;</span><br><span class="line">							<span class="comment">//rule#1,2</span></span><br><span class="line">							<span class="comment">//这种情况只在点的射线穿过每条边的端点才有用</span></span><br><span class="line">							<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getStart().getY())</span><br><span class="line">									||Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getEnd().getY()) ) &#123;</span><br><span class="line">								<span class="comment">//判断是穿过开始点还是终止点</span></span><br><span class="line">								<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getStart().getY())) &#123;</span><br><span class="line">									<span class="comment">//方向为上，穿过开始点，则有效穿越</span></span><br><span class="line">									<span class="keyword">if</span>(pVector2d.crossProduct(<span class="built_in">line</span>.getVector2D())&gt;<span class="number">0</span>) &#123;</span><br><span class="line">										crossNum++;</span><br><span class="line">									&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">										crossNum--;</span><br><span class="line">									&#125;</span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									<span class="comment">//方向为上，穿过终止点，则无效穿越</span></span><br><span class="line">								&#125;</span><br><span class="line">							&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">								<span class="comment">//不穿过端点的情况</span></span><br><span class="line">								<span class="keyword">if</span>(pVector2d.crossProduct(<span class="built_in">line</span>.getVector2D())&gt;<span class="number">0</span>) &#123;</span><br><span class="line">									crossNum++;</span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									crossNum--;</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;</span><br><span class="line">							</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="comment">//边向下,p在边左边-&gt;p的向右出发的水平射线在边的顺时针方向</span></span><br><span class="line">						<span class="keyword">if</span> (<span class="built_in">line</span>.isDown()) &#123;</span><br><span class="line">							<span class="comment">//rule#1,2</span></span><br><span class="line">							<span class="comment">//这种情况只在点的射线穿过每条边的端点才有用</span></span><br><span class="line">							<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getStart().getY())</span><br><span class="line">									||Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getEnd().getY()) ) &#123;</span><br><span class="line">								<span class="comment">//判断是穿过开始点还是终止点</span></span><br><span class="line">								<span class="keyword">if</span>(Double.doubleToLongBits(p.getY()) == Double.doubleToLongBits(<span class="built_in">line</span>.getStart().getY())) &#123;</span><br><span class="line">									<span class="comment">//方向为下，穿过开始点，则无效穿越</span></span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									<span class="comment">//方向为下，穿过终止点，则有效穿越</span></span><br><span class="line">									<span class="keyword">if</span>(pVector2d.crossProduct(<span class="built_in">line</span>.getVector2D())&gt;<span class="number">0</span>) &#123;</span><br><span class="line">										crossNum++;</span><br><span class="line">									&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">										crossNum--;</span><br><span class="line">									&#125;	</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">								<span class="comment">//不穿过端点的情况</span></span><br><span class="line">								<span class="keyword">if</span>(pVector2d.crossProduct(<span class="built_in">line</span>.getVector2D())&gt;<span class="number">0</span>) &#123;</span><br><span class="line">									crossNum++;</span><br><span class="line">								&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">									crossNum--;</span><br><span class="line">								&#125;	</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>上面也说到，转角法更为精确一些，为什么呢？</p>
+<p>因为在一些多边形中可能会有复杂的构造，这种情况下，射线法的计算结果会不准确</p>
+<p>例如：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203315.png!blog" alt="20190907203315"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>这种情况下</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203326.png!blog" alt="20190907203326"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>可以看到同样的多边形，同样的点，用不同的方法会得到不同的结果。这是因为转角法更精确，而射线法的缺点在于没有考虑到多边形内部的复杂构造可能使结果出现偏差。</p>
+<p>转角法是在射线法的基础上进行的优化，他具有和射线法相同的效率，并且，它更为精确，因此，判断点是否在任意多边形时，转角法是首选</p>
+<p>射线法的思路比较简单，只需要判断穿越次数的奇偶性即可。但需要注意的是，判断穿越为有效穿越需要严格遵守4个规则。但是射线法的缺陷也是很明显的，它的判断不够精确。在左图的情况下，射线法的结果是false，而转角法的结果是true。</p>
+<p>射线法是没有考虑到多边形内部的构造的。而转角法是射线法的优化（因为他们使用了相同的穿越规则），它通过计算环绕次数来得出结果，会考虑多边形内部的构造问题。</p>
+<p>在同样的效率下，转角算法比射线算法准确度更高。</p>
+<p>同时，我认为这也是个仁者见仁智者见智的过程，因为不同的场景下，可能把多边形形成的内部构造的认为是属于该多边形的，也可能认为是不属于的。因此具体的使用要根据具体场景而选择不同的方法。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\10\08\GIS算法基础（一）-计算几何基础（上）\" rel="bookmark">GIS算法基础（一） 计算几何基础（上）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）\" rel="bookmark">GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\11\30\GIS算法基础（三）计算几何基础（下）\" rel="bookmark">GIS算法基础（三）计算几何基础（下）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）\" rel="bookmark">GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\07\GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）\" rel="bookmark">GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束感谢您的阅读,如有疑问，请联系<a href="mailto:610596547@qq.com">610596547@qq.com</a>-------------</div>
+    
+</div>
+      
+    </div>
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/GIS算法/" rel="tag"># GIS算法</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/10/08/GIS算法基础（一）-计算几何基础（上）/" rel="next" title="GIS算法基础（一） 计算几何基础（上）">
+                  <i class="fa fa-chevron-left"></i> GIS算法基础（一） 计算几何基础（上）
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2018/11/30/GIS算法基础（三）计算几何基础（下）/" rel="prev" title="GIS算法基础（三）计算几何基础（下）">
+                  GIS算法基础（三）计算几何基础（下） <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://profile.zhonghaowei.xyz/" title="Profile &rarr; http://profile.zhonghaowei.xyz/" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、线段的拐向的判断"><span class="nav-number">1.</span> <span class="nav-text">一、线段的拐向的判断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、判断点是否在线段上"><span class="nav-number">2.</span> <span class="nav-text">二、判断点是否在线段上</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、判断两线段是否相交"><span class="nav-number">3.</span> <span class="nav-text">三、判断两线段是否相交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#①快速排斥试验"><span class="nav-number">3.0.1.</span> <span class="nav-text">①快速排斥试验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#②跨立试验"><span class="nav-number">3.0.2.</span> <span class="nav-text">②跨立试验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速排斥试验："><span class="nav-number">3.1.</span> <span class="nav-text">快速排斥试验：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨立试验"><span class="nav-number">3.2.</span> <span class="nav-text">跨立试验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、射线法的实现"><span class="nav-number">3.3.</span> <span class="nav-text">一、射线法的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转角法"><span class="nav-number">3.3.1.</span> <span class="nav-text">转角法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、转角法的实现"><span class="nav-number">3.4.</span> <span class="nav-text">二、转角法的实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+
+<div id="days"></div>
+<div class="BbeiAn-info">
+   	粤ICP备 -
+    <a target="_blank" href="http://beian.miit.gov.cn" style="color:#f0d784"  rel="nofollow">粤ICP备19111001号-1</a> <!--a标签中增加nofollow属性，避免爬虫出站。-->| 
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">粤公网安备 粤ICP备19111001号-1</a>	  <!--这里将图标作为了背景，以使得能和后面的文字在同一行-->
+</div>
+
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'default',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>

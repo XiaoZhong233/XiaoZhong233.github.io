@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="矢量结构数据与栅格结构数据的相互转换，是地理信息系统的基本功能之一，已发展形成了许多高效的转换算法。源码已经放在github上了，需要朋友自取。https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/Raster.java">
+<meta name="keywords" content="GIS算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）">
+<meta property="og:url" content="localhost:4000/2018/12/07/GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="矢量结构数据与栅格结构数据的相互转换，是地理信息系统的基本功能之一，已发展形成了许多高效的转换算法。源码已经放在github上了，需要朋友自取。https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/Raster.java">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204348.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204329.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204307.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204251.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204215.png!blog">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204157.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?ia%20%3D%20%5Cleft%20%5B%28%20x1-x0-%5Cleft%20%28%20j-1%20%5Cright%20%29*m%29*tan%5Calpha%20+y0-y1%20%5Cright%20%5D/m%20+1">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?ie%3D%5Cleft%20%5B%20%28x1-x0-j*m%29*tan%5Calpha%20+y0-y1%20%5Cright%20%5D/m%20+1">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204406.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:updated_time" content="2019-09-07T12:44:13.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）">
+<meta name="twitter:description" content="矢量结构数据与栅格结构数据的相互转换，是地理信息系统的基本功能之一，已发展形成了许多高效的转换算法。源码已经放在github上了，需要朋友自取。https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/Raster.java">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204348.png!blog">
+  <link rel="canonical" href="localhost:4000/2018/12/07/GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现） | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2018/12/07/GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-07 21:59:24" itemprop="dateCreated datePublished" datetime="2018-12-07T21:59:24+08:00">2018-12-07</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GIS/" itemprop="url" rel="index"><span itemprop="name">GIS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>矢量结构数据与栅格结构数据的相互转换，是地理信息系统的基本功能之一，已发展形成了许多高效的转换算法。</p><p><strong>源码已经放在github上了，需要朋友自取。</strong></p><p><a href="https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/Raster.java" target="_blank" rel="noopener">https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/Raster.java</a></p><a id="more"></a>
+
+
+<p><strong>目录</strong></p>
+<p><a href="#一、矢量点的栅格化">一、矢量点的栅格化</a></p>
+<p><a href="#二、矢量线的栅格化">二、矢量线的栅格化</a></p>
+<p><a href="#①八方向栅格化">①八方向栅格化</a></p>
+<p><a href="#算法思想：">算法思想：</a></p>
+<p><a href="#算法实现：">算法实现：</a></p>
+<p><a href="#测试：">测试：</a></p>
+<p><a href="#②全路径栅格化">②全路径栅格化</a></p>
+<p><a href="#算法思想">算法思想</a></p>
+<p><a href="#算法实现：">算法实现：</a></p>
+<p><a href="#测试结果：">测试结果：</a></p>
+<hr>
+<h1 id="一、矢量点的栅格化"><a href="#一、矢量点的栅格化" class="headerlink" title="一、矢量点的栅格化"></a>一、矢量点的栅格化</h1><p>矢量点的栅格化:   实质是将点的坐标x、y换算为栅格行、列号。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204348.png!blog" alt="20190907204348"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>注意：栅格的坐标原点是从左上角开始的，行数I向下递增，列数J向左递增</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204329.png!blog" alt="20190907204329"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>(X0,Y0)代表栅格的原点，dx,dy代表分别代表栅格的长和宽，也就是大小</p>
+<p>实际代码中，这个x0,yo因为已知了栅格大小，所以可以求的出来。</p>
+<p>在矢量数据向栅格数据转换的过程中，栅格数据可以用二维数组来表达。</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @param point	带转化的矢量点</span></span><br><span class="line"><span class="comment"> * @param xOffset 起始栅格点的x位移量</span></span><br><span class="line"><span class="comment"> * @param yOffset	起始栅格点的y位移量</span></span><br><span class="line"><span class="comment"> * @return 0-行 1-列</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">int</span>[] transformRasterPoint(Point <span class="built_in">point</span>,<span class="keyword">double</span> xOffset,<span class="keyword">double</span> yOffset) &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">double</span> x0=<span class="built_in">size</span>+xOffset+<span class="keyword">this</span>.xOffset;<span class="comment">//栅格起始点坐标</span></span><br><span class="line">	<span class="keyword">double</span> y0=ROW+yOffset+<span class="keyword">this</span>.yOffset;</span><br><span class="line">	<span class="built_in">int</span>[] rowAndColumn = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">2</span>];</span><br><span class="line">	<span class="comment">//像元大小默认为1</span></span><br><span class="line">	rowAndColumn[<span class="number">0</span>] = (<span class="built_in">int</span>) (<span class="number">1</span>+ (Math.<span class="built_in">floor</span>(Math.<span class="built_in">abs</span>((y0-<span class="built_in">point</span>.getY())/<span class="built_in">size</span>))));</span><br><span class="line">	rowAndColumn[<span class="number">1</span>] = (<span class="built_in">int</span>)(<span class="number">1</span>+(Math.<span class="built_in">floor</span>(Math.<span class="built_in">abs</span>((<span class="built_in">point</span>.getX()-x0))/<span class="built_in">size</span>)));</span><br><span class="line">	<span class="keyword">return</span> rowAndColumn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>测试结果：</p>
+<p>输入：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Raster raster = new Raster(<span class="number">30</span>,<span class="number">30</span>); <span class="comment">//创建一个30x30的栅格</span></span><br><span class="line">Point p = new Point(<span class="number">.5</span>, <span class="number">.5</span>); </span><br><span class="line">System.out.println(p);</span><br><span class="line">int[] a = raster.transformRasterPoint(p, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">System.out.println(String.format(<span class="string">"I=%d,J=%d"</span>, a[<span class="number">0</span>],a[<span class="number">1</span>]));</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>输出：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0.500000</span>,<span class="number">0.500000</span>)</span><br><span class="line">I=<span class="number">30</span>,J=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="二、矢量线的栅格化"><a href="#二、矢量线的栅格化" class="headerlink" title="二、矢量线的栅格化"></a>二、矢量线的栅格化</h1><h2 id="①八方向栅格化"><a href="#①八方向栅格化" class="headerlink" title="①八方向栅格化"></a>①八方向栅格化</h2><p>八方向栅格法很容易理解，就是已知直线的倾角情况，在每行或每列只有一个像元被涂黑。</p>
+<h3 id="算法思想："><a href="#算法思想：" class="headerlink" title="算法思想："></a>算法思想：</h3><ol>
+<li>一条线段有两个端点：P1(x1,y1)、P2(x2,y2)，先分别确定其行列号(I1,J1)及(I2,J2),然后求出这两个端点位置的行数差和列数差。</li>
+<li>若行数差大于列数差，则逐行求出本行中心线与过这两个端点的直线的交点（X，Y），得到交点行、列号，将交点“涂黑”：Y=yi行中心线，X=(yi-y1)k+x1；式中k=(x2-x1)/(y2-y1)，这个公式不看也罢，其实就是两直线求交点的方程</li>
+<li>若行数差小于或等于列数差，则逐列求出本列中心线与过这两个端点的直线的交点（X，Y），得到交点行、列号，将交点“涂黑” ：X=xi行中心线，Y=(xj-x1)k’+y1；式中k’=(y2-y1) /(x2-x1)</li>
+</ol>
+<h3 id="算法实现："><a href="#算法实现：" class="headerlink" title="算法实现："></a>算法实现：</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> RasterLine(Point start,Point <span class="built_in">end</span>,<span class="keyword">int</span> type,<span class="keyword">double</span> xOffset,<span class="keyword">double</span> yOffset) &#123;</span><br><span class="line">	<span class="comment">//开始点与结束点的起始坐标</span></span><br><span class="line">	<span class="keyword">int</span>[] startPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">int</span>[] endPoint = transformRasterPoint(<span class="built_in">end</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	System.out.<span class="built_in">println</span>(<span class="keyword">String</span>.format(<span class="string">"开始点：(%d,%d)"</span>,                     startPoint[<span class="number">0</span>],startPoint[<span class="number">1</span>]));</span><br><span class="line">	System.out.<span class="built_in">println</span>(<span class="keyword">String</span>.format(<span class="string">"结束点：(%d,%d)"</span>, endPoint[<span class="number">0</span>],endPoint[<span class="number">1</span>]));</span><br><span class="line">	<span class="comment">//涂黑,开始点与终止点（值设为1）</span></span><br><span class="line">	setValue(startPoint[<span class="number">0</span>], startPoint[<span class="number">1</span>]);</span><br><span class="line">	setValue(endPoint[<span class="number">0</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">	Line <span class="built_in">line</span> = <span class="keyword">new</span> Line(start, <span class="built_in">end</span>);</span><br><span class="line">	<span class="comment">//如果是垂直或者水平者直接涂黑</span></span><br><span class="line">	<span class="built_in">if</span>(<span class="built_in">line</span>.isHorizontal() || Double.doubleToLongBits(start.getX())==Double.doubleToLongBits(<span class="built_in">end</span>.getX())) &#123;</span><br><span class="line">		<span class="built_in">if</span>(<span class="built_in">line</span>.isHorizontal()) &#123;</span><br><span class="line">			<span class="keyword">int</span> i = startPoint[<span class="number">0</span>];</span><br><span class="line">			<span class="keyword">int</span> j0 = Math.<span class="built_in">min</span>(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">			<span class="keyword">int</span> j1 = Math.<span class="built_in">max</span>(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">			<span class="built_in">while</span>(j0!=j1) &#123;</span><br><span class="line">				setValue(i, j0);</span><br><span class="line">				j0++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="built_in">else</span> &#123;</span><br><span class="line">			<span class="keyword">int</span> i = startPoint[<span class="number">1</span>];</span><br><span class="line">			<span class="keyword">int</span> j0 = Math.<span class="built_in">min</span>(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>]);</span><br><span class="line">			<span class="keyword">int</span> j1 = Math.<span class="built_in">max</span>(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>]);</span><br><span class="line">			<span class="built_in">while</span>(j0!=j1) &#123;</span><br><span class="line">				setValue(j0, i);</span><br><span class="line">				j0++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">		<span class="comment">//行差与列差</span></span><br><span class="line">		<span class="keyword">int</span> difOfRow = Math.<span class="built_in">abs</span>(startPoint[<span class="number">0</span>]-endPoint[<span class="number">0</span>]);</span><br><span class="line">		<span class="keyword">int</span> difOfColumn = Math.<span class="built_in">abs</span>(startPoint[<span class="number">1</span>]-endPoint[<span class="number">1</span>]);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//若行差大于列差，则逐行求出本行中心线与过两个端点的直线的交点</span></span><br><span class="line">		<span class="comment">//反之则反之</span></span><br><span class="line">		<span class="built_in">if</span>(difOfRow&gt;difOfColumn) &#123;</span><br><span class="line">			<span class="comment">//求每行中心线</span></span><br><span class="line">			<span class="keyword">int</span> num = Math.<span class="built_in">min</span>(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>]); <span class="comment">//用于记录当前行</span></span><br><span class="line">			<span class="built_in">while</span>(num&lt;=Math.<span class="built_in">max</span>(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>])) &#123;</span><br><span class="line">				<span class="comment">//因为只需要求出行，所以设列为1即可</span></span><br><span class="line">				Point temPoint=transformVetorPoint(num, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">				<span class="comment">//中心线</span></span><br><span class="line">				<span class="keyword">double</span> y = temPoint.getY();</span><br><span class="line">				<span class="comment">//求交点</span></span><br><span class="line">				<span class="keyword">double</span> x=<span class="built_in">line</span>.getXByY(y);</span><br><span class="line">				Point result = <span class="keyword">new</span> Point(x, y);</span><br><span class="line">				<span class="comment">//矢量点转栅格</span></span><br><span class="line">				<span class="keyword">int</span>[] resultRasterPoint=transformRasterPoint(result, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">				<span class="comment">//"涂黑"栅格</span></span><br><span class="line">				setValue(resultRasterPoint[<span class="number">0</span>], resultRasterPoint[<span class="number">1</span>]);</span><br><span class="line">				num++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="built_in">else</span> &#123;</span><br><span class="line">			<span class="comment">//求每列中心线</span></span><br><span class="line">			<span class="keyword">int</span> num = Math.<span class="built_in">min</span>(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">			<span class="built_in">while</span>(num&lt;Math.<span class="built_in">max</span>(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>])) &#123;</span><br><span class="line">				Point temPoint = transformVetorPoint(<span class="number">1</span>, num, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">				<span class="keyword">double</span> x = temPoint.getX();</span><br><span class="line">				<span class="keyword">double</span> y = <span class="built_in">line</span>.getYByX(x);</span><br><span class="line">				Point result = <span class="keyword">new</span> Point(x, y);</span><br><span class="line">				<span class="keyword">int</span>[] resultRasterPoint = transformRasterPoint(result, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">				setValue(resultRasterPoint[<span class="number">0</span>], resultRasterPoint[<span class="number">1</span>]);</span><br><span class="line">				num++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h2><p>输入：</p>
+<p>p（3,9），q（15,30）组成的线段，在30x30的栅格上显示</p>
+<p>输出</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204307.png!blog" alt="20190907204307"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>这个渲染的代码就不放出来了，有兴趣可以到github上看。</p>
+<h2 id="②全路径栅格化"><a href="#②全路径栅格化" class="headerlink" title="②全路径栅格化"></a>②全路径栅格化</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204251.png!blog" alt="20190907204251"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h2><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204215.png!blog" alt="20190907204215"></p>
+<p>说白了就是固定行，求列，固定列，求行的过程。</p>
+<p>但值得注意的是，书上并没有给出计算行号的过程：</p>
+<p>实际上也不难推出，因为求起止行列的过程就是已知tan角求不同边的过程</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204157.png!blog" alt="20190907204157"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>固定行，求起止列就是求上图中a的过程 a = tana/b</p>
+<p>固定列，求起止行就是求b的过程， b=tana * b</p>
+<p>因此可以推出</p>
+<p>起始行号: <img src="https://private.codecogs.com/gif.latex?ia%20%3D%20%5Cleft%20%5B%28%20x1-x0-%5Cleft%20%28%20j-1%20%5Cright%20%29*m%29*tan%5Calpha%20&plus;y0-y1%20%5Cright%20%5D/m%20&plus;1" alt="ia = \left [( x1-x0-\left ( j-1 \right )*m)*tan\alpha +y0-y1 \right ]/m +1"></p>
+<p>终止行号:<img src="https://private.codecogs.com/gif.latex?ie%3D%5Cleft%20%5B%20%28x1-x0-j*m%29*tan%5Calpha%20&plus;y0-y1%20%5Cright%20%5D/m%20&plus;1" alt="ie=\left [ (x1-x0-j*m)*tan\alpha +y0-y1 \right ]/m +1"></p>
+<p>m是栅格的边长，j是当前处理的列，y0是栅格坐标原点在直角坐标系中的纵坐标值</p>
+<h2 id="算法实现：-1"><a href="#算法实现：-1" class="headerlink" title="算法实现："></a>算法实现：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RasterLine</span><span class="params">(Point start,Point end,<span class="keyword">int</span> type,<span class="keyword">double</span> xOffset,<span class="keyword">double</span> yOffset)</span> </span>&#123;</span><br><span class="line">			<span class="comment">//开始点与结束点的起始坐标</span></span><br><span class="line">			<span class="keyword">int</span>[] startPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">int</span>[] endPoint = transformRasterPoint(end, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">			<span class="comment">//</span></span><br><span class="line">			System.out.println(String.format(<span class="string">"开始点：(%d,%d)"</span>, startPoint[<span class="number">0</span>],startPoint[<span class="number">1</span>]));</span><br><span class="line">			System.out.println(String.format(<span class="string">"结束点：(%d,%d)"</span>, endPoint[<span class="number">0</span>],endPoint[<span class="number">1</span>]));</span><br><span class="line">			<span class="comment">//涂黑,开始点与终止点（值设为1）</span></span><br><span class="line">			setValue(startPoint[<span class="number">0</span>], startPoint[<span class="number">1</span>]);</span><br><span class="line">			setValue(endPoint[<span class="number">0</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">			Line line = <span class="keyword">new</span> Line(start, end);</span><br><span class="line">			<span class="comment">//如果是垂直或者水平者直接涂黑</span></span><br><span class="line">			<span class="keyword">if</span>(line.isHorizontal() || Double.doubleToLongBits(start.getX())==Double.doubleToLongBits(end.getX())) &#123;</span><br><span class="line">				<span class="keyword">if</span>(line.isHorizontal()) &#123;</span><br><span class="line">					<span class="keyword">int</span> i = startPoint[<span class="number">0</span>];</span><br><span class="line">					<span class="keyword">int</span> j0 = Math.min(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">					<span class="keyword">int</span> j1 = Math.max(startPoint[<span class="number">1</span>], endPoint[<span class="number">1</span>]);</span><br><span class="line">					<span class="keyword">while</span>(j0!=j1) &#123;</span><br><span class="line">						setValue(i, j0);</span><br><span class="line">						j0++;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="keyword">int</span> i = startPoint[<span class="number">1</span>];</span><br><span class="line">					<span class="keyword">int</span> j0 = Math.min(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>]);</span><br><span class="line">					<span class="keyword">int</span> j1 = Math.max(startPoint[<span class="number">0</span>], endPoint[<span class="number">0</span>]);</span><br><span class="line">					<span class="keyword">while</span>(j0!=j1) &#123;</span><br><span class="line">						setValue(j0, i);</span><br><span class="line">						j0++;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//计算栅格原点在直角坐标系中的坐标</span></span><br><span class="line">                <span class="keyword">double</span> x0=<span class="number">1</span>+xOffset+<span class="keyword">this</span>.xOffset;</span><br><span class="line">				<span class="keyword">double</span> y0=ROW+yOffset+<span class="keyword">this</span>.yOffset;</span><br><span class="line">				</span><br><span class="line">				</span><br><span class="line">				<span class="comment">//△x&gt;=△y，则计算列号，反之则计算行号</span></span><br><span class="line">				<span class="keyword">double</span> difX = Math.abs(start.getX()-end.getX());</span><br><span class="line">				<span class="keyword">double</span> difY = Math.abs(start.getY()-end.getY());</span><br><span class="line">				<span class="keyword">double</span> k = line.getSlope();</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span>(difX&gt;=difY) &#123;</span><br><span class="line">					<span class="comment">//开始点与结束点的起始坐标</span></span><br><span class="line">					<span class="keyword">if</span>(Double.doubleToLongBits(end.getY())&lt;Double.doubleToLongBits(start.getY())) &#123;</span><br><span class="line">						startPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						endPoint = transformRasterPoint(end, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						line = <span class="keyword">new</span> Line(start,end);</span><br><span class="line">					&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">						startPoint = transformRasterPoint(end, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						endPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						line = <span class="keyword">new</span> Line(end,start);</span><br><span class="line">					&#125;</span><br><span class="line">					k = line.getSlope();</span><br><span class="line">					<span class="comment">//System.out.println(k);</span></span><br><span class="line">					<span class="comment">//用于记录当前行</span></span><br><span class="line">					<span class="keyword">int</span> i = startPoint[<span class="number">0</span>];</span><br><span class="line">					<span class="comment">//终止行</span></span><br><span class="line">					<span class="keyword">int</span> j = endPoint[<span class="number">0</span>];</span><br><span class="line">					<span class="comment">//计算起始列号</span></span><br><span class="line">					<span class="keyword">int</span> j0 = (<span class="keyword">int</span>)Math.floor(((((y0-(i-<span class="number">1</span>)*size-line.getStart().getY())/k)+line.getStart().getX()-x0)/size))+<span class="number">1</span>;</span><br><span class="line">					<span class="comment">//计算终止列号</span></span><br><span class="line">					<span class="keyword">int</span> j1 = (<span class="keyword">int</span>)Math.floor((((y0-i*size-line.getStart().getY())/k)+line.getStart().getX()-x0)/size)+<span class="number">1</span>;</span><br><span class="line">				</span><br><span class="line">					<span class="comment">//System.out.println(String.format("s%d,%d", j0,j1));</span></span><br><span class="line">					<span class="keyword">while</span>(i!=j) &#123;</span><br><span class="line">						<span class="comment">//i行从j0-j1涂黑</span></span><br><span class="line">						<span class="keyword">int</span> ja,jb;</span><br><span class="line">						ja=j0;</span><br><span class="line">						jb=j1;</span><br><span class="line">						System.out.println(String.format(<span class="string">"%d,%d"</span>, j0,j1));</span><br><span class="line">						<span class="keyword">while</span>(ja!=jb) &#123;</span><br><span class="line">							</span><br><span class="line">							<span class="keyword">if</span>(ja&lt;jb) &#123;</span><br><span class="line">								<span class="comment">//System.out.println(String.format("i=%d ja=%d", i,ja));</span></span><br><span class="line">								setValue(i, ja);</span><br><span class="line">								ja++;</span><br><span class="line">							&#125;</span><br><span class="line">							<span class="keyword">else</span> &#123;</span><br><span class="line">								<span class="comment">//System.out.println(String.format("i=%d jb=%d", i,jb));</span></span><br><span class="line">								setValue(i, jb);</span><br><span class="line">								jb++;</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">						i++;</span><br><span class="line">						<span class="comment">//本行终止列号等于下一行的起始列号</span></span><br><span class="line">						j0=j1;</span><br><span class="line">						<span class="comment">//计算下一行终止列号</span></span><br><span class="line">						j1 = (<span class="keyword">int</span>)Math.floor((((y0-i*size-line.getStart().getY())/k)+line.getStart().getX()-x0)/size)+<span class="number">1</span>;</span><br><span class="line">						<span class="comment">//System.out.println(String.format("%d,%d", j0,j1));</span></span><br><span class="line">						</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="comment">//System.out.println("第二种");</span></span><br><span class="line">					<span class="comment">//开始点与结束点的起始坐标</span></span><br><span class="line">					<span class="keyword">if</span>(Double.doubleToLongBits(end.getX())&gt;Double.doubleToLongBits(start.getX())) &#123;</span><br><span class="line">						startPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						endPoint = transformRasterPoint(end, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						line = <span class="keyword">new</span> Line(start,end);</span><br><span class="line">					&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">						startPoint = transformRasterPoint(end, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						endPoint = transformRasterPoint(start, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">						line = <span class="keyword">new</span> Line(end,start);</span><br><span class="line">					&#125;</span><br><span class="line">					k = line.getSlope();</span><br><span class="line">					<span class="comment">//System.out.println(k);</span></span><br><span class="line">					<span class="comment">//记录当前列</span></span><br><span class="line">					<span class="keyword">int</span> js = startPoint[<span class="number">1</span>];</span><br><span class="line">					<span class="comment">//记录终止列</span></span><br><span class="line">					<span class="keyword">int</span> je = endPoint[<span class="number">1</span>];</span><br><span class="line">					</span><br><span class="line">					<span class="comment">//计算起始行号</span></span><br><span class="line">					<span class="keyword">int</span> is = (<span class="keyword">int</span>)Math.floor(((line.getStart().getX()-x0-(js-<span class="number">1</span>)*size)*k+y0-line.getStart().getY())/size)+<span class="number">1</span>;</span><br><span class="line">					</span><br><span class="line">					<span class="comment">//计算终止行号</span></span><br><span class="line">					<span class="keyword">int</span> ie = (<span class="keyword">int</span>)Math.floor(((line.getStart().getX()-x0-js*size)*k+y0-line.getStart().getY())/size)+<span class="number">1</span>;</span><br><span class="line">					<span class="comment">//System.out.println(String.format("first %d,%d", is,ie));</span></span><br><span class="line">					<span class="keyword">while</span>(js!=je) &#123;</span><br><span class="line">						<span class="keyword">int</span> ia,ib;</span><br><span class="line">						<span class="comment">//从is-ie行涂黑</span></span><br><span class="line">						ia=is;</span><br><span class="line">						ib=ie;</span><br><span class="line">						<span class="keyword">while</span>(ia!=ib) &#123;</span><br><span class="line">							</span><br><span class="line">							<span class="keyword">if</span>(ia&lt;ib) &#123;</span><br><span class="line">								<span class="comment">//System.out.println(ia);</span></span><br><span class="line">								setValue(ia, js);</span><br><span class="line">								ia++;</span><br><span class="line">								</span><br><span class="line">							&#125;</span><br><span class="line">							<span class="keyword">else</span> &#123;</span><br><span class="line">								<span class="comment">//System.out.println(ib);</span></span><br><span class="line">								setValue(ib, js);</span><br><span class="line">								ib++;</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">						js++;</span><br><span class="line">						is=ie;</span><br><span class="line">						ie = (<span class="keyword">int</span>)Math.floor(((line.getStart().getX()-x0-js*size)*k+y0-line.getStart().getY())/size)+<span class="number">1</span>;</span><br><span class="line">						<span class="comment">//System.out.println(String.format("%d,%d", is,ie));</span></span><br><span class="line">					&#125;</span><br><span class="line">					</span><br><span class="line">				&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="测试结果："><a href="#测试结果：" class="headerlink" title="测试结果："></a>测试结果：</h2><p>输入：</p>
+<p>p（3,9），q（15,30）组成的线段，在30x30的栅格上显示</p>
+<p>输出：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907204406.png!blog" alt="20190907204406"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>同时，由于输入的线段是相同的，也可以比对一下八方向栅格化和全路径栅格化的栅格化效果。</p>
+<p>八方向的特点是每行或每列只有一个栅格被涂黑，所以看起来比较细长。而全路径栅格化，由于计算过程是把所有经过的栅格都”涂黑“了，因此当要以任何方向探测栅格影响的存在或者想要知道矢量可能出现在哪些栅格所覆盖的范围时，就可以用全路径栅格化。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\10\08\GIS算法基础（一）-计算几何基础（上）\" rel="bookmark">GIS算法基础（一） 计算几何基础（上）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）\" rel="bookmark">GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\11\30\GIS算法基础（三）计算几何基础（下）\" rel="bookmark">GIS算法基础（三）计算几何基础（下）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）\" rel="bookmark">GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\16\GIS算法基础（八）基于距离变换的栅格骨架提取算法\" rel="bookmark">GIS算法基础（八）基于距离变换的栅格骨架提取算法</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束感谢您的阅读,如有疑问，请联系<a href="mailto:610596547@qq.com">610596547@qq.com</a>-------------</div>
+    
+</div>
+      
+    </div>
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/GIS算法/" rel="tag"># GIS算法</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2018/11/30/GIS算法基础（三）计算几何基础（下）/" rel="next" title="GIS算法基础（三）计算几何基础（下）">
+                  <i class="fa fa-chevron-left"></i> GIS算法基础（三）计算几何基础（下）
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2018/12/08/GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）/" rel="prev" title="GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）">
+                  GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现） <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://profile.zhonghaowei.xyz/" title="Profile &rarr; http://profile.zhonghaowei.xyz/" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、矢量点的栅格化"><span class="nav-number">1.</span> <span class="nav-text">一、矢量点的栅格化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、矢量线的栅格化"><span class="nav-number">2.</span> <span class="nav-text">二、矢量线的栅格化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#①八方向栅格化"><span class="nav-number">2.1.</span> <span class="nav-text">①八方向栅格化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法思想："><span class="nav-number">2.1.1.</span> <span class="nav-text">算法思想：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现："><span class="nav-number">2.1.2.</span> <span class="nav-text">算法实现：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试："><span class="nav-number">2.2.</span> <span class="nav-text">测试：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#②全路径栅格化"><span class="nav-number">2.3.</span> <span class="nav-text">②全路径栅格化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法思想"><span class="nav-number">2.4.</span> <span class="nav-text">算法思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法实现：-1"><span class="nav-number">2.5.</span> <span class="nav-text">算法实现：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试结果："><span class="nav-number">2.6.</span> <span class="nav-text">测试结果：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+
+<div id="days"></div>
+<div class="BbeiAn-info">
+   	粤ICP备 -
+    <a target="_blank" href="http://beian.miit.gov.cn" style="color:#f0d784"  rel="nofollow">粤ICP备19111001号-1</a> <!--a标签中增加nofollow属性，避免爬虫出站。-->| 
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">粤公网安备 粤ICP备19111001号-1</a>	  <!--这里将图标作为了背景，以使得能和后面的文字在同一行-->
+</div>
+
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'default',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>

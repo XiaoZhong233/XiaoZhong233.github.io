@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/CNY32x32.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/CNY16x16.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="po一个B站线性代数学习资料，这个作者很好地解释线性代数操作空间的本质。 【官方双语/合集】线性代数的本质 - 系列合集 github地址 https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java">
+<meta name="keywords" content="GIS算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIS算法基础（四）平面坐标变换（变换矩阵算法实现）">
+<meta property="og:url" content="localhost:4000/2019/09/07/GIS算法基础（四）平面坐标变换（变换矩阵算法实现）/index.html">
+<meta property="og:site_name" content="钟浩伟的个人博客">
+<meta property="og:description" content="po一个B站线性代数学习资料，这个作者很好地解释线性代数操作空间的本质。 【官方双语/合集】线性代数的本质 - 系列合集 github地址 https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203856.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203845.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181202130738935.png">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203926.png!blog">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==">
+<meta property="og:updated_time" content="2019-09-07T12:40:35.977Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GIS算法基础（四）平面坐标变换（变换矩阵算法实现）">
+<meta name="twitter:description" content="po一个B站线性代数学习资料，这个作者很好地解释线性代数操作空间的本质。 【官方双语/合集】线性代数的本质 - 系列合集 github地址 https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203856.png!blog">
+  <link rel="canonical" href="localhost:4000/2019/09/07/GIS算法基础（四）平面坐标变换（变换矩阵算法实现）/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>GIS算法基础（四）平面坐标变换（变换矩阵算法实现） | 钟浩伟的个人博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">钟浩伟的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">欢迎光临</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/07/GIS算法基础（四）平面坐标变换（变换矩阵算法实现）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">GIS算法基础（四）平面坐标变换（变换矩阵算法实现）
+
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-07 20:36:49" itemprop="dateCreated datePublished" datetime="2019-09-07T20:36:49+08:00">2019-09-07</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/GIS/" itemprop="url" rel="index"><span itemprop="name">GIS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>po一个B站线性代数学习资料，这个作者很好地解释线性代数操作空间的本质。</p>
+<p><a href="https://www.bilibili.com/video/av6731067" target="_blank" rel="noopener">【官方双语/合集】线性代数的本质 - 系列合集</a></p>
+<p>github地址</p>
+<p><a href="https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java" target="_blank" rel="noopener">https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java</a></p>
+<a id="more"></a>
+
+<hr>
+<p><strong>目录</strong></p>
+<p><a href="#一、平面直角坐标系的建立">一、平面直角坐标系的建立</a></p>
+<p><a href="#二、平面坐标变换矩阵">二、平面坐标变换矩阵</a></p>
+<p><a href="#三、平移变换">三、平移变换</a></p>
+<p><a href="#四、比例变换">四、比例变换</a></p>
+<p><a href="#五、对称变换">五、对称变换</a></p>
+<p><a href="#六、旋转变换">六、旋转变换</a></p>
+<p><a href="#七、错切变换">七、错切变换</a></p>
+<p><a href="#八、复合变换">八、复合变换</a></p>
+<p><a href="#(1)、复合平移">(1)、复合平移</a></p>
+<p><a href="#（2）复合比例变换">（2）复合比例变换</a></p>
+<p><a href="#（3）复合旋转">（3）复合旋转</a></p>
+<p><a href="#（4）相对某点的比例变换">（4）相对某点的比例变换</a></p>
+<p><a href="#（5）相对某点的选址变换">（5）相对某点的选址变换</a></p>
+<h1 id="一、平面直角坐标系的建立"><a href="#一、平面直角坐标系的建立" class="headerlink" title="一、平面直角坐标系的建立"></a>一、平面直角坐标系的建立</h1><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203856.png!blog" alt="20190907203856"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>在平面上选一点作为直角坐标的原点，过该原点作相互垂直的两轴，就建立起了平面直角坐标系，如上图所示。</p>
+<p>在代码中，我们可以用一个类表示一个点实体，他由一串坐标组成，但是，如果这些点如果位于不同的坐标系中，该怎么转换呢？通过对X,Y的操作，比如平移就在相应的X,Y分量上加偏移量，我们就可以实现。那如果，我们既要平移，又要旋转，或者一系列的对点实体的操作，该怎么实现？这个时候就可以用到平面坐标变换矩阵。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203845.png!blog" alt="20190907203845"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="二、平面坐标变换矩阵"><a href="#二、平面坐标变换矩阵" class="headerlink" title="二、平面坐标变换矩阵"></a>二、平面坐标变换矩阵</h1><p>  “变换矩阵是数学<a href="https://baike.baidu.com/item/线性代数/800" target="_blank" rel="noopener">线性代数</a>中的一个概念。在线性代数中，<a href="https://baike.baidu.com/item/线性变换/5904192" target="_blank" rel="noopener">线性变换</a>能够用<a href="https://baike.baidu.com/item/矩阵" target="_blank" rel="noopener">矩阵</a>表示。如果T是一个把Rn映射到Rm的线性变换，且x是一个具有n个元素的<a href="https://baike.baidu.com/item/列向量/6247956" target="_blank" rel="noopener">列向量</a> ，那么我们把m×n的矩阵A，称为T的变换矩阵。”</p>
+<p>​                                                                                                                                     ——-<a href="https://baike.baidu.com/item/变换矩阵/9035701?fr=aladdin" target="_blank" rel="noopener">百度百科-变换矩阵</a></p>
+<p>其实没有这么复杂，就是我们通过对一个坐标串构成的矩阵与某个矩阵相乘，得到的新矩阵包含了我们所要的坐标的信息。这个”某个矩阵”在这里就是屏幕坐标变换矩阵。</p>
+<p>怎么构建 矩阵吧，矩阵的构建可以用二维数组实现。这个不是算法的重点，所以我就不po代码了，想看代码可以到我的github上看</p>
+<p><a href="https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java" target="_blank" rel="noopener">https://github.com/XiaoZhong233/GIS_ALG/blob/master/src/scau/gz/zhw/BasicTransform.java</a></p>
+<p>平面坐标变换矩阵可由下式表示：</p>
+<p>​    /<em>*<br>​     \</em>      |a d g|<br>​     * T= |b e h|      |a d|                                                                                                             |g|<br>​     *       |c f   i|      |b e| 负责对图形的缩放,旋转,对称,错切 。[c f] 负责对图形进行平移变换    |h| 负责投影变换<br>​     */    </p>
+<p>构建代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SurfaceTransformationMatrix</span> &#123;</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> a,b,c,d,e,f,g,h,i;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span>[][]  data= &#123;&#123;a,d,g&#125;,&#123;b,e,h&#125;,&#123;c,f,i&#125;&#125;;</span><br><span class="line">	<span class="keyword">private</span> Matrix matrix;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SurfaceTransformationMatrix</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SurfaceTransformationMatrix</span><span class="params">(<span class="keyword">double</span>[][] data)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Matrix <span class="title">getMatrix</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="三、平移变换"><a href="#三、平移变换" class="headerlink" title="三、平移变换"></a>三、平移变换</h1><p>公式如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20181202130738935.png" alt="平移变换矩阵"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>(m,n)是变换后的坐标，(x,y)是变换前的坐标，tx,ty分别对应x轴，y轴的偏移量</p>
+<p>构建代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TransformMatrix</span> <span class="keyword">extends</span> <span class="title">SurfaceTransformationMatrix</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="type">Matrix</span> matrix;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">TransformMatrix</span>(double <span class="type">Tx</span>,double <span class="type">Ty</span>) &#123;</span><br><span class="line">		<span class="keyword">super</span>(<span class="keyword">new</span> double[][]&#123;&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="type">Tx</span>,<span class="type">Ty</span>,<span class="number">1</span>&#125;&#125;);</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">super</span>.getMatrix();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">Matrix</span> getTransformMatrix() &#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>平移算法：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 平移算法</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param x	x正方向偏移量</span></span><br><span class="line"><span class="comment"> * @param y	y正方向偏移量</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point transform(Point <span class="built_in">point</span>,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Matrix matrix = <span class="keyword">new</span> TransformMatrix(x, y).getTransformMatrix();</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;<span class="built_in">point</span>.getX(),<span class="built_in">point</span>.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="comment">//System.out.println("平移后的点 ："+new Point(result.getMatrix()[0][0], result.getMatrix()[0][1]).toString());</span></span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Line transform(Line <span class="built_in">line</span>,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Point start = <span class="built_in">line</span>.getStart();</span><br><span class="line">	Point <span class="built_in">end</span> = <span class="built_in">line</span>.getEnd();</span><br><span class="line">	</span><br><span class="line">	Point newStart = transform(start, x, y);</span><br><span class="line">	Point newEnd = transform(<span class="built_in">end</span>, x, y);</span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Line(newStart,newEnd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Polygon transform(Polygon polygon,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Point[] points = polygon.getPoints();</span><br><span class="line">	Point[] result = <span class="keyword">new</span> Point[points.length];</span><br><span class="line">	<span class="built_in">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;points.length;i++) &#123;</span><br><span class="line">		result[i]=transform(points[i], x, y);</span><br><span class="line">		<span class="comment">//System.out.println("result ："+result[i].toString());</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Polygon(result, polygon.isClose());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="接下来的变换基本都和这个变换的例子差不多，无非是参数的变化"><a href="#接下来的变换基本都和这个变换的例子差不多，无非是参数的变化" class="headerlink" title="接下来的变换基本都和这个变换的例子差不多，无非是参数的变化"></a>接下来的变换基本都和这个变换的例子差不多，无非是参数的变化</h2><h1 id="四、比例变换"><a href="#四、比例变换" class="headerlink" title="四、比例变换"></a>四、比例变换</h1><h3 id="变换公式：-x-y-1-x-y-1-x-Sx-0-0-0-Sy-0-0-0-1-Sxx-Syy-1"><a href="#变换公式：-x-y-1-x-y-1-x-Sx-0-0-0-Sy-0-0-0-1-Sxx-Syy-1" class="headerlink" title="变换公式：[x* y* 1] = [x y 1] x [{Sx,0,0},{0,Sy,0},{0,0,1}] = [Sxx Syy 1]"></a>变换公式：[x* y* 1] = [x y 1] x [{Sx,0,0},{0,Sy,0},{0,0,1}] = [Sx<em>x Sy</em>y 1]</h3><p>因为公式没找到图，就用二维数组来表示</p>
+<p>x<em>,y</em>是x,y变换后的坐标</p>
+<h3 id="变换关系如下"><a href="#变换关系如下" class="headerlink" title="变换关系如下"></a>变换关系如下</h3><p>（1）当Sx = Sy = 1 时，为恒等比例变换，就是图形不变</p>
+<p>（2）当Sx = Sy &gt; 1 时，图形沿两个坐标轴方向等比例放大。</p>
+<p>（3）当Sx = Sy &lt; 1 时，图形沿两个坐标轴方向等比例缩小。</p>
+<p>（4）当Sx != Sy  时，图形沿两个坐标轴方向做非均匀的比例变换。</p>
+<p>构建代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ScaleMtrix</span> <span class="keyword">extends</span> <span class="title">SurfaceTransformationMatrix</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="type">Matrix</span> matrix;</span><br><span class="line">	public <span class="type">ScaleMtrix</span>(double <span class="type">Sx</span>,double <span class="type">Sy</span>) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">super</span>(<span class="keyword">new</span> double[][]&#123;&#123;<span class="type">Sx</span>,<span class="number">0</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="type">Sy</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>&#125;&#125;);</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">super</span>.getMatrix();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">Matrix</span> getScaleMatrix() &#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>算法：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 比例变换算法</span></span><br><span class="line"><span class="comment"> * x=y时，恒比例放大或缩小</span></span><br><span class="line"><span class="comment"> * x!=y时，图形沿两个坐标轴方向做非均匀比例变换</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param x </span></span><br><span class="line"><span class="comment"> * @param y</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point <span class="built_in">scale</span>(Point <span class="built_in">point</span>,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Matrix matrix = <span class="keyword">new</span> ScaleMtrix(x, y).getScaleMatrix();</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;<span class="built_in">point</span>.getX(),<span class="built_in">point</span>.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Line <span class="built_in">scale</span>(Line <span class="built_in">line</span>,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Point start = <span class="built_in">line</span>.getStart();</span><br><span class="line">	Point end = <span class="built_in">line</span>.getEnd();</span><br><span class="line">	</span><br><span class="line">	Point newStart = <span class="built_in">scale</span>(start, x, y);</span><br><span class="line">	Point newEnd = <span class="built_in">scale</span>(end, x, y);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Line(newStart,newEnd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Polygon <span class="built_in">scale</span>(Polygon polygon,<span class="keyword">double</span> x,<span class="keyword">double</span> y) &#123;</span><br><span class="line">	Point[] points = polygon.getPoints();</span><br><span class="line">	Point[] result = <span class="keyword">new</span> Point[points.length];</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;points.length;i++) &#123;</span><br><span class="line">		result[i]=<span class="built_in">scale</span>(points[i], x, y);</span><br><span class="line">		<span class="comment">//System.out.println("result ："+result[i].toString());</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Polygon(result, polygon.isClose());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="五、对称变换"><a href="#五、对称变换" class="headerlink" title="五、对称变换"></a>五、对称变换</h1><p>公式如下：</p>
+<p> <strong>[x<em>,y</em>,1] = [x,y,1] x [{a,d,0},{b,e,0},{0,0,1}] = [ax+by dx+ey 1]</strong></p>
+<p>变换关系：</p>
+<p>（1）当b=d=0,a=-1,e=1时，产生与y轴对称的反射图形</p>
+<p>（2）当b=d=0,a=1,e=-1时，产生与x轴对称的反射图形</p>
+<p>（3）当b=d=0,a=e=-1时，产生与原点对称的反射图形</p>
+<p>（4）当b=d=1,a=e=0时，产生与直线y=x对称的反射图形</p>
+<p>（5）当b=d=-1,a=e=0时，产生与直线y=-x对称的反射图形</p>
+<p>构建代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 对称变换矩阵</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Administrator</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SymmetryMatrix</span> <span class="keyword">extends</span> <span class="title">SurfaceTransformationMatrix</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Matrix matrix;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SymmetryMatrix</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">double</span> b,<span class="keyword">double</span> d,<span class="keyword">double</span> e)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">super</span>(<span class="keyword">new</span> <span class="keyword">double</span>[][] &#123;&#123;a,d,<span class="number">0</span>&#125;,&#123;b,e,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>&#125;&#125;);</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">super</span>.getMatrix();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Matrix <span class="title">getSymmetryMatrix</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>算法：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 对称变换</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param symmetryType 枚举类型</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point symmetry(Point point,SymmetryType symmetryType) &#123;</span><br><span class="line">	Matrix matrix;</span><br><span class="line">	<span class="keyword">switch</span> (symmetryType) &#123;</span><br><span class="line">	<span class="keyword">case</span> xAxis:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>).getSymmetryMatrix();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> yAxis:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>).getSymmetryMatrix();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> yx:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>).getSymmetryMatrix();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> anti_yx:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">0</span>).getSymmetryMatrix();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> origin:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>).getSymmetryMatrix();</span><br><span class="line">	<span class="keyword">default</span>:<span class="type"></span></span><br><span class="line"><span class="type">		matrix </span>= <span class="keyword">new</span> <span class="type">SymmetryMatrix</span>(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>).getSymmetryMatrix();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	double [][] data= &#123;&#123;point.getX(),point.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> <span class="type">Matrix</span>(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="type">Point</span>(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="六、旋转变换"><a href="#六、旋转变换" class="headerlink" title="六、旋转变换"></a>六、旋转变换</h1><p>公式如下：</p>
+<h2 id="x-y-1"><a href="#x-y-1" class="headerlink" title="[x,y,1] ="></a>[x<em>,y</em>,1] =</h2><h2 id="x-y-1-x-cosa-sina-0-sina-cosa-0-0-0-1-xcosa-ysina-xsina-ycosa-1"><a href="#x-y-1-x-cosa-sina-0-sina-cosa-0-0-0-1-xcosa-ysina-xsina-ycosa-1" class="headerlink" title="[x,y,1] x [{cosa,sina,0},{-sina,cosa,0},{0,0,1}] = [xcosa-ysina xsina+ycosa 1]"></a>[x,y,1] x [{cosa,sina,0},{-sina,cosa,0},{0,0,1}] = [xcosa-ysina xsina+ycosa 1]</h2><p>a是二维图形绕原点顺时针旋转a角。</p>
+<p>构建代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">RotateMatrix</span> <span class="keyword">extends</span> <span class="title">SurfaceTransformationMatrix</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="type">Matrix</span> matrix;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">RotateMatrix</span>(double angle) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">super</span>(<span class="keyword">new</span> double[][] &#123;&#123;<span class="type">Math</span>.cos(<span class="type">Math</span>.toRadians(angle)),<span class="type">Math</span>.sin(<span class="type">Math</span>.toRadians(angle)),<span class="number">0</span>&#125;,</span><br><span class="line">			&#123;-<span class="type">Math</span>.sin(<span class="type">Math</span>.toRadians(angle)),<span class="type">Math</span>.cos(<span class="type">Math</span>.toRadians(angle)),<span class="number">0</span>&#125;,</span><br><span class="line">			&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>&#125;&#125;);</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">super</span>.getMatrix();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">Matrix</span> getRotateMatrix() &#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>算法：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 旋转变换</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param angle 角度制单位</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">public static Point <span class="built_in">rotate</span>(Point point,double angle) &#123;</span><br><span class="line">	<span class="keyword">Matrix</span> matrix = <span class="keyword">new</span> <span class="built_in">RotateMatrix</span>(angle).<span class="built_in">getRotateMatrix</span>();</span><br><span class="line">	double [][] data= &#123;&#123;point.getX(),point.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	<span class="keyword">Matrix</span> pointMatrix = <span class="keyword">new</span> <span class="keyword">Matrix</span>(data);</span><br><span class="line">	<span class="keyword">Matrix</span> result = pointMatrix.RightMultiMatrix(<span class="keyword">matrix</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Point</span>(result.<span class="built_in">getMatrix</span>()[<span class="number">0</span>][<span class="number">0</span>], result.<span class="built_in">getMatrix</span>()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="七、错切变换"><a href="#七、错切变换" class="headerlink" title="七、错切变换"></a>七、错切变换</h1><p>公式如下：</p>
+<h2 id="x-y-1-x-y-1-1-d-0-b-1-0-0-0-1-x-by-dx-y-1"><a href="#x-y-1-x-y-1-1-d-0-b-1-0-0-0-1-x-by-dx-y-1" class="headerlink" title="[x,y,1] = [x,y,1] * [{1,d,0},{b,1,0},{0,0,1}]  = [x+by,dx+y,1]"></a>[x<em>,y</em>,1] = [x,y,1] * [{1,d,0},{b,1,0},{0,0,1}]  = [x+by,dx+y,1]</h2><p>x<em>,y</em>为变换后的坐标。</p>
+<p>变换关系如下：</p>
+<p>（1）当d=0时，x<em>=x+by,y</em>=y,此时图形的y坐标不变，x坐标随初值(x,y)及变换系数b而作线性变换；若b&gt;0，则图形沿+x方向做错切位移；b&lt;0图形沿-x方向做错切位移。</p>
+<p>（2）当b=0时，x<em>=x,y</em>=dx+y，此时图形的x坐标不变，y坐标随初值（x,y）及变换系数d做线性变换；如d&gt;0，则图形沿+y方向作错切变换；d&lt;0时，图形沿-y方向做错切位移。</p>
+<p>（3）当b!=0时，且d!=0时，x<em>=x+by，y</em>=dx+y，图形沿x,y两个方向错切位移。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190907203926.png!blog" alt="20190907203926"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>构建代码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MiscutMatrix</span> <span class="keyword">extends</span> <span class="title">SurfaceTransformationMatrix</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="type">Matrix</span> matrix;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">MiscutMatrix</span>(double d,double b) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">super</span>(<span class="keyword">new</span> double[][] &#123;&#123;<span class="number">1</span>,d,<span class="number">0</span>&#125;,&#123;b,<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>&#125;&#125;);</span><br><span class="line">		<span class="keyword">this</span>.matrix = <span class="keyword">super</span>.getMatrix();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public <span class="type">Matrix</span> getMiscutMatrix()&#123;</span><br><span class="line">		<span class="keyword">return</span> matrix;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>算法如下：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 错切变换</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> point </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> b=0,y轴随变换系数d变换  b&gt;0,图形沿+y方向做错切变换,b&lt;0,图形沿-y方向做错切变换 </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> d=0,y轴随变换系数b变换  b&gt;0,图形沿+x方向做错切变换,b&lt;0,图形沿-x方向做错切变换</span></span><br><span class="line"><span class="comment"> * 		  b!=0 &amp;&amp; d!=0时,x*=x+by y*=dx+y 图形沿x,y两个方向做错切变换</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Point <span class="title">miscut</span><span class="params">(Point point,<span class="keyword">double</span> b,<span class="keyword">double</span> d)</span> </span>&#123;</span><br><span class="line">	Matrix matrix = <span class="keyword">new</span> MiscutMatrix(b,d).getMiscutMatrix();</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;point.getX(),point.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h1 id="八、复合变换"><a href="#八、复合变换" class="headerlink" title="八、复合变换"></a>八、复合变换</h1><p>复合变换是指图形做一次以上的几何变换，变换结果是每次变换矩阵相乘。</p>
+<h2 id="1-、复合平移"><a href="#1-、复合平移" class="headerlink" title="(1)、复合平移"></a>(1)、复合平移</h2><p>直接上代码吧，就直接几个平移矩阵相乘</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 复合平移</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param matrixs</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point complexTransform(Point <span class="built_in">point</span>,TransformMatrix...matrixs) &#123;</span><br><span class="line">	<span class="keyword">int</span> len = matrixs.length;</span><br><span class="line">	Matrix matrix = matrixs[<span class="number">0</span>].getTransformMatrix();</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++) &#123;</span><br><span class="line">		matrix = matrix.RightMultiMatrix(matrixs[i].getTransformMatrix());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;<span class="built_in">point</span>.getX(),<span class="built_in">point</span>.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="（2）复合比例变换"><a href="#（2）复合比例变换" class="headerlink" title="（2）复合比例变换"></a>（2）复合比例变换</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 复合比例变换</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param matrixs</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point complexScale(Point <span class="built_in">point</span>,ScaleMtrix...matrixs) &#123;</span><br><span class="line">	<span class="keyword">int</span> len = matrixs.length;</span><br><span class="line">	Matrix matrix = matrixs[<span class="number">0</span>].getScaleMatrix();</span><br><span class="line">	<span class="built_in">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++) &#123;</span><br><span class="line">		matrix = matrix.RightMultiMatrix(matrixs[i].getScaleMatrix());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;<span class="built_in">point</span>.getX(),<span class="built_in">point</span>.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="（3）复合旋转"><a href="#（3）复合旋转" class="headerlink" title="（3）复合旋转"></a>（3）复合旋转</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 复合旋转变换</span></span><br><span class="line"><span class="comment"> * @param point</span></span><br><span class="line"><span class="comment"> * @param matrixs</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Point complexRotate(Point <span class="built_in">point</span>,RotateMatrix ...matrixs) &#123;</span><br><span class="line">	<span class="keyword">int</span> len = matrixs.length;</span><br><span class="line">	Matrix matrix = matrixs[<span class="number">0</span>].getRotateMatrix();</span><br><span class="line">	<span class="built_in">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++) &#123;</span><br><span class="line">		matrix = matrix.RightMultiMatrix(matrixs[i].getRotateMatrix());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">double</span> [][] data= &#123;&#123;<span class="built_in">point</span>.getX(),<span class="built_in">point</span>.getY(),<span class="number">1</span>&#125;&#125;;</span><br><span class="line">	Matrix pointMatrix = <span class="keyword">new</span> Matrix(data);</span><br><span class="line">	Matrix result = pointMatrix.RightMultiMatrix(matrix);</span><br><span class="line">	<span class="built_in">return</span> <span class="keyword">new</span> Point(result.getMatrix()[<span class="number">0</span>][<span class="number">0</span>], result.getMatrix()[<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<p>比例，旋转变换是与参考的有关的，上面的都是相对于原点的比例变换，如果要参考某个(m,n)点做比例 ，旋转变换，其变换过程就是先把该坐标系的原点移到（m,n）上来，然后做了旋转或比例变换，然后再移回去。</p>
+<h2 id="（4）相对某点的比例变换"><a href="#（4）相对某点的比例变换" class="headerlink" title="（4）相对某点的比例变换"></a>（4）相对某点的比例变换</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 相对于某点的比例变换</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> point 待变换的点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> center 相对点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> x</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> y</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Point <span class="title">scaleAround</span><span class="params">(Point point,Point center,<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span> </span>&#123;</span><br><span class="line">	TransformMatrix t1 = <span class="keyword">new</span> TransformMatrix(-center.getX(), -center.getY());</span><br><span class="line">	ScaleMtrix scaleMtrix = <span class="keyword">new</span> ScaleMtrix(x, y);</span><br><span class="line">	TransformMatrix t2 = <span class="keyword">new</span> TransformMatrix(center.getX(), center.getY());</span><br><span class="line">	<span class="function"><span class="keyword">return</span> <span class="title">complexTransmit</span><span class="params">(point, t1,scaleMtrix,t2)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="（5）相对某点的选址变换"><a href="#（5）相对某点的选址变换" class="headerlink" title="（5）相对某点的选址变换"></a>（5）相对某点的选址变换</h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 围绕某点的旋转变换</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> point 待变换的点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> center 相对点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> angle</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Point <span class="title">rotateAround</span><span class="params">(Point point,Point center,<span class="keyword">double</span> angle)</span> </span>&#123;</span><br><span class="line">	TransformMatrix t1 = <span class="keyword">new</span> TransformMatrix(-center.getX(), -center.getY());</span><br><span class="line">	RotateMatrix rotateMatrix = <span class="keyword">new</span> RotateMatrix(angle);</span><br><span class="line">	TransformMatrix t2 = <span class="keyword">new</span> TransformMatrix(center.getX(), center.getY());</span><br><span class="line">	<span class="function"><span class="keyword">return</span> <span class="title">complexTransmit</span><span class="params">(point, t1,rotateMatrix,t2)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\10\08\GIS算法基础（一）-计算几何基础（上）\" rel="bookmark">GIS算法基础（一） 计算几何基础（上）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）\" rel="bookmark">GIS算法基础（七）矢量数据向栅格数据的转换（面转换的边界代数算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\11\30\GIS算法基础（三）计算几何基础（下）\" rel="bookmark">GIS算法基础（三）计算几何基础（下）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\08\GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）\" rel="bookmark">GIS算法基础（六）矢量数据向栅格数据的转换（面转换的射线算法实现）</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2018\12\07\GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）\" rel="bookmark">GIS算法基础（五）矢量数据向栅格数据的转换（点，线算法实现）</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束感谢您的阅读,如有疑问，请联系<a href="mailto:610596547@qq.com">610596547@qq.com</a>-------------</div>
+    
+</div>
+      
+    </div>
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/GIS算法/" rel="tag"># GIS算法</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/03/AOE网及关键路径/" rel="next" title="AOE网及关键路径实现">
+                  <i class="fa fa-chevron-left"></i> AOE网及关键路径实现
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/09/07/GIS算法基础（九）矢量压缩算法-道格拉斯普克算法/" rel="prev" title="GIS算法基础（九）矢量压缩算法-道格拉斯普克算法">
+                  GIS算法基础（九）矢量压缩算法-道格拉斯普克算法 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/profile.jpg"
+      alt="钟浩伟">
+  <p class="site-author-name" itemprop="name">钟浩伟</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://github.com/XiaoZhong233" title="GitHub &rarr; https://github.com/XiaoZhong233" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="mailto:601596547@qq.com" title="E-Mail &rarr; mailto:601596547@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="https://blog.csdn.net/weixin_41154636" title="CSDN &rarr; https://blog.csdn.net/weixin_41154636" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>CSDN</a>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <a href="http://profile.zhonghaowei.xyz/" title="Profile &rarr; http://profile.zhonghaowei.xyz/" rel="noopener" target="_blank"><i class="fa fa-fw fa-address-card-o"></i>Profile</a>
+      </span>
+    
+  </div>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、平面直角坐标系的建立"><span class="nav-number">1.</span> <span class="nav-text">一、平面直角坐标系的建立</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、平面坐标变换矩阵"><span class="nav-number">2.</span> <span class="nav-text">二、平面坐标变换矩阵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、平移变换"><span class="nav-number">3.</span> <span class="nav-text">三、平移变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#接下来的变换基本都和这个变换的例子差不多，无非是参数的变化"><span class="nav-number">3.1.</span> <span class="nav-text">接下来的变换基本都和这个变换的例子差不多，无非是参数的变化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、比例变换"><span class="nav-number">4.</span> <span class="nav-text">四、比例变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变换公式：-x-y-1-x-y-1-x-Sx-0-0-0-Sy-0-0-0-1-Sxx-Syy-1"><span class="nav-number">4.0.1.</span> <span class="nav-text">变换公式：[x* y* 1] = [x y 1] x [{Sx,0,0},{0,Sy,0},{0,0,1}] = [Sxx Syy 1]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变换关系如下"><span class="nav-number">4.0.2.</span> <span class="nav-text">变换关系如下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、对称变换"><span class="nav-number">5.</span> <span class="nav-text">五、对称变换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、旋转变换"><span class="nav-number">6.</span> <span class="nav-text">六、旋转变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#x-y-1"><span class="nav-number">6.1.</span> <span class="nav-text">[x,y,1] =</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x-y-1-x-cosa-sina-0-sina-cosa-0-0-0-1-xcosa-ysina-xsina-ycosa-1"><span class="nav-number">6.2.</span> <span class="nav-text">[x,y,1] x [{cosa,sina,0},{-sina,cosa,0},{0,0,1}] = [xcosa-ysina xsina+ycosa 1]</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、错切变换"><span class="nav-number">7.</span> <span class="nav-text">七、错切变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#x-y-1-x-y-1-1-d-0-b-1-0-0-0-1-x-by-dx-y-1"><span class="nav-number">7.1.</span> <span class="nav-text">[x,y,1] = [x,y,1] * [{1,d,0},{b,1,0},{0,0,1}]  = [x+by,dx+y,1]</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、复合变换"><span class="nav-number">8.</span> <span class="nav-text">八、复合变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-、复合平移"><span class="nav-number">8.1.</span> <span class="nav-text">(1)、复合平移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（2）复合比例变换"><span class="nav-number">8.2.</span> <span class="nav-text">（2）复合比例变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（3）复合旋转"><span class="nav-number">8.3.</span> <span class="nav-text">（3）复合旋转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（4）相对某点的比例变换"><span class="nav-number">8.4.</span> <span class="nav-text">（4）相对某点的比例变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（5）相对某点的选址变换"><span class="nav-number">8.5.</span> <span class="nav-text">（5）相对某点的选址变换</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">钟浩伟</span>
+</div>
+
+
+<div id="days"></div>
+<div class="BbeiAn-info">
+   	粤ICP备 -
+    <a target="_blank" href="http://beian.miit.gov.cn" style="color:#f0d784"  rel="nofollow">粤ICP备19111001号-1</a> <!--a标签中增加nofollow属性，避免爬虫出站。-->| 
+	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" style="color:#f0d784;text-decoration:none;padding-left:30px;background:url(https://s1.ax1x.com/2018/09/29/ilmwIH.png) no-repeat left center" rel="nofollow">粤公网安备 粤ICP备19111001号-1</a>	  <!--这里将图标作为了背景，以使得能和后面的文字在同一行-->
+</div>
+
+<script>
+function show_date_time(){
+    window.setTimeout("show_date_time()", 1000);
+    BirthDay=new Date("08/15/2019 22:40:14");
+    today=new Date();
+    timeold=(today.getTime()-BirthDay.getTime());
+    sectimeold=timeold/1000
+    secondsold=Math.floor(sectimeold);
+    msPerDay=24*60*60*1000
+    e_daysold=timeold/msPerDay
+    daysold=Math.floor(e_daysold);
+    e_hrsold=(e_daysold-daysold)*24;
+    hrsold=setzero(Math.floor(e_hrsold));
+    e_minsold=(e_hrsold-hrsold)*60;
+    minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+    seconds=setzero(Math.floor((e_minsold-minsold)*60));
+    document.getElementById('days').innerHTML="<p>小破站已运行 "+daysold+" 天 "+hrsold+" 小时 "+minsold+" 分 "+seconds+" 秒</p>";
+}
+function setzero(i) {
+    if (i<10) {
+        i="0" + i
+    };
+    return i;
+}
+show_date_time();
+</script>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme: 'default',
+      logLevel: 3,
+      flowchart: { curve: 'linear' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>
+</html>
