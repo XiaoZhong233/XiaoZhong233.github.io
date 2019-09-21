@@ -55,13 +55,13 @@
   };
 </script>
 
-  <meta name="description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
+  <meta name="description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anyway，先把堆排序这页撕了吧 :)。">
 <meta name="keywords" content="数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="堆排序原来这么简单">
 <meta property="og:url" content="localhost:4000/2019/09/21/堆排序原来这么简单/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
+<meta property="og:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anyway，先把堆排序这页撕了吧 :)。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/tree.png!blog">
@@ -72,10 +72,10 @@
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/heapsort21354.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asf234rf4vthhhhhhhhhhh.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asdsd23o4h235olkfl43.png!blog">
-<meta property="og:updated_time" content="2019-09-21T14:01:13.846Z">
+<meta property="og:updated_time" content="2019-09-21T14:09:33.504Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆排序原来这么简单">
-<meta name="twitter:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
+<meta name="twitter:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anyway，先把堆排序这页撕了吧 :)。">
 <meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog">
   <link rel="canonical" href="localhost:4000/2019/09/21/堆排序原来这么简单/">
 
@@ -318,7 +318,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。</p>
 <p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog" alt="mmexport1569073823017"></p>
-<p>顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。</p>
+<p>顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anyway，先把堆排序这页撕了吧 :)。</p>
 <a id="more"></a>
 
 <h1 id="堆排序的前提"><a href="#堆排序的前提" class="headerlink" title="堆排序的前提"></a>堆排序的前提</h1><h2 id="堆要符合什么条件"><a href="#堆要符合什么条件" class="headerlink" title="堆要符合什么条件"></a>堆要符合什么条件</h2><ol>
@@ -394,14 +394,14 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\02\图的存储结构实现：邻接表\" rel="bookmark">图的存储结构实现：邻接表</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="\2019\09\02\图的存储结构实现：邻接表\" rel="bookmark">图的存储结构实现：邻接表</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\03\图的遍历-BFS和DFS\" rel="bookmark">图的遍历:BFS和DFS</a></div>
       
     </li>
   
