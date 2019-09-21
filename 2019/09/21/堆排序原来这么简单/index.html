@@ -55,14 +55,15 @@
   };
 </script>
 
-  <meta name="description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。堆排序的前提堆要符合什么条件 堆排序的堆是完全二叉树，因此用数组实现是最好的（因为完全二叉树的节点是连续的） 父节点比子节点大，或父节点比子节点小 获取父子节点易观察并总结出规律得：获取子节点的公式c1 = 2n+1">
+  <meta name="description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
 <meta name="keywords" content="数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="堆排序原来这么简单">
 <meta property="og:url" content="localhost:4000/2019/09/21/堆排序原来这么简单/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。堆排序的前提堆要符合什么条件 堆排序的堆是完全二叉树，因此用数组实现是最好的（因为完全二叉树的节点是连续的） 父节点比子节点大，或父节点比子节点小 获取父子节点易观察并总结出规律得：获取子节点的公式c1 = 2n+1">
+<meta property="og:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/tree.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/121321313.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asdasdasdqwqwe2131314565.png!blog">
@@ -71,11 +72,11 @@
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/heapsort21354.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asf234rf4vthhhhhhhhhhh.png!blog">
 <meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asdsd23o4h235olkfl43.png!blog">
-<meta property="og:updated_time" content="2019-09-21T13:27:24.856Z">
+<meta property="og:updated_time" content="2019-09-21T14:01:13.846Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="堆排序原来这么简单">
-<meta name="twitter:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。堆排序的前提堆要符合什么条件 堆排序的堆是完全二叉树，因此用数组实现是最好的（因为完全二叉树的节点是连续的） 父节点比子节点大，或父节点比子节点小 获取父子节点易观察并总结出规律得：获取子节点的公式c1 = 2n+1">
-<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/tree.png!blog">
+<meta name="twitter:description" content="前言之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。  顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog">
   <link rel="canonical" href="localhost:4000/2019/09/21/堆排序原来这么简单/">
 
 
@@ -315,14 +316,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。</p><h1 id="堆排序的前提"><a href="#堆排序的前提" class="headerlink" title="堆排序的前提"></a>堆排序的前提</h1><h2 id="堆要符合什么条件"><a href="#堆要符合什么条件" class="headerlink" title="堆要符合什么条件"></a>堆要符合什么条件</h2><ol>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前上数据结构这门课的时候，一直没搞明白堆排序到底是为啥就能排序了呢。最近终于弄懂了，其实很简单。</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/mmexport1569073823017.jpg!blog" alt="mmexport1569073823017"></p>
+<p>顺便吐槽一下，严蔚敏的紫书代码可读性真滴不咋滴，有了注释也很难知道在说啥，没有就更不用说了，一股浓浓的学究代码气息扑面而来？anywhere，把堆排序这页撕了吧 :)。</p>
+<a id="more"></a>
+
+<h1 id="堆排序的前提"><a href="#堆排序的前提" class="headerlink" title="堆排序的前提"></a>堆排序的前提</h1><h2 id="堆要符合什么条件"><a href="#堆要符合什么条件" class="headerlink" title="堆要符合什么条件"></a>堆要符合什么条件</h2><ol>
 <li>堆排序的堆是完全二叉树，因此用<strong>数组</strong>实现是最好的（因为完全二叉树的节点是连续的）</li>
 <li>父节点比子节点大，或父节点比子节点小</li>
-</ol><h2 id="获取父子节点"><a href="#获取父子节点" class="headerlink" title="获取父子节点"></a>获取父子节点</h2><p>易观察并总结出规律得：</p><p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/tree.png!blog" alt="tree"></p><h3 id="获取子节点的公式"><a href="#获取子节点的公式" class="headerlink" title="获取子节点的公式"></a>获取子节点的公式</h3><p>c1 = 2n+1</p><a id="more"></a>
-
-
-
-
+</ol>
+<h2 id="获取父子节点"><a href="#获取父子节点" class="headerlink" title="获取父子节点"></a>获取父子节点</h2><p>易观察并总结出规律得：</p>
+<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/tree.png!blog" alt="tree"></p>
+<h3 id="获取子节点的公式"><a href="#获取子节点的公式" class="headerlink" title="获取子节点的公式"></a>获取子节点的公式</h3><p>c1 = 2n+1</p>
 <p>c2 = 2n+2</p>
 <h3 id="获取父节点公式"><a href="#获取父节点公式" class="headerlink" title="获取父节点公式"></a>获取父节点公式</h3><p>p = (c+1)/2</p>
 <h1 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h1><p>别急，在进行真正的堆排序之前，不妨先实现两个操作，堆调整和创建堆，他们都是堆排序所必需的操作。</p>
@@ -354,7 +359,7 @@
 <p>因为可以发现整个树的根节点就是最大值，所以直接将最后一个节点与第一个节点交换，然后“斩断”最后一个节点。然后对新的根节点进行堆调整。</p>
 <p>“斩断”的节点就是当前的最大值，随便你怎么搞，输出也好，放在队列中也好，放在栈中也好。</p>
 <p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/asf234rf4vthhhhhhhhhhh.png!blog" alt="asf234rf4vthhhhhhhhhhh"></p>
-<p>这样你就可以又得到一颗去除了最大值的堆了~~，重复此过程直到树中没有树了或者遍历到头了。就完成了堆排序了哦。</p>
+<p>这样你就可以又得到一颗去除了最大值的堆了~~，重复此过程直到树中没有树了或者遍历到头了（其实是懒得作图了- - ）。就完成了堆排序了哦。</p>
 <p>上代码：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//堆排序，升序</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">heap_sort</span><span class="params">(<span class="keyword">int</span> tree[],<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    build_heap(tree,n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="comment">//最后一个与根节点进行交换</span></span><br><span class="line">        swap(tree,i,<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//调整根节点，注意此时的第二个参数也就是处理的数组大小变成了i哦，相当于斩断了最后一个节点</span></span><br><span class="line">        heapify(tree,i,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
