@@ -55,23 +55,18 @@
   };
 </script>
 
-  <meta name="description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
-<meta name="keywords" content="部署">
+  <meta name="description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS上安装配置Python3.7">
-<meta property="og:url" content="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/index.html">
+<meta property="og:title" content="浅谈区块链的密码学原理:hash与签名">
+<meta property="og:url" content="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
+<meta property="og:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131549.png!blog">
-<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131711.png!blog">
-<meta property="og:updated_time" content="2019-08-19T12:19:19.100Z">
+<meta property="og:updated_time" content="2020-01-14T16:21:23.063Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CentOS上安装配置Python3.7">
-<meta name="twitter:description" content="安装依赖包1yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make1yum install libffi-devel -y下载python3.7的包">
-<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog">
-  <link rel="canonical" href="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/">
+<meta name="twitter:title" content="浅谈区块链的密码学原理:hash与签名">
+<meta name="twitter:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
+  <link rel="canonical" href="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/">
 
 
 <script id="page-configurations">
@@ -85,7 +80,7 @@
   };
 </script>
 
-  <title>CentOS上安装配置Python3.7 | 钟浩伟的个人博客</title>
+  <title>浅谈区块链的密码学原理:hash与签名 | 钟浩伟的个人博客</title>
   
 
 
@@ -251,7 +246,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/08/19/CentOS上安装配置Python3-7/">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="钟浩伟">
@@ -265,7 +260,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">CentOS上安装配置Python3.7
+          <h1 class="post-title" itemprop="name headline">浅谈区块链的密码学原理:hash与签名
 
             
           </h1>
@@ -282,20 +277,7 @@
                 
               
 
-              <time title="创建时间：2019-08-19 12:30:24" itemprop="dateCreated datePublished" datetime="2019-08-19T12:30:24+08:00">2019-08-19</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
-
-                
-                
-              
+              <time title="创建时间：2020-01-14 22:53:42" itemprop="dateCreated datePublished" datetime="2020-01-14T22:53:42+08:00">2020-01-14</time>
             </span>
           
 
@@ -310,51 +292,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install </span>zlib-devel <span class="keyword">bzip2-devel </span>openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br></pre></td></tr></table></figure><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> libffi-devel -y</span><br></pre></td></tr></table></figure><h1 id="下载python3-7的包"><a href="#下载python3-7的包" class="headerlink" title="下载python3.7的包"></a>下载python3.7的包</h1><a id="more"></a>
+        <p>比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些</p><p>比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）</p><h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。</p><h2 id="Hash的特点"><a href="#Hash的特点" class="headerlink" title="Hash的特点"></a>Hash的特点</h2><h3 id="Collision-resistance"><a href="#Collision-resistance" class="headerlink" title="Collision resistance"></a>Collision resistance</h3><a id="more"></a>
 
 
-
-<h2 id="方法一：直接在官方网站下载"><a href="#方法一：直接在官方网站下载" class="headerlink" title="方法一：直接在官方网站下载"></a>方法一：直接在官方网站下载</h2><p>打开python的官方网站：<a href="https://www.python.org/" target="_blank" rel="noopener">https://www.python.org/</a>  –&gt;Downloads–&gt;Source code–&gt;Latest Python 3 Release - Python 3.7.0–&gt;拉到最下面，选择Gzipped source tarball，下载到本地，然后上传到服务器即可</p>
-<h2 id="方法二：通过wget"><a href="#方法二：通过wget" class="headerlink" title="方法二：通过wget"></a>方法二：通过wget</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="regexp">//</span>www.python.org<span class="regexp">/ftp/</span>python<span class="regexp">/3.7.0/</span>Python-<span class="number">3.7</span>.<span class="number">0</span>.tgz</span><br></pre></td></tr></table></figure>
-
-<p>然后执行：</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python<span class="number">-3.7</span><span class="number">.0</span>.tgz <span class="meta">#解压解包</span></span><br><span class="line">cd Python<span class="number">-3.7</span><span class="number">.0</span></span><br><span class="line">./configure <span class="meta">#运行配置</span></span><br><span class="line"><span class="built_in">make</span>&amp;&amp;<span class="built_in">make</span> install <span class="meta">#编译并安装</span></span><br></pre></td></tr></table></figure>
-
-<p>安装的目录通常在：/usr/bin/下</p>
-<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>这里为了使默认python变成python3，需要加一条软链接,并把之前的python命令改成python.bak，而且pip也是要进行链接的：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv <span class="regexp">/usr/</span>bin<span class="regexp">/python /</span>usr<span class="regexp">/bin/</span>python.bak</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>python3 <span class="regexp">/usr/</span>bin/python</span><br><span class="line">mv <span class="regexp">/usr/</span>bin<span class="regexp">/pip /</span>usr<span class="regexp">/bin/</span>pip.bak</span><br><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>pip3 <span class="regexp">/usr/</span>bin/pip</span><br></pre></td></tr></table></figure>
-
-<p>接下来需要配置yum的引用，因为yum引用的是之前系统默认的python2.7，现在变成了3.7，需要把他改回来。需要改动两个地方</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="regexp">/usr/</span>libexec<span class="regexp">/urlgrabber-ext-down</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131304.png!blog" alt="20190819131304"></p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi <span class="regexp">/usr/</span>bin<span class="regexp">/yum</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131549.png!blog" alt="20190819131549"></p>
-<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>输入</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">python -V</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">pip -V</span></span><br></pre></td></tr></table></figure>
-
-<p>如果出现3.7版本，就说明成功了。</p>
-<p><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/20190819131711.png!blog" alt="20190819131711"></p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>新建一个py文件</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">vim</span> helloWorld.<span class="keyword">py</span></span><br></pre></td></tr></table></figure>
-
-<p>修改内容如下：</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /usr/bin/python </span></span><br><span class="line">print(<span class="string">"hello,world"</span>)</span><br></pre></td></tr></table></figure>
-
-<p>第一句一定要加的，除非你配个虚拟环境<code>virtualenv</code></p>
-<p>增加执行权限：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">chmod</span> +<span class="selector-tag">x</span> <span class="selector-tag">helloWorld</span><span class="selector-class">.py</span></span><br></pre></td></tr></table></figure>
-
-<p>运行：</p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">./helloWorld.py</span></span><br></pre></td></tr></table></figure>
-
-<p>如果控制台输出为：</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">hello,</span>world</span><br></pre></td></tr></table></figure>
-
-<p>即测试成功了。</p>
+<p>​    x可以有若干个，这若干个x就组成了输入空间，通常这个输入空间是足够大的，例如256位，这意味这你有2^256种输入，而这2^256种输入，通过hash函数，可以输出很多很多的结果。这个特点就是<strong>Collision resistance</strong></p>
+<p>​    他的意思就是，<u>对于某个HASH函数，你很难在足够大的输入空间中找到两个不同的输入，使他们的输出相同</u>。这种难以<strong>人为制造</strong>的HASH碰撞的特性就是Collision resistance。</p>
+<p>​    当然，也存在已经找到了人为制造HASH碰撞的函数，那就是大名鼎鼎的MD5。</p>
+<h3 id="Hiding"><a href="#Hiding" class="headerlink" title="Hiding"></a>Hiding</h3><p>​    对于足够大的输入空间，存在某个HASH映射H，<u>你可以通过某个X算出H(X)，但你很难通过H(X)算出X。</u>除非你使用暴力破解。这个暴力破解的过程就是”挖矿“，所以你需要大量的算力来进行计算，这样一个挖矿需要消耗大量算力的原则就是POW（proof of work，工作量证明）。你挖到矿了，同时你也必须付出大量的算力。</p>
+<p>​    这里需要注意的是，挖矿过程中，假设你是第一个算出的，你算出了这个X，其他人可以很容易地在第一时间验证你这x是否正确。这就是“difficult to solve,easy to verify”，即挖矿很难，验证简单。</p>
+<p>实现Hiding有两个条件，①输入空间足够大。②分布尽可能均匀（随机性强）</p>
+<h3 id="Puzzle-frendly"><a href="#Puzzle-frendly" class="headerlink" title="Puzzle frendly"></a>Puzzle frendly</h3><p>HASH值是不可预测的，即如果你想要H(X)落在某个范围之内，没有啥好办法，只能一个个去尝试。</p>
+<p>比特币中使用的HASH函数是SHA-256，SHA就是secure hash algorithm。</p>
+<h1 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h1><p>​    在说签名前，先了解两对概念：公钥和私钥，对称加密与非对称加密。</p>
+<h2 id="非对称加密与公私钥"><a href="#非对称加密与公私钥" class="headerlink" title="非对称加密与公私钥"></a>非对称加密与公私钥</h2><p>​    公私钥的这个概念来自密码学中的非对称加密（asymmetric encryption algorithm）。如果你加密和解密用的是同一个密钥，这个就是对称加密，如果加密和解密用的不是一个密钥，这就是非对称加密。</p>
+<p>​    对于对称密钥，他的一个前提条件就是你有一个安全的渠道分发你的密钥，即你的密钥不会被窃取，所以对称密钥的使用条件比较严格，这也是对称密钥的缺点，难以分发你的密钥。</p>
+<p>​    非对称密钥就解决了这个问题，其密钥的成对的不同的。假设A和B两个人通信，并且网络环境是不安全的，A要和B传输信息，A就需要利用B的公钥把信息加密，传到B那后，B在利用他自己的私钥对加密信息进行解密得到明文信息。如果此时B要回复，就需要用A的公钥进行加密，信息传输到A本地时再用A的私钥进行解密。</p>
+<p>​    加密的公钥是不需要保密的，你可以传输给网络上任何一个人，私钥是需要保密的，私钥是保存在本地的，只有在解密是用到。</p>
+<p>​    比特币系统系统中，你的账户由公钥和私钥组成，这个公钥就相当于你的“银行账号”，别人要给你转账，只需要你的公钥即可，这个私钥就相当于你的账户密码。你在收到这笔转账之后，你就可以通过私钥来验证这笔转账是不是你的。</p>
+<h2 id="签名的概念"><a href="#签名的概念" class="headerlink" title="签名的概念"></a>签名的概念</h2><p>​    在比特币区块链中，私钥代表的对比特币的的控制权。交易发起方用私钥对交易进行签名，并将签名后的交易和公钥进行广播，网络中的其他人收到交易后可以用公钥验证交易是否合法。在这个过程中无需发起方暴露自己的私钥，从而实现保密。</p>
+<h2 id="比特币的交易过程"><a href="#比特币的交易过程" class="headerlink" title="比特币的交易过程"></a>比特币的交易过程</h2><p>​    假设在比特币市场中，我要向你转一个比特币，我就需要用我的私钥对这笔交易进行“签名”，然后将签名后的交易和我的公钥在网络上广播，其他人收到之后进行验证，如果验证成功，就都在自己的“账本”上记上一笔，即我向你转了1比特币。这样就保证了整个网络的账本的统一性和去中心化。</p>
+<p>​    另外，这个验证过程就是每个人回溯自己的账本，检查我到底有没有1比特币。如果没有，转账无效，如果有，则在账本上记上一笔。这样就带来了新问题，每个人的账本都不一样，要找到一个让所有人接受的账本，这个就是<u>共识机制</u>，如何保证账本一致？这就需要网络上的每个人争夺记账的权力，中本聪的方案就是做题，谁先把题目算出来谁就拥有记账权力。计算一个题目需要大量的工作量，就是前面所说的<u>工作量证明原则</u>。这个题目就是暴力反算HASH的过程，这个过程就是挖矿，就是看谁的算力强。第一个算出来的人，大家也很容易在第一时间验证他是否算的正确，如果正确，然后大家就把这个人的所记的写到自己的账本上，并且系统会给他相应的比特币作为奖励，这样网络上的每一个人都拥有相同且实时更新的账本。</p>
 
     </div>
 
@@ -362,16 +319,6 @@
     
     
       
-  <div class="popular-posts-header">相关文章推荐</div>
-  <ul class="popular-posts">
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="\2019\08\16\hexo部署云服务器的全过程\" rel="bookmark">hexo部署云服务器的全过程</a></div>
-      
-    </li>
-  
-  </ul>
 
 
     
@@ -388,23 +335,14 @@
       
 
       <footer class="post-footer">
-          
-            
-          
-          <div class="post-tags">
-            
-              <a href="/tags/部署/" rel="tag"># 部署</a>
-            
-          </div>
-        
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/08/18/Linux常用命令-网络命令/" rel="next" title="Linux常用命令-网络命令">
-                  <i class="fa fa-chevron-left"></i> Linux常用命令-网络命令
+                <a href="/2020/01/11/vue父子组件双向数据绑定/" rel="next" title="vue父子组件双向数据绑定">
+                  <i class="fa fa-chevron-left"></i> vue父子组件双向数据绑定
                 </a>
               
             </div>
@@ -412,10 +350,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/08/19/Linux-常用命令-关机重启命令/" rel="prev" title="Linux 常用命令-关机重启命令">
-                  Linux 常用命令-关机重启命令 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -605,7 +539,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装依赖包"><span class="nav-number">1.</span> <span class="nav-text">安装依赖包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载python3-7的包"><span class="nav-number">2.</span> <span class="nav-text">下载python3.7的包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一：直接在官方网站下载"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：直接在官方网站下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二：通过wget"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：通过wget</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash"><span class="nav-number">1.</span> <span class="nav-text">Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash的特点"><span class="nav-number">1.1.</span> <span class="nav-text">Hash的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Collision-resistance"><span class="nav-number">1.1.1.</span> <span class="nav-text">Collision resistance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hiding"><span class="nav-number">1.1.2.</span> <span class="nav-text">Hiding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Puzzle-frendly"><span class="nav-number">1.1.3.</span> <span class="nav-text">Puzzle frendly</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#签名"><span class="nav-number">2.</span> <span class="nav-text">签名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#非对称加密与公私钥"><span class="nav-number">2.1.</span> <span class="nav-text">非对称加密与公私钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#签名的概念"><span class="nav-number">2.2.</span> <span class="nav-text">签名的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比特币的交易过程"><span class="nav-number">2.3.</span> <span class="nav-text">比特币的交易过程</span></a></li></ol></li></ol></div>
             
 
           </div>

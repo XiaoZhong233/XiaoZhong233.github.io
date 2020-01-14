@@ -241,6 +241,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2020/01/14/浅谈密码学原理-hash与签名/" class="post-title-link" itemprop="url">浅谈区块链的密码学原理:hash与签名</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-14 22:53:42" itemprop="dateCreated datePublished" datetime="2020-01-14T22:53:42+08:00">2020-01-14</time>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些</p><p>比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）</p><h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。</p><h2 id="Hash的特点"><a href="#Hash的特点" class="headerlink" title="Hash的特点"></a>Hash的特点</h2><h3 id="Collision-resistance"><a href="#Collision-resistance" class="headerlink" title="Collision resistance"></a>Collision resistance</h3>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/01/14/浅谈密码学原理-hash与签名/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="localhost:4000/2020/01/11/vue父子组件双向数据绑定/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="钟浩伟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="钟浩伟的个人博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+              <a href="/2020/01/11/vue父子组件双向数据绑定/" class="post-title-link" itemprop="url">vue父子组件双向数据绑定</a>
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-11 17:57:39" itemprop="dateCreated datePublished" datetime="2020-01-11T17:57:39+08:00">2020-01-11</time>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+            <h1 id="技术点："><a href="#技术点：" class="headerlink" title="技术点："></a>技术点：</h1><ol>
+<li>父子组件通信</li>
+</ol>
+<p>子-&gt;父：使用v-bind即可实现，在子组件中定义props接收从父组件传入的信息</p>
+<p>父-&gt;子：子组件中通过订阅<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 双向数据绑定</span><br><span class="line"></span><br><span class="line">简易写法：v-model</span><br><span class="line"></span><br><span class="line">本质是：监听:value()和@input事件完成，前者完成数据到视图（Data-&gt;View）的绑定，后者完成视图到数据(View-&gt;Data)的绑定</span><br><span class="line"></span><br><span class="line">3. 父子组件的双向数据绑定</span><br><span class="line"></span><br><span class="line">父向子绑定：v-bind即可实现</span><br><span class="line"></span><br><span class="line">子向父绑定：利用:value,@input,和this.$emit结合使用即可实现</span><br><span class="line"></span><br><span class="line">注意点：在子组件绑定父组件的信息时，不能直接绑定来自父组件的信息，会导致传入的信息可能被父组件和子组件同时改变。正确的方法应该是在子组件的中重写data方法，因为data方法返回的对象是父组件传入的信息的一个拷贝，改变这个data所得的对象不会改变原来的信息。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">代码如下：</span><br><span class="line"></span><br><span class="line">``` html</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">		&lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">		&lt;title&gt;父子组件双向绑定&lt;/title&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">	&lt;body&gt;</span><br><span class="line">		&lt;div id=&quot;app&quot;&gt;</span><br><span class="line">			&lt;child :message2 = message1 @messagechange = &apos;handleInfoFromChild&apos;&gt;&lt;/child&gt;</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">		&lt;template id=&quot;child&quot; &gt;</span><br><span class="line">			&lt;div&gt;</span><br><span class="line">				&lt;p&gt;我是子组件&lt;/p&gt;</span><br><span class="line">				&lt;p&gt;来自父组件的信息：&#123;&#123;message2&#125;&#125;&lt;/p&gt;</span><br><span class="line">				&lt;p&gt;绑定至message的信息:&#123;&#123;message&#125;&#125;&lt;/p&gt;</span><br><span class="line">				&lt;!--不能直接绑定来自父组件的信息，会导致传入的信息可能被父组件和子组件同时改变--&gt;</span><br><span class="line">				&lt;input type=&quot;text&quot; :value=&quot;message&quot; @input=&quot;onInputChange&quot;/&gt; </span><br><span class="line">			&lt;/div&gt;</span><br><span class="line">		&lt;/template&gt;</span><br><span class="line">		&lt;script&gt;	</span><br><span class="line">			let app = new Vue(&#123;</span><br><span class="line">				el:&apos;#app&apos;,</span><br><span class="line">				data:&#123;</span><br><span class="line">					message1: &apos;父组件信息&apos;</span><br><span class="line">				&#125;,</span><br><span class="line">				methods:&#123;</span><br><span class="line">					handleInfoFromChild(info)&#123;</span><br><span class="line">						this.message1 = info</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				components:&#123;</span><br><span class="line">					child:&#123;</span><br><span class="line">						template:&apos;#child&apos;,</span><br><span class="line">						data()&#123;</span><br><span class="line">							return &#123;</span><br><span class="line">								message: this.message2</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;,</span><br><span class="line">						methods:&#123;</span><br><span class="line">							onInputChange(event)&#123;</span><br><span class="line">								this.message = event.target.value</span><br><span class="line">								//向父组件通信</span><br><span class="line">								this.$emit(&apos;messagechange&apos;,this.message)</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;,</span><br><span class="line">						props:&#123;</span><br><span class="line">							message2: String</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;)</span><br><span class="line">		&lt;/script&gt;</span><br><span class="line">	&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+    <div>
+      
+    </div>
+      <footer class="post-footer">
+          <div class="post-eof"></div>
+        
+      </footer>
+  </div>
+  
+  
+  
+  </article>
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="localhost:4000/2020/01/01/反射学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1054,210 +1239,6 @@
   </article>
 
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/最小生成树-Prim算法实现/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/09/03/最小生成树-Prim算法实现/" class="post-title-link" itemprop="url">最小生成树:Prim算法实现</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-03 19:32:57" itemprop="dateCreated datePublished" datetime="2019-09-03T19:32:57+08:00">2019-09-03</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h1><h2 id="算法原理及算法流程"><a href="#算法原理及算法流程" class="headerlink" title="算法原理及算法流程"></a>算法原理及算法流程</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>根据（MST性质：网络G必有一颗最小生成树），具体证明不再赘述，大概思想就是假设你现有一个图的集合G，从G中的一个顶点出发，不断的选择最短的一条连接边，扩充到已选边集N中，直至N包含了图G中的所有顶点。</p><h3 id="构造过程举例"><a href="#构造过程举例" class="headerlink" title="构造过程举例"></a>构造过程举例</h3><p>假设现在有这样一颗图</p><h6 id="第一次构造"><a href="#第一次构造" class="headerlink" title="第一次构造"></a>第一次构造</h6><p>V1的邻接节点全部入队。并且由于该队列是优先级队列，会按照权重排序</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/09/03/最小生成树-Prim算法实现/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="localhost:4000/2019/09/03/图的遍历-BFS和DFS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="钟浩伟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="钟浩伟的个人博客">
-    </span>
-      <header class="post-header">
-
-        
-          <h1 class="post-title" itemprop="name headline">
-              
-              <a href="/2019/09/03/图的遍历-BFS和DFS/" class="post-title-link" itemprop="url">图的遍历:BFS和DFS</a>
-            
-          </h1>
-        
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-03 19:24:07" itemprop="dateCreated datePublished" datetime="2019-09-03T19:24:07+08:00">2019-09-03</time>
-            </span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机理论/" itemprop="url" rel="index"><span itemprop="name">计算机理论</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h1><h2 id="BFS（广度优先搜索）"><a href="#BFS（广度优先搜索）" class="headerlink" title="BFS（广度优先搜索）"></a>BFS（广度优先搜索）</h2><h3 id="算法原理及步骤"><a href="#算法原理及步骤" class="headerlink" title="算法原理及步骤"></a>算法原理及步骤</h3><p>按照广度优先原则遍历图，利用了队列，有点像树的层次遍历。广度优先遍历的结果不唯一。整个遍历过程大概是这样的：给定一个起始顶点，将该起始顶点入队</p><ol>
-<li>顶点出队，如果当前顶点未被标记访问，则访问该顶点，然后标记为已访问，如果当前顶点已访问则直接丢弃该顶点</li>
-<li>当前访问顶点的邻接顶点入队</li>
-<li>当队列不为空的时候，循环1,2步</li>
-</ol>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/09/03/图的遍历-BFS和DFS/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-    <div>
-      
-    </div>
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
   </section>
 
   
@@ -1298,7 +1279,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1362,7 +1343,9 @@
         
           
         
-        <span class="site-state-item-count">11</span>
+          
+        
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
