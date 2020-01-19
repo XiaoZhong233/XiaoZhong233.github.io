@@ -55,17 +55,19 @@
   };
 </script>
 
-  <meta name="description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
+  <meta name="description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些 比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈区块链的密码学原理:hash与签名">
 <meta property="og:url" content="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/index.html">
 <meta property="og:site_name" content="钟浩伟的个人博客">
-<meta property="og:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
+<meta property="og:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些 比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-14T16:21:23.063Z">
+<meta property="og:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/qukuailian.jpg!blog">
+<meta property="og:updated_time" content="2020-01-19T09:07:24.614Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈区块链的密码学原理:hash与签名">
-<meta name="twitter:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）Hash简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。Hash的特点Collision resistance">
+<meta name="twitter:description" content="比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些 比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）">
+<meta name="twitter:image" content="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/qukuailian.jpg!blog">
   <link rel="canonical" href="localhost:4000/2020/01/14/浅谈密码学原理-hash与签名/">
 
 
@@ -292,10 +294,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些</p><p>比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）</p><h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。</p><h2 id="Hash的特点"><a href="#Hash的特点" class="headerlink" title="Hash的特点"></a>Hash的特点</h2><h3 id="Collision-resistance"><a href="#Collision-resistance" class="headerlink" title="Collision resistance"></a>Collision resistance</h3><a id="more"></a>
+        <p>比特币与区块链这个概念一直很火，我也一直不是很明白，最近才懂了一些些</p>
+<p>比特币用到了密码学中的2个功能：①HASH  ②签名（非对称加密）<br><img src="https://zhong-blog.oss-cn-shenzhen.aliyuncs.com/blog/qukuailian.jpg!blog" alt="qukuailian"></p>
+<a id="more"></a>
 
-
-<p>​    x可以有若干个，这若干个x就组成了输入空间，通常这个输入空间是足够大的，例如256位，这意味这你有2^256种输入，而这2^256种输入，通过hash函数，可以输出很多很多的结果。这个特点就是<strong>Collision resistance</strong></p>
+<h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>简单的来说：假设你有一个x，通过某个函数f(x)，映射算出某个值的过程就是hash，这个f(x)就是HASH函数。</p>
+<h2 id="Hash的特点"><a href="#Hash的特点" class="headerlink" title="Hash的特点"></a>Hash的特点</h2><h3 id="Collision-resistance"><a href="#Collision-resistance" class="headerlink" title="Collision resistance"></a>Collision resistance</h3><p>​    x可以有若干个，这若干个x就组成了输入空间，通常这个输入空间是足够大的，例如256位，这意味这你有2^256种输入，而这2^256种输入，通过hash函数，可以输出很多很多的结果。这个特点就是<strong>Collision resistance</strong></p>
 <p>​    他的意思就是，<u>对于某个HASH函数，你很难在足够大的输入空间中找到两个不同的输入，使他们的输出相同</u>。这种难以<strong>人为制造</strong>的HASH碰撞的特性就是Collision resistance。</p>
 <p>​    当然，也存在已经找到了人为制造HASH碰撞的函数，那就是大名鼎鼎的MD5。</p>
 <h3 id="Hiding"><a href="#Hiding" class="headerlink" title="Hiding"></a>Hiding</h3><p>​    对于足够大的输入空间，存在某个HASH映射H，<u>你可以通过某个X算出H(X)，但你很难通过H(X)算出X。</u>除非你使用暴力破解。这个暴力破解的过程就是”挖矿“，所以你需要大量的算力来进行计算，这样一个挖矿需要消耗大量算力的原则就是POW（proof of work，工作量证明）。你挖到矿了，同时你也必须付出大量的算力。</p>
@@ -350,6 +354,10 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2020/01/15/vue-router笔记/" rel="prev" title="vue-router笔记">
+                  vue-router笔记 <i class="fa fa-chevron-right"></i>
+                </a>
               
             </div>
           </div>
@@ -406,7 +414,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -472,7 +480,9 @@
         
           
         
-        <span class="site-state-item-count">12</span>
+          
+        
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>
