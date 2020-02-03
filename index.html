@@ -301,10 +301,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
+          <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">https://docs.docker.com/install/linux/docker-ce/centos/</a></p><p>官网看是最好的，其他的帖子乱七八糟的各种出错</p><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/<span class="regexp">/查看环境配置文件</span></span><br><span class="line"><span class="regexp">$ systemctl show docker | grep EnvironmentFile</span></span><br><span class="line"><span class="regexp">EnvironmentFile=-/etc</span><span class="regexp">/sysconfig/docker</span> (ignore_errors=yes)</span><br><span class="line"></span><br><span class="line">/<span class="regexp">/查看服务启动文件位置：</span></span><br><span class="line"><span class="regexp">$ systemctl show --property=FragmentPath docker</span></span><br><span class="line"><span class="regexp">FragmentPath=/usr</span><span class="regexp">/lib/systemd</span><span class="regexp">/system/docker</span>.service</span><br><span class="line"></span><br><span class="line">$ grep EnvironmentFile /usr/<span class="class"><span class="keyword">lib</span>/<span class="title">systemd</span>/<span class="title">system</span>/<span class="title">docker</span>.<span class="title">service</span></span></span><br><span class="line">EnvironmentFile=-<span class="regexp">/etc/sysconfig</span><span class="regexp">/docker</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
           
-            <p># </p>
-
+            <div class="post-button text-center">
+              <a class="btn" href="/2020/01/30/docker学习笔记/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
     </div>
